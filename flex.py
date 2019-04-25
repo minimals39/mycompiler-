@@ -46,7 +46,7 @@ t_RSTATE = r'\}'
 t_LESS = r'<<'
 t_MORE = r'>>'
 t_EQUTO = r'=='
-t_NOEQU = r'\*=*'
+t_NOEQU = r'<=>'
 
 def t_NEWLINE(t):
 	r'\n+'
@@ -82,7 +82,8 @@ lexer = lex.lex()
  
  # Test it out
 data = '''
-(a+b-{h*n}%t)
+(a+b-{h*n}%t)<=>
+
 
 
 '''
