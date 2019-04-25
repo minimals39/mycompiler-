@@ -16,23 +16,24 @@ precedence = (
 #                 | statement NEWLINE statement NEWLINE'''
 #    p[0] = ('multiple_stm', p[1], p[3])
 
-def p_statement_simple(p):
-    '''statement : assignexp
-                 | defineexp
-                 | printexp
-                 | sleepexp
-                 | ifexp
-                 | ifelseexp
-                 | whileexp
-                 | statement NEWLINE
-                 | NEWLINE statement
-                 | statement NEWLINE statement'''
+#def p_statement_simple(p):
+#    '''statement : assignexp
+#                 | defineexp
+#                 | printexp
+#                 | sleepexp
+#                 | ifexp
+#                 | ifelseexp
+#                 | whileexp
+#                 | statement NEWLINE
+#                 | NEWLINE statement
+#                 '''
     #  | loopexp NEWLINE
-    if p[1] == '\n':
-        p[0] = p[2]
-    else:
-        p[0] = p[1]
+#    if p[1] == '\n':
+#        p[0] = p[2]
+#    else:
+#        p[0] = p[1]
 
+#--------------------------------------expression----------------------------------------------------------------------------------
 def p_expression_operators(p):
     '''expression : expression PLUS expression                  
                   | term PLUS term
@@ -60,10 +61,15 @@ def p_expression_operators(p):
     elif p[2] == 'MOD':
         p[0] = p[1] / p[3]
 
+def p_expression_negative(p):
+    'expression : MINUS expression'
+    p[0] = ('minus', p[1])
 
-def p_factor_expr(p):
-    'factor : LPAREN expression RPAREN'
+
+def p_expression_bracket(p):
+    'expression : "LPAREN expression RPAREN'
     p[0] = p[2]
+
 
 # Error rule for syntax errors
 def p_error(p):
