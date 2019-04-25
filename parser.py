@@ -61,6 +61,18 @@ def p_expression_operators(p):
     elif p[2] == 'MOD':
         p[0] = ('MOD',p[1],p[3])
 
+def p_value(p):
+    '''term : WORD
+           | arr
+           | NUM'''
+    p[0] = p[1]
+
+
+def p_expression_standalone(p):
+    '''expression : term'''
+    p[0] = p[1]
+
+
 def p_expression_negative(p):
     'expression : MINUS expression'
     p[0] = ('negative', p[1])
@@ -71,16 +83,48 @@ def p_expression_parenthesis(p):
     p[0] = p[2]
 
 def p_expression_assign(p):
-    '''exassign : TYPE_T EQU expression
-                  | TYPE_N EQU expression
-                  | expression EQU expression
-                  | '''
+    '''exassign : NUM EQU expression
+                  | WORD EQU expression
+                  '''
     p[0] = ('assign',p[1],p[3])
 
 
 #----------------declare----------------------
-def p_term(p):
-    'term : TYPE_N EQU '
+
+def p_declare_const(p):
+    '''declare : DECL WORD
+               | DECL WORD EQU term'''
+    if(len(p) == 4) :
+        p[0] = ("decl", p[2], 0)
+    else : 
+        p[0] = ("decl", p[2], p[4])
+
+#----------------declare array-------------
+def p_defineexp_array1(p):
+    'defineexp : VAR ID "=" "{" arrayX "}"'
+    p[0] = ("var_array", p[2], p[5])
+
+
+def p_defineexp_array2(p):
+    'defineexp : VAR ID "[" CONSTANT "]"'
+    p[0] = ("var_array", p[2], p[4], 0)
+
+
+def p_defineexp_array3(p):
+    'defineexp : VAR ID "[" CONSTANT "]" "=" "{" arrayX "}"'
+    p[0] = ("var_array", p[2], p[4], p[8])
+
+
+def p_arrayX_simple(p):
+    'arrayX : CONSTANT arrayY'
+    p[0] = ("argument", p[1], p[2])
+
+
+def p_arrayY_simple(p):
+    '''arrayY : "," CONSTANT arrayY
+              | empty empty empty'''
+    p[0] = ("argument", p[2], p[3])
+
 
 
 # Error rule for syntax errors
