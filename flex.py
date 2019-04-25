@@ -5,7 +5,7 @@ tokens = (
 	'INT64','TYPE_T','TYPE_N','TYPE_A','TEXT','LOOP','REPEAT',
 	'SO','NOTSO','OTHERWISE','EQU','PLUS','MINUS','MUL','DIV',
 	'SEMI','COMMA','MOD','DECADE','HEX','LPAREN','RPAREN',
-	'LSTATE','RSTATE','BACK','NEWLINE')
+	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU')
 #Reseved word
 RESERVED = {
 	"int64":"INT64",
@@ -36,17 +36,23 @@ t_PLUS = r'\+'
 t_MINUS = r'-'
 t_MUL = r'\*'
 t_DIV = r'/'
-t_COMMA = r'\,'
+t_COMMA = r','
 t_SEMI = r';'
 t_MOD = r'%'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_LSTATE = r'\{'
 t_RSTATE = r'\}'
+t_LESS = r'<<'
+t_MORE = r'>>'
+t_EQUTO = r'=='
+t_NOEQU = r'\*=*'
 
 def t_NEWLINE(t):
 	r'\n+'
 	t.lexer.lineno += len(t.value)
+	t.type = 'NEWLINE'
+
 
 def t_TYPE_T(t):
      r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -76,7 +82,7 @@ lexer = lex.lex()
  
  # Test it out
 data = '''
-[a+b-{h*n}%t]
+(a+b-{h*n}%t)
 
 
 '''
