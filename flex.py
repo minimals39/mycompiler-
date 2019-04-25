@@ -2,7 +2,7 @@ import ply.lex as lex
 
 #list token
 tokens = (
-	'INT64','TYPE_T','TYPE_N','TYPE_A','TEXT','LOOP','REPEAT',
+	'INT64','WORD','NUM','ARRY','HEX','TEXT','LOOP','REPEAT',
 	'SO','NOTSO','OTHERWISE','EQU','PLUS','MINUS','MUL','DIV',
 	'SEMI','COMMA','MOD','DECADE','HEX','LPAREN','RPAREN',
 	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU')
@@ -54,16 +54,21 @@ def t_NEWLINE(t):
 	t.type = 'NEWLINE'
 
 
-def t_TYPE_T(t):
+def t_WORD(t):
      r'[a-zA-Z_][a-zA-Z0-9_]*'
-     t.type = RESERVED.get(t.value, "TYPE_T")
+     t.type = RESERVED.get(t.value, "WORD")
      return t
 
-def t_TYPE_N(t):
+def t_NUM(t):
+    r'\d+|-\d+'
+    t.value = int(t.value)
+    return t
+
+def t_HEX(t):
     r'0[hH][0-9a-fA-F]+|\d+|-\d+'
     if t.value[:2] == '0h':
         t.value = str(int(t.value.replace('0h', '0x'), 16))
-    t.type = 'TYPE_N'
+    t.type = 'HEX'
     return t
 
  # A string containing ignored characters (spaces and tabs)
