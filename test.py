@@ -42,7 +42,7 @@ precedence = (
 
 def p_add( p ) :
     'expr : expr PLUS expr'
-    p[0] = p[1] + p[3]
+    p[0] = ('PLUS',p[1],p[3])
 
 def p_sub( p ) :
     'expr : expr MINUS expr'
@@ -77,5 +77,6 @@ def p_error( p ):
 
 parser = yacc.yacc()
 
-res = parser.parse("-4*-(3-5)10") # the input
+res = parser.parse("2+3") # the input
+
 print(res)
