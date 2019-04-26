@@ -164,8 +164,8 @@ def p_declare_const(p):
 #----------------declare array-------------
 
 def p_defineexp_arrayshort(p):
-    '''arraysh : WORD "[" NUM "]"
-              | WORD "[" WORD "]"'''
+    '''arraysh : WORD LARRY NUM RARRY
+               | WORD LARRY WORD RARRY'''
     p[0] = ("array", p[1], p[3])
 
 def p_defineexp_arraya(p):
@@ -189,7 +189,7 @@ def p_arrayX_simple(p):
 
 
 def p_arrayY_simple(p):
-    '''arrayY : "," NUM arrayY
+    '''arrayY : COMMA NUM arrayY
               | empty empty empty'''
     p[0] = ("argument", p[2], p[3])
 

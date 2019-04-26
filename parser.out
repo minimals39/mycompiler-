@@ -3,7 +3,6 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     BACK
-    COMMA
     DECADE
     HEX
     INT64
@@ -63,13 +62,13 @@ Rule 47    expression -> expression LESS expression
 Rule 48    expression -> expression MORE expression
 Rule 49    declare -> DECL WORD
 Rule 50    declare -> DECL WORD EQU term
-Rule 51    arraysh -> WORD [ NUM ]
-Rule 52    arraysh -> WORD [ WORD ]
+Rule 51    arraysh -> WORD LARRY NUM RARRY
+Rule 52    arraysh -> WORD LARRY WORD RARRY
 Rule 53    declare -> DECL WORD EQU LSTATE arrayX RSTATE
 Rule 54    declare -> DECL WORD LARRY NUM RARRY
 Rule 55    declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
 Rule 56    arrayX -> NUM arrayY
-Rule 57    arrayY -> , NUM arrayY
+Rule 57    arrayY -> COMMA NUM arrayY
 Rule 58    arrayY -> empty empty empty
 Rule 59    exprint -> TEXT LPAREN WORD printMore RPAREN
 Rule 60    printMore -> , expression printMore
@@ -78,9 +77,9 @@ Rule 62    empty -> <empty>
 
 Terminals, with rules where they appear
 
-,                    : 57 60
+,                    : 60
 BACK                 : 
-COMMA                : 
+COMMA                : 57
 DECADE               : 
 DECL                 : 49 50 53 54 55
 DIV                  : 31 32 33
@@ -88,7 +87,7 @@ EQU                  : 43 44 50 53 55
 EQUTO                : 45
 HEX                  : 
 INT64                : 
-LARRY                : 54 55
+LARRY                : 51 52 54 55
 LESS                 : 47
 LOOP                 : 18 19
 LPAREN               : 13 14 18 19 20 21 42 59
@@ -103,7 +102,7 @@ NOTSO                :
 NUM                  : 39 51 54 55 56 57
 OTHERWISE            : 16 16 17
 PLUS                 : 22 23 24
-RARRY                : 54 55
+RARRY                : 51 52 54 55
 REPEAT               : 20 21
 RPAREN               : 13 14 18 19 20 21 42 59
 RSTATE               : 13 14 17 18 19 20 21 53 55
@@ -111,8 +110,6 @@ SEMI                 :
 SO                   : 13 14
 TEXT                 : 59
 WORD                 : 37 43 49 50 51 52 52 53 54 55 59
-[                    : 51 52
-]                    : 51 52
 error                : 
 
 Nonterminals, with rules where they appear
@@ -166,8 +163,8 @@ state 0
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
@@ -227,8 +224,8 @@ state 2
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
@@ -330,11 +327,11 @@ state 9
 state 10
 
     (43) exassign -> WORD . EQU expression
-    (51) arraysh -> WORD . [ NUM ]
-    (52) arraysh -> WORD . [ WORD ]
+    (51) arraysh -> WORD . LARRY NUM RARRY
+    (52) arraysh -> WORD . LARRY WORD RARRY
 
     EQU             shift and go to state 22
-    [               shift and go to state 23
+    LARRY           shift and go to state 23
 
 
 state 11
@@ -418,8 +415,8 @@ state 17
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
   ! shift/reduce conflict for NEWLINE resolved as shift
     $end            reduce using rule 10 (statement -> statement NEWLINE .)
@@ -517,8 +514,8 @@ state 22
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -531,8 +528,8 @@ state 22
 
 state 23
 
-    (51) arraysh -> WORD [ . NUM ]
-    (52) arraysh -> WORD [ . WORD ]
+    (51) arraysh -> WORD LARRY . NUM RARRY
+    (52) arraysh -> WORD LARRY . WORD RARRY
 
     NUM             shift and go to state 40
     WORD            shift and go to state 39
@@ -566,8 +563,8 @@ state 24
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -630,8 +627,8 @@ state 27
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -671,8 +668,8 @@ state 28
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -712,8 +709,8 @@ state 29
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -772,8 +769,8 @@ state 31
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 50
     WORD            shift and go to state 10
@@ -796,8 +793,8 @@ state 31
 state 32
 
     (37) term -> WORD .
-    (51) arraysh -> WORD . [ NUM ]
-    (52) arraysh -> WORD . [ WORD ]
+    (51) arraysh -> WORD . LARRY NUM RARRY
+    (52) arraysh -> WORD . LARRY WORD RARRY
 
     PLUS            reduce using rule 37 (term -> WORD .)
     MINUS           reduce using rule 37 (term -> WORD .)
@@ -814,7 +811,7 @@ state 32
     RSTATE          reduce using rule 37 (term -> WORD .)
     RPAREN          reduce using rule 37 (term -> WORD .)
     ,               reduce using rule 37 (term -> WORD .)
-    [               shift and go to state 23
+    LARRY           shift and go to state 23
 
 
 state 33
@@ -915,8 +912,8 @@ state 35
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -955,8 +952,8 @@ state 36
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1011,16 +1008,16 @@ state 38
 
 state 39
 
-    (52) arraysh -> WORD [ WORD . ]
+    (52) arraysh -> WORD LARRY WORD . RARRY
 
-    ]               shift and go to state 67
+    RARRY           shift and go to state 67
 
 
 state 40
 
-    (51) arraysh -> WORD [ NUM . ]
+    (51) arraysh -> WORD LARRY NUM . RARRY
 
-    ]               shift and go to state 68
+    RARRY           shift and go to state 68
 
 
 state 41
@@ -1058,8 +1055,8 @@ state 42
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     LSTATE          shift and go to state 70
     WORD            shift and go to state 32
@@ -1200,8 +1197,8 @@ state 48
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
   ! reduce/reduce conflict for NEWLINE resolved using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
   ! reduce/reduce conflict for $end resolved using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
@@ -1277,8 +1274,8 @@ state 50
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
@@ -1326,8 +1323,8 @@ state 51
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1366,8 +1363,8 @@ state 52
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1406,8 +1403,8 @@ state 53
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1446,8 +1443,8 @@ state 54
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1486,8 +1483,8 @@ state 55
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1526,8 +1523,8 @@ state 56
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1566,8 +1563,8 @@ state 57
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1606,8 +1603,8 @@ state 58
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1646,8 +1643,8 @@ state 59
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -1687,8 +1684,8 @@ state 60
     (46) expression -> . expression NOEQU expression
     (47) expression -> . expression LESS expression
     (48) expression -> . expression MORE expression
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     WORD            shift and go to state 32
     NUM             shift and go to state 38
@@ -1728,8 +1725,8 @@ state 61
     (46) expression -> . expression NOEQU expression
     (47) expression -> . expression LESS expression
     (48) expression -> . expression MORE expression
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     WORD            shift and go to state 32
     NUM             shift and go to state 38
@@ -1769,8 +1766,8 @@ state 62
     (46) expression -> . expression NOEQU expression
     (47) expression -> . expression LESS expression
     (48) expression -> . expression MORE expression
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     WORD            shift and go to state 32
     NUM             shift and go to state 38
@@ -1810,8 +1807,8 @@ state 63
     (46) expression -> . expression NOEQU expression
     (47) expression -> . expression LESS expression
     (48) expression -> . expression MORE expression
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     WORD            shift and go to state 32
     NUM             shift and go to state 38
@@ -1851,8 +1848,8 @@ state 64
     (46) expression -> . expression NOEQU expression
     (47) expression -> . expression LESS expression
     (48) expression -> . expression MORE expression
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     WORD            shift and go to state 32
     NUM             shift and go to state 38
@@ -1930,46 +1927,46 @@ state 66
 
 state 67
 
-    (52) arraysh -> WORD [ WORD ] .
+    (52) arraysh -> WORD LARRY WORD RARRY .
 
-    EQU             reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    PLUS            reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    MINUS           reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    MUL             reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    DIV             reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    MOD             reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    EQUTO           reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    NOEQU           reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    LESS            reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    MORE            reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    NEWLINE         reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    $end            reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    LSTATE          reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    RSTATE          reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    RPAREN          reduce using rule 52 (arraysh -> WORD [ WORD ] .)
-    ,               reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    EQU             reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    PLUS            reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    MINUS           reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    MUL             reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    DIV             reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    MOD             reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    EQUTO           reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    NOEQU           reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    LESS            reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    MORE            reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    NEWLINE         reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    $end            reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    LSTATE          reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    RSTATE          reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    RPAREN          reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
+    ,               reduce using rule 52 (arraysh -> WORD LARRY WORD RARRY .)
 
 
 state 68
 
-    (51) arraysh -> WORD [ NUM ] .
+    (51) arraysh -> WORD LARRY NUM RARRY .
 
-    EQU             reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    PLUS            reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    MINUS           reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    MUL             reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    DIV             reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    MOD             reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    EQUTO           reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    NOEQU           reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    LESS            reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    MORE            reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    NEWLINE         reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    $end            reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    LSTATE          reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    RSTATE          reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    RPAREN          reduce using rule 51 (arraysh -> WORD [ NUM ] .)
-    ,               reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    EQU             reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    PLUS            reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    MINUS           reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    MUL             reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    DIV             reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    MOD             reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    EQUTO           reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    NOEQU           reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    LESS            reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    MORE            reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    NEWLINE         reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    $end            reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    LSTATE          reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    RSTATE          reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    RPAREN          reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
+    ,               reduce using rule 51 (arraysh -> WORD LARRY NUM RARRY .)
 
 
 state 69
@@ -2034,8 +2031,8 @@ state 73
     (37) term -> . WORD
     (38) term -> . arraysh
     (39) term -> . NUM
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 35
     LPAREN          shift and go to state 36
@@ -3053,11 +3050,11 @@ state 100
 state 101
 
     (56) arrayX -> NUM . arrayY
-    (57) arrayY -> . , NUM arrayY
+    (57) arrayY -> . COMMA NUM arrayY
     (58) arrayY -> . empty empty empty
     (62) empty -> .
 
-    ,               shift and go to state 115
+    COMMA           shift and go to state 115
     RSTATE          reduce using rule 62 (empty -> .)
 
     arrayY                         shift and go to state 114
@@ -3155,8 +3152,8 @@ state 106
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
@@ -3214,8 +3211,8 @@ state 108
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 123
     WORD            shift and go to state 10
@@ -3265,8 +3262,8 @@ state 109
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
@@ -3332,7 +3329,7 @@ state 114
 
 state 115
 
-    (57) arrayY -> , . NUM arrayY
+    (57) arrayY -> COMMA . NUM arrayY
 
     NUM             shift and go to state 126
 
@@ -3408,8 +3405,8 @@ state 121
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
@@ -3471,8 +3468,8 @@ state 123
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
@@ -3533,8 +3530,8 @@ state 125
     (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
     (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
-    (51) arraysh -> . WORD [ NUM ]
-    (52) arraysh -> . WORD [ WORD ]
+    (51) arraysh -> . WORD LARRY NUM RARRY
+    (52) arraysh -> . WORD LARRY WORD RARRY
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
@@ -3556,12 +3553,12 @@ state 125
 
 state 126
 
-    (57) arrayY -> , NUM . arrayY
-    (57) arrayY -> . , NUM arrayY
+    (57) arrayY -> COMMA NUM . arrayY
+    (57) arrayY -> . COMMA NUM arrayY
     (58) arrayY -> . empty empty empty
     (62) empty -> .
 
-    ,               shift and go to state 115
+    COMMA           shift and go to state 115
     RSTATE          reduce using rule 62 (empty -> .)
 
     arrayY                         shift and go to state 135
@@ -3657,9 +3654,9 @@ state 134
 
 state 135
 
-    (57) arrayY -> , NUM arrayY .
+    (57) arrayY -> COMMA NUM arrayY .
 
-    RSTATE          reduce using rule 57 (arrayY -> , NUM arrayY .)
+    RSTATE          reduce using rule 57 (arrayY -> COMMA NUM arrayY .)
 
 
 state 136
