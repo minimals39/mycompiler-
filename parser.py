@@ -1,7 +1,7 @@
 from ply import *
 import flex
-
-tokens = flex.tokens
+import sys
+tokens = flex.tokens 
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
@@ -11,29 +11,71 @@ precedence = (
 
 #--------------------------------------------------------------------------------------------------------------
 
-# def p_statement_multiple(p):
-#    '''statement : statement NEWLINE statement
-#                 | statement NEWLINE statement NEWLINE'''
-#    p[0] = ('multiple_stm', p[1], p[3])
+def p_statement_multiple(p):
+    '''statement : statement NEWLINE statement
+                 | statement NEWLINE statement NEWLINE'''
+    p[0] = ('multiple_stm', p[1], p[3])
 
-#def p_statement_simple(p):
-#    '''statement : assignexp
-#                 | defineexp
-#                 | printexp
-#                 | sleepexp
-#                 | ifexp
-#                 | ifelseexp
-#                 | whileexp
-#                 | statement NEWLINE
-#                 | NEWLINE statement
-#                 '''
-    #  | loopexp NEWLINE
-#    if p[1] == '\n':
-#        p[0] = p[2]
-#    else:
-#        p[0] = p[1]
+def p_statement_simple(p):
+    '''statement : exassign
+                 | declare
+                 | exprint
+                 | exif
+                 | exelif
+                 | exloop
+                 | exrepeat
+                 | statement NEWLINE
+                 | NEWLINE statement
+                 | exloop NEWLINE
+                 '''
+    if p[1] == '\n':
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 
-#--------------------------------------expression----------------------------------------------------------------------------------
+#--------------------------------------expression-conditions----------------------------------------------------------------------------------
+
+
+def p_exif(p):
+    '''exif : SO LPAREN expression RPAREN LSTATE statement RSTATE
+             | SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE'''
+    if p[5] == '\n':
+        p[0] = ('if', p[3], p[7])
+    else:
+        p[0] = ('if', p[3], p[6])
+
+
+def p_exelif(p):
+    '''exelif : exif exelse'''
+    p[0] = ('elif', p[1], p[2])
+
+
+def p_exelse(p):
+    '''exelse : OTHERWISE LSTATE statement LSTATE OTHERWISE
+               | OTHERWISE LSTATE NEWLINE statement RSTATE'''
+    if p[3] == '\n':
+        p[0] = ('else', p[4])
+    else:
+        p[0] = ('else', p[3])
+
+
+def p_exloop(p):
+    '''exloop : LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+             | LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE'''
+    if p[6] == '\n':
+        p[0] = ('loop', p[3], p[7])
+    else:
+        p[0] = ('loop', p[3], p[6])
+
+def p_exrepeat(p):
+    '''exrepeat : REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+                | REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE'''
+    if p[5] == '\n':
+        p[0] = ('repeat', p[3], p[7])
+    else:
+        p[0] = ('repeat', p[3], p[6])        
+
+#-----------------------------------valuestuffs-----------------------------------------------------
 def p_expression_operators(p):
     '''expression : expression PLUS expression                  
                   | term PLUS term
@@ -50,20 +92,20 @@ def p_expression_operators(p):
                   | expression MOD expression
                   | term MOD term
                   | term MOD expression'''
-    if p[2] == 'PLUS':
+    if p[2] == '+':
         p[0] = ('PLUS',p[1],p[3])
-    elif p[2] == 'MINUS':
+    elif p[2] == '-':
         p[0] = ('MINUS',p[1],p[3])
-    elif p[2] == 'MUL':
+    elif p[2] == '*':
         p[0] = ('MUL',p[1],p[3])
-    elif p[2] == 'DIV':
+    elif p[2] == '/':
         p[0] = ('DIV',p[1],p[3])
-    elif p[2] == 'MOD':
+    elif p[2] == '%':
         p[0] = ('MOD',p[1],p[3])
 
 def p_value(p):
     '''term : WORD
-           | arr
+           | arraysh
            | NUM'''
     p[0] = p[1]
 
@@ -83,10 +125,30 @@ def p_expression_parenthesis(p):
     p[0] = p[2]
 
 def p_expression_assign(p):
-    '''exassign : NUM EQU expression
-                  | WORD EQU expression
+    '''exassign : WORD EQU expression
+                  | arraysh EQU expression
                   '''
     p[0] = ('assign',p[1],p[3])
+
+
+def p_expression_EQUTO(p):
+    '''expression : expression EQUTO expression'''
+    p[0] = ('==', p[1], p[3])
+
+def p_expression_NEQU(p):
+    'expression : expression NOEQU expression'
+    p[0] = ('<=>', p[1], p[3])
+
+
+def p_expression_LESS(p):
+    '''expression : expression LESS expression'''
+    p[0] = ('<<', p[1], p[3])
+
+
+def p_expression_MORE(p):
+    '''expression : expression MORE expression'''
+    p[0] = ('>>', p[1], p[3])
+
 
 
 #----------------declare----------------------
@@ -100,36 +162,69 @@ def p_declare_const(p):
         p[0] = ("decl", p[2], p[4])
 
 #----------------declare array-------------
-def p_defineexp_array1(p):
+
+def p_defineexp_arrayshort(p):
+    '''arraysh : WORD "[" NUM "]"
+              | WORD "[" WORD "]"'''
+    p[0] = ("array", p[1], p[3])
+
+def p_defineexp_arraya(p):
     'declare : DECL WORD EQU LSTATE arrayX RSTATE'
     p[0] = ("var_array", p[2], p[5])
 
 
-def p_defineexp_array2(p):
-    'defineexp : VAR ID "[" CONSTANT "]"'
+def p_defineexp_arrayb(p):
+    'declare : DECL WORD LARRY NUM RARRY'
     p[0] = ("var_array", p[2], p[4], 0)
 
 
-def p_defineexp_array3(p):
-    'defineexp : VAR ID "[" CONSTANT "]" "=" "{" arrayX "}"'
+def p_defineexp_arrayc(p):
+    'declare : DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE'
     p[0] = ("var_array", p[2], p[4], p[8])
 
 
 def p_arrayX_simple(p):
-    'arrayX : CONSTANT arrayY'
+    'arrayX : NUM arrayY'
     p[0] = ("argument", p[1], p[2])
 
 
 def p_arrayY_simple(p):
-    '''arrayY : "," CONSTANT arrayY
+    '''arrayY : "," NUM arrayY
               | empty empty empty'''
     p[0] = ("argument", p[2], p[3])
 
+    
+
+# print ----------------------------------------
+
+
+def p_exprint(p):
+    'exprint : TEXT LPAREN WORD printMore RPAREN'
+    p[0] = ('print', p[3], p[4])
+
+
+def p_print_content(p):
+    '''printMore : "," expression printMore
+                 | empty empty empty'''
+    p[0] = ('argument', p[2], p[3])
 
 
 # Error rule for syntax errors
+
+def p_empty(p):
+    'empty :'
+    pass
+
 def p_error(p):
-    print("Syntax error in input!")
+    if p:
+        if p.value == '\n':
+            print("Syntax error at line %d" % p.lineno)
+        else:
+            print("Syntax error at '%s' at line %d" %
+                  (p.value, p.lexer.lineno))
+    else:
+        print("Syntax error at EOF")
+
 
 # Build the parser
 parser = yacc.yacc()

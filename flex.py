@@ -5,7 +5,7 @@ tokens = (
 	'INT64','WORD','NUM','HEX','TEXT','LOOP','REPEAT',
 	'SO','NOTSO','OTHERWISE','EQU','PLUS','MINUS','MUL','DIV',
 	'SEMI','COMMA','MOD','DECADE','LPAREN','RPAREN','LARRY','RARRY',
-	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU')
+	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU','DECL', )
 #Reseved word
 RESERVED = {
 	"int64":"INT64",
@@ -17,7 +17,8 @@ RESERVED = {
 	"repeat" : "REPEAT",
 	"decade" : "DECADE",
 	"hex" : "HEX",
-	"decl" : "DECL"
+	"decl" : "DECL",
+     "text" : "TEXT"
 }
 
 
@@ -49,10 +50,11 @@ t_MORE = r'>>'
 t_EQUTO = r'=='
 t_NOEQU = r'<=>'
 
-def t_NEWLINE(t):
-	r'\n+'
-	t.lexer.lineno += len(t.value)
-	t.type = 'NEWLINE'
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+    t.type = 'NEWLINE'
+    return t
 
 
 def t_WORD(t):
@@ -75,6 +77,8 @@ def t_HEX(t):
  # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t'
  # Error handling rule
+
+ 
 def t_error(t):
      print("Illegal character '%s'" % t.value[0])
      t.lexer.skip(1)
@@ -88,7 +92,7 @@ lexer = lex.lex()
  
  # Test it out
 data = '''
-(a+b-{h*n}%t)<=>[]
+TEXT( << >> {} []) 2 f + - * / %
 
 
 

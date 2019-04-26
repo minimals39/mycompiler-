@@ -1,306 +1,3770 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    BACK
+    COMMA
+    DECADE
+    HEX
+    INT64
+    NOTSO
+    SEMI
+
 Grammar
 
-Rule 0     S' -> expr
-Rule 1     expr -> expr PLUS expr
-Rule 2     expr -> expr MINUS expr
-Rule 3     expr -> MINUS expr
-Rule 4     expr -> expr TIMES expr
-Rule 5     expr -> expr DIV expr
-Rule 6     expr -> NUMBER
-Rule 7     expr -> LPAREN expr RPAREN
+Rule 0     S' -> statement
+Rule 1     statement -> statement NEWLINE statement
+Rule 2     statement -> statement NEWLINE statement NEWLINE
+Rule 3     statement -> exassign
+Rule 4     statement -> declare
+Rule 5     statement -> exprint
+Rule 6     statement -> exif
+Rule 7     statement -> exelif
+Rule 8     statement -> exloop
+Rule 9     statement -> exrepeat
+Rule 10    statement -> statement NEWLINE
+Rule 11    statement -> NEWLINE statement
+Rule 12    statement -> exloop NEWLINE
+Rule 13    exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE
+Rule 14    exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+Rule 15    exelif -> exif exelse
+Rule 16    exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE
+Rule 17    exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE
+Rule 18    exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+Rule 19    exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+Rule 20    exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+Rule 21    exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+Rule 22    expression -> expression PLUS expression
+Rule 23    expression -> term PLUS term
+Rule 24    expression -> term PLUS expression
+Rule 25    expression -> expression MINUS expression
+Rule 26    expression -> term MINUS term
+Rule 27    expression -> term MINUS expression
+Rule 28    expression -> expression MUL expression
+Rule 29    expression -> term MUL term
+Rule 30    expression -> term MUL expression
+Rule 31    expression -> expression DIV expression
+Rule 32    expression -> term DIV term
+Rule 33    expression -> term DIV expression
+Rule 34    expression -> expression MOD expression
+Rule 35    expression -> term MOD term
+Rule 36    expression -> term MOD expression
+Rule 37    term -> WORD
+Rule 38    term -> arraysh
+Rule 39    term -> NUM
+Rule 40    expression -> term
+Rule 41    expression -> MINUS expression
+Rule 42    expression -> LPAREN expression RPAREN
+Rule 43    exassign -> WORD EQU expression
+Rule 44    exassign -> arraysh EQU expression
+Rule 45    expression -> expression EQUTO expression
+Rule 46    expression -> expression NOEQU expression
+Rule 47    expression -> expression LESS expression
+Rule 48    expression -> expression MORE expression
+Rule 49    declare -> DECL WORD
+Rule 50    declare -> DECL WORD EQU term
+Rule 51    arraysh -> WORD [ NUM ]
+Rule 52    arraysh -> WORD [ WORD ]
+Rule 53    declare -> DECL WORD EQU LSTATE arrayX RSTATE
+Rule 54    declare -> DECL WORD LARRY NUM RARRY
+Rule 55    declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+Rule 56    arrayX -> NUM arrayY
+Rule 57    arrayY -> , NUM arrayY
+Rule 58    arrayY -> empty empty empty
+Rule 59    exprint -> TEXT LPAREN WORD printMore RPAREN
+Rule 60    printMore -> , expression printMore
+Rule 61    printMore -> empty empty empty
+Rule 62    empty -> <empty>
 
 Terminals, with rules where they appear
 
-DIV                  : 5
-LPAREN               : 7
-MINUS                : 2 3
-NUMBER               : 6
-PLUS                 : 1
-RPAREN               : 7
-TIMES                : 4
+,                    : 57 60
+BACK                 : 
+COMMA                : 
+DECADE               : 
+DECL                 : 49 50 53 54 55
+DIV                  : 31 32 33
+EQU                  : 43 44 50 53 55
+EQUTO                : 45
+HEX                  : 
+INT64                : 
+LARRY                : 54 55
+LESS                 : 47
+LOOP                 : 18 19
+LPAREN               : 13 14 18 19 20 21 42 59
+LSTATE               : 13 14 16 16 17 18 19 20 21 53 55
+MINUS                : 25 26 27 41
+MOD                  : 34 35 36
+MORE                 : 48
+MUL                  : 28 29 30
+NEWLINE              : 1 2 2 10 11 12 14 17 19 21
+NOEQU                : 46
+NOTSO                : 
+NUM                  : 39 51 54 55 56 57
+OTHERWISE            : 16 16 17
+PLUS                 : 22 23 24
+RARRY                : 54 55
+REPEAT               : 20 21
+RPAREN               : 13 14 18 19 20 21 42 59
+RSTATE               : 13 14 17 18 19 20 21 53 55
+SEMI                 : 
+SO                   : 13 14
+TEXT                 : 59
+WORD                 : 37 43 49 50 51 52 52 53 54 55 59
+[                    : 51 52
+]                    : 51 52
 error                : 
 
 Nonterminals, with rules where they appear
 
-expr                 : 1 1 2 2 3 4 4 5 5 7 0
+arrayX               : 53 55
+arrayY               : 56 57
+arraysh              : 38 44
+declare              : 4
+empty                : 58 58 58 61 61 61
+exassign             : 3
+exelif               : 7
+exelse               : 15
+exif                 : 6 15
+exloop               : 8 12
+expression           : 13 14 18 19 20 21 22 22 24 25 25 27 28 28 30 31 31 33 34 34 36 41 42 43 44 45 45 46 46 47 47 48 48 60
+exprint              : 5
+exrepeat             : 9
+printMore            : 59 60
+statement            : 1 1 2 2 10 11 13 14 16 17 18 19 20 21 0
+term                 : 23 23 24 26 26 27 29 29 30 32 32 33 35 35 36 40 50
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . expr
-    (1) expr -> . expr PLUS expr
-    (2) expr -> . expr MINUS expr
-    (3) expr -> . MINUS expr
-    (4) expr -> . expr TIMES expr
-    (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (0) S' -> . statement
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
 
-    MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
 
-    expr                           shift and go to state 1
+    statement                      shift and go to state 1
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
 
 state 1
 
-    (0) S' -> expr .
-    (1) expr -> expr . PLUS expr
-    (2) expr -> expr . MINUS expr
-    (4) expr -> expr . TIMES expr
-    (5) expr -> expr . DIV expr
+    (0) S' -> statement .
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
 
-    PLUS            shift and go to state 5
-    MINUS           shift and go to state 6
-    TIMES           shift and go to state 7
-    DIV             shift and go to state 8
+    NEWLINE         shift and go to state 17
 
 
 state 2
 
-    (3) expr -> MINUS . expr
-    (1) expr -> . expr PLUS expr
-    (2) expr -> . expr MINUS expr
-    (3) expr -> . MINUS expr
-    (4) expr -> . expr TIMES expr
-    (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (11) statement -> NEWLINE . statement
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
 
-    MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
 
-    expr                           shift and go to state 9
+    statement                      shift and go to state 18
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
 
 state 3
 
-    (6) expr -> NUMBER .
+    (3) statement -> exassign .
 
-    PLUS            reduce using rule 6 (expr -> NUMBER .)
-    MINUS           reduce using rule 6 (expr -> NUMBER .)
-    TIMES           reduce using rule 6 (expr -> NUMBER .)
-    DIV             reduce using rule 6 (expr -> NUMBER .)
-    $end            reduce using rule 6 (expr -> NUMBER .)
-    RPAREN          reduce using rule 6 (expr -> NUMBER .)
+    NEWLINE         reduce using rule 3 (statement -> exassign .)
+    $end            reduce using rule 3 (statement -> exassign .)
+    LSTATE          reduce using rule 3 (statement -> exassign .)
+    RSTATE          reduce using rule 3 (statement -> exassign .)
 
 
 state 4
 
-    (7) expr -> LPAREN . expr RPAREN
-    (1) expr -> . expr PLUS expr
-    (2) expr -> . expr MINUS expr
-    (3) expr -> . MINUS expr
-    (4) expr -> . expr TIMES expr
-    (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (4) statement -> declare .
 
-    MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    NEWLINE         reduce using rule 4 (statement -> declare .)
+    $end            reduce using rule 4 (statement -> declare .)
+    LSTATE          reduce using rule 4 (statement -> declare .)
+    RSTATE          reduce using rule 4 (statement -> declare .)
 
-    expr                           shift and go to state 10
 
 state 5
 
-    (1) expr -> expr PLUS . expr
-    (1) expr -> . expr PLUS expr
-    (2) expr -> . expr MINUS expr
-    (3) expr -> . MINUS expr
-    (4) expr -> . expr TIMES expr
-    (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (5) statement -> exprint .
 
-    MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    NEWLINE         reduce using rule 5 (statement -> exprint .)
+    $end            reduce using rule 5 (statement -> exprint .)
+    LSTATE          reduce using rule 5 (statement -> exprint .)
+    RSTATE          reduce using rule 5 (statement -> exprint .)
 
-    expr                           shift and go to state 11
 
 state 6
 
-    (2) expr -> expr MINUS . expr
-    (1) expr -> . expr PLUS expr
-    (2) expr -> . expr MINUS expr
-    (3) expr -> . MINUS expr
-    (4) expr -> . expr TIMES expr
-    (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (6) statement -> exif .
+    (15) exelif -> exif . exelse
+    (16) exelse -> . OTHERWISE LSTATE statement LSTATE OTHERWISE
+    (17) exelse -> . OTHERWISE LSTATE NEWLINE statement RSTATE
 
-    MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    NEWLINE         reduce using rule 6 (statement -> exif .)
+    $end            reduce using rule 6 (statement -> exif .)
+    LSTATE          reduce using rule 6 (statement -> exif .)
+    RSTATE          reduce using rule 6 (statement -> exif .)
+    OTHERWISE       shift and go to state 20
 
-    expr                           shift and go to state 12
+    exelse                         shift and go to state 19
 
 state 7
 
-    (4) expr -> expr TIMES . expr
-    (1) expr -> . expr PLUS expr
-    (2) expr -> . expr MINUS expr
-    (3) expr -> . MINUS expr
-    (4) expr -> . expr TIMES expr
-    (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (7) statement -> exelif .
 
-    MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    NEWLINE         reduce using rule 7 (statement -> exelif .)
+    $end            reduce using rule 7 (statement -> exelif .)
+    LSTATE          reduce using rule 7 (statement -> exelif .)
+    RSTATE          reduce using rule 7 (statement -> exelif .)
 
-    expr                           shift and go to state 13
 
 state 8
 
-    (5) expr -> expr DIV . expr
-    (1) expr -> . expr PLUS expr
-    (2) expr -> . expr MINUS expr
-    (3) expr -> . MINUS expr
-    (4) expr -> . expr TIMES expr
-    (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (8) statement -> exloop .
+    (12) statement -> exloop . NEWLINE
 
-    MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    $end            reduce using rule 8 (statement -> exloop .)
+    LSTATE          reduce using rule 8 (statement -> exloop .)
+    RSTATE          reduce using rule 8 (statement -> exloop .)
+    NEWLINE         shift and go to state 21
 
-    expr                           shift and go to state 14
+  ! NEWLINE         [ reduce using rule 8 (statement -> exloop .) ]
+
 
 state 9
 
-    (3) expr -> MINUS expr .
-    (1) expr -> expr . PLUS expr
-    (2) expr -> expr . MINUS expr
-    (4) expr -> expr . TIMES expr
-    (5) expr -> expr . DIV expr
+    (9) statement -> exrepeat .
 
-    PLUS            reduce using rule 3 (expr -> MINUS expr .)
-    MINUS           reduce using rule 3 (expr -> MINUS expr .)
-    TIMES           reduce using rule 3 (expr -> MINUS expr .)
-    DIV             reduce using rule 3 (expr -> MINUS expr .)
-    $end            reduce using rule 3 (expr -> MINUS expr .)
-    RPAREN          reduce using rule 3 (expr -> MINUS expr .)
-
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
-  ! TIMES           [ shift and go to state 7 ]
-  ! DIV             [ shift and go to state 8 ]
+    NEWLINE         reduce using rule 9 (statement -> exrepeat .)
+    $end            reduce using rule 9 (statement -> exrepeat .)
+    LSTATE          reduce using rule 9 (statement -> exrepeat .)
+    RSTATE          reduce using rule 9 (statement -> exrepeat .)
 
 
 state 10
 
-    (7) expr -> LPAREN expr . RPAREN
-    (1) expr -> expr . PLUS expr
-    (2) expr -> expr . MINUS expr
-    (4) expr -> expr . TIMES expr
-    (5) expr -> expr . DIV expr
+    (43) exassign -> WORD . EQU expression
+    (51) arraysh -> WORD . [ NUM ]
+    (52) arraysh -> WORD . [ WORD ]
 
-    RPAREN          shift and go to state 15
-    PLUS            shift and go to state 5
-    MINUS           shift and go to state 6
-    TIMES           shift and go to state 7
-    DIV             shift and go to state 8
+    EQU             shift and go to state 22
+    [               shift and go to state 23
 
 
 state 11
 
-    (1) expr -> expr PLUS expr .
-    (1) expr -> expr . PLUS expr
-    (2) expr -> expr . MINUS expr
-    (4) expr -> expr . TIMES expr
-    (5) expr -> expr . DIV expr
+    (44) exassign -> arraysh . EQU expression
 
-    PLUS            reduce using rule 1 (expr -> expr PLUS expr .)
-    MINUS           reduce using rule 1 (expr -> expr PLUS expr .)
-    $end            reduce using rule 1 (expr -> expr PLUS expr .)
-    RPAREN          reduce using rule 1 (expr -> expr PLUS expr .)
-    TIMES           shift and go to state 7
-    DIV             shift and go to state 8
-
-  ! TIMES           [ reduce using rule 1 (expr -> expr PLUS expr .) ]
-  ! DIV             [ reduce using rule 1 (expr -> expr PLUS expr .) ]
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
+    EQU             shift and go to state 24
 
 
 state 12
 
-    (2) expr -> expr MINUS expr .
-    (1) expr -> expr . PLUS expr
-    (2) expr -> expr . MINUS expr
-    (4) expr -> expr . TIMES expr
-    (5) expr -> expr . DIV expr
+    (49) declare -> DECL . WORD
+    (50) declare -> DECL . WORD EQU term
+    (53) declare -> DECL . WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> DECL . WORD LARRY NUM RARRY
+    (55) declare -> DECL . WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
 
-    PLUS            reduce using rule 2 (expr -> expr MINUS expr .)
-    MINUS           reduce using rule 2 (expr -> expr MINUS expr .)
-    $end            reduce using rule 2 (expr -> expr MINUS expr .)
-    RPAREN          reduce using rule 2 (expr -> expr MINUS expr .)
-    TIMES           shift and go to state 7
-    DIV             shift and go to state 8
-
-  ! TIMES           [ reduce using rule 2 (expr -> expr MINUS expr .) ]
-  ! DIV             [ reduce using rule 2 (expr -> expr MINUS expr .) ]
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
+    WORD            shift and go to state 25
 
 
 state 13
 
-    (4) expr -> expr TIMES expr .
-    (1) expr -> expr . PLUS expr
-    (2) expr -> expr . MINUS expr
-    (4) expr -> expr . TIMES expr
-    (5) expr -> expr . DIV expr
+    (59) exprint -> TEXT . LPAREN WORD printMore RPAREN
 
-    PLUS            reduce using rule 4 (expr -> expr TIMES expr .)
-    MINUS           reduce using rule 4 (expr -> expr TIMES expr .)
-    TIMES           reduce using rule 4 (expr -> expr TIMES expr .)
-    DIV             reduce using rule 4 (expr -> expr TIMES expr .)
-    $end            reduce using rule 4 (expr -> expr TIMES expr .)
-    RPAREN          reduce using rule 4 (expr -> expr TIMES expr .)
-
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
-  ! TIMES           [ shift and go to state 7 ]
-  ! DIV             [ shift and go to state 8 ]
+    LPAREN          shift and go to state 26
 
 
 state 14
 
-    (5) expr -> expr DIV expr .
-    (1) expr -> expr . PLUS expr
-    (2) expr -> expr . MINUS expr
-    (4) expr -> expr . TIMES expr
-    (5) expr -> expr . DIV expr
+    (13) exif -> SO . LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> SO . LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
 
-    PLUS            reduce using rule 5 (expr -> expr DIV expr .)
-    MINUS           reduce using rule 5 (expr -> expr DIV expr .)
-    TIMES           reduce using rule 5 (expr -> expr DIV expr .)
-    DIV             reduce using rule 5 (expr -> expr DIV expr .)
-    $end            reduce using rule 5 (expr -> expr DIV expr .)
-    RPAREN          reduce using rule 5 (expr -> expr DIV expr .)
-
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
-  ! TIMES           [ shift and go to state 7 ]
-  ! DIV             [ shift and go to state 8 ]
+    LPAREN          shift and go to state 27
 
 
 state 15
 
-    (7) expr -> LPAREN expr RPAREN .
+    (18) exloop -> LOOP . LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> LOOP . LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
 
-    PLUS            reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    MINUS           reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    TIMES           reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    DIV             reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    $end            reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    RPAREN          reduce using rule 7 (expr -> LPAREN expr RPAREN .)
+    LPAREN          shift and go to state 28
 
+
+state 16
+
+    (20) exrepeat -> REPEAT . LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> REPEAT . LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+
+    LPAREN          shift and go to state 29
+
+
+state 17
+
+    (1) statement -> statement NEWLINE . statement
+    (2) statement -> statement NEWLINE . statement NEWLINE
+    (10) statement -> statement NEWLINE .
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    $end            reduce using rule 10 (statement -> statement NEWLINE .)
+    LSTATE          reduce using rule 10 (statement -> statement NEWLINE .)
+    RSTATE          reduce using rule 10 (statement -> statement NEWLINE .)
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+  ! NEWLINE         [ reduce using rule 10 (statement -> statement NEWLINE .) ]
+
+    statement                      shift and go to state 30
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 18
+
+    (11) statement -> NEWLINE statement .
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    $end            reduce using rule 11 (statement -> NEWLINE statement .)
+    LSTATE          reduce using rule 11 (statement -> NEWLINE statement .)
+    RSTATE          reduce using rule 11 (statement -> NEWLINE statement .)
+    NEWLINE         shift and go to state 17
+
+  ! NEWLINE         [ reduce using rule 11 (statement -> NEWLINE statement .) ]
+
+
+state 19
+
+    (15) exelif -> exif exelse .
+
+    NEWLINE         reduce using rule 15 (exelif -> exif exelse .)
+    $end            reduce using rule 15 (exelif -> exif exelse .)
+    LSTATE          reduce using rule 15 (exelif -> exif exelse .)
+    RSTATE          reduce using rule 15 (exelif -> exif exelse .)
+
+
+state 20
+
+    (16) exelse -> OTHERWISE . LSTATE statement LSTATE OTHERWISE
+    (17) exelse -> OTHERWISE . LSTATE NEWLINE statement RSTATE
+
+    LSTATE          shift and go to state 31
+
+
+state 21
+
+    (12) statement -> exloop NEWLINE .
+
+    NEWLINE         reduce using rule 12 (statement -> exloop NEWLINE .)
+    $end            reduce using rule 12 (statement -> exloop NEWLINE .)
+    LSTATE          reduce using rule 12 (statement -> exloop NEWLINE .)
+    RSTATE          reduce using rule 12 (statement -> exloop NEWLINE .)
+
+
+state 22
+
+    (43) exassign -> WORD EQU . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 33
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 23
+
+    (51) arraysh -> WORD [ . NUM ]
+    (52) arraysh -> WORD [ . WORD ]
+
+    NUM             shift and go to state 40
+    WORD            shift and go to state 39
+
+
+state 24
+
+    (44) exassign -> arraysh EQU . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    arraysh                        shift and go to state 37
+    expression                     shift and go to state 41
+    term                           shift and go to state 34
+
+state 25
+
+    (49) declare -> DECL WORD .
+    (50) declare -> DECL WORD . EQU term
+    (53) declare -> DECL WORD . EQU LSTATE arrayX RSTATE
+    (54) declare -> DECL WORD . LARRY NUM RARRY
+    (55) declare -> DECL WORD . LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+
+    NEWLINE         reduce using rule 49 (declare -> DECL WORD .)
+    $end            reduce using rule 49 (declare -> DECL WORD .)
+    LSTATE          reduce using rule 49 (declare -> DECL WORD .)
+    RSTATE          reduce using rule 49 (declare -> DECL WORD .)
+    EQU             shift and go to state 42
+    LARRY           shift and go to state 43
+
+
+state 26
+
+    (59) exprint -> TEXT LPAREN . WORD printMore RPAREN
+
+    WORD            shift and go to state 44
+
+
+state 27
+
+    (13) exif -> SO LPAREN . expression RPAREN LSTATE statement RSTATE
+    (14) exif -> SO LPAREN . expression RPAREN NEWLINE LSTATE statement RSTATE
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 45
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 28
+
+    (18) exloop -> LOOP LPAREN . expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> LOOP LPAREN . expression RPAREN LSTATE NEWLINE statement RSTATE
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 46
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 29
+
+    (20) exrepeat -> REPEAT LPAREN . expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> REPEAT LPAREN . expression RPAREN NEWLINE LSTATE statement RSTATE
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 47
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 30
+
+    (1) statement -> statement NEWLINE statement .
+    (2) statement -> statement NEWLINE statement . NEWLINE
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    $end            reduce using rule 1 (statement -> statement NEWLINE statement .)
+    LSTATE          reduce using rule 1 (statement -> statement NEWLINE statement .)
+    RSTATE          reduce using rule 1 (statement -> statement NEWLINE statement .)
+    NEWLINE         shift and go to state 48
+
+  ! NEWLINE         [ reduce using rule 1 (statement -> statement NEWLINE statement .) ]
+
+
+state 31
+
+    (16) exelse -> OTHERWISE LSTATE . statement LSTATE OTHERWISE
+    (17) exelse -> OTHERWISE LSTATE . NEWLINE statement RSTATE
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    NEWLINE         shift and go to state 50
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+    statement                      shift and go to state 49
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 32
+
+    (37) term -> WORD .
+    (51) arraysh -> WORD . [ NUM ]
+    (52) arraysh -> WORD . [ WORD ]
+
+    PLUS            reduce using rule 37 (term -> WORD .)
+    MINUS           reduce using rule 37 (term -> WORD .)
+    MUL             reduce using rule 37 (term -> WORD .)
+    DIV             reduce using rule 37 (term -> WORD .)
+    MOD             reduce using rule 37 (term -> WORD .)
+    EQUTO           reduce using rule 37 (term -> WORD .)
+    NOEQU           reduce using rule 37 (term -> WORD .)
+    LESS            reduce using rule 37 (term -> WORD .)
+    MORE            reduce using rule 37 (term -> WORD .)
+    NEWLINE         reduce using rule 37 (term -> WORD .)
+    $end            reduce using rule 37 (term -> WORD .)
+    LSTATE          reduce using rule 37 (term -> WORD .)
+    RSTATE          reduce using rule 37 (term -> WORD .)
+    RPAREN          reduce using rule 37 (term -> WORD .)
+    ,               reduce using rule 37 (term -> WORD .)
+    [               shift and go to state 23
+
+
+state 33
+
+    (43) exassign -> WORD EQU expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    NEWLINE         reduce using rule 43 (exassign -> WORD EQU expression .)
+    $end            reduce using rule 43 (exassign -> WORD EQU expression .)
+    LSTATE          reduce using rule 43 (exassign -> WORD EQU expression .)
+    RSTATE          reduce using rule 43 (exassign -> WORD EQU expression .)
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+
+state 34
+
+    (23) expression -> term . PLUS term
+    (24) expression -> term . PLUS expression
+    (26) expression -> term . MINUS term
+    (27) expression -> term . MINUS expression
+    (29) expression -> term . MUL term
+    (30) expression -> term . MUL expression
+    (32) expression -> term . DIV term
+    (33) expression -> term . DIV expression
+    (35) expression -> term . MOD term
+    (36) expression -> term . MOD expression
+    (40) expression -> term .
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for MUL resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for MOD resolved as shift
+    PLUS            shift and go to state 60
+    MINUS           shift and go to state 61
+    MUL             shift and go to state 62
+    DIV             shift and go to state 63
+    MOD             shift and go to state 64
+    EQUTO           reduce using rule 40 (expression -> term .)
+    NOEQU           reduce using rule 40 (expression -> term .)
+    LESS            reduce using rule 40 (expression -> term .)
+    MORE            reduce using rule 40 (expression -> term .)
+    NEWLINE         reduce using rule 40 (expression -> term .)
+    $end            reduce using rule 40 (expression -> term .)
+    LSTATE          reduce using rule 40 (expression -> term .)
+    RSTATE          reduce using rule 40 (expression -> term .)
+    RPAREN          reduce using rule 40 (expression -> term .)
+    ,               reduce using rule 40 (expression -> term .)
+
+  ! PLUS            [ reduce using rule 40 (expression -> term .) ]
+  ! MINUS           [ reduce using rule 40 (expression -> term .) ]
+  ! MUL             [ reduce using rule 40 (expression -> term .) ]
+  ! DIV             [ reduce using rule 40 (expression -> term .) ]
+  ! MOD             [ reduce using rule 40 (expression -> term .) ]
+
+
+state 35
+
+    (41) expression -> MINUS . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 65
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 36
+
+    (42) expression -> LPAREN . expression RPAREN
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 66
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 37
+
+    (38) term -> arraysh .
+
+    PLUS            reduce using rule 38 (term -> arraysh .)
+    MINUS           reduce using rule 38 (term -> arraysh .)
+    MUL             reduce using rule 38 (term -> arraysh .)
+    DIV             reduce using rule 38 (term -> arraysh .)
+    MOD             reduce using rule 38 (term -> arraysh .)
+    EQUTO           reduce using rule 38 (term -> arraysh .)
+    NOEQU           reduce using rule 38 (term -> arraysh .)
+    LESS            reduce using rule 38 (term -> arraysh .)
+    MORE            reduce using rule 38 (term -> arraysh .)
+    NEWLINE         reduce using rule 38 (term -> arraysh .)
+    $end            reduce using rule 38 (term -> arraysh .)
+    LSTATE          reduce using rule 38 (term -> arraysh .)
+    RSTATE          reduce using rule 38 (term -> arraysh .)
+    RPAREN          reduce using rule 38 (term -> arraysh .)
+    ,               reduce using rule 38 (term -> arraysh .)
+
+
+state 38
+
+    (39) term -> NUM .
+
+    PLUS            reduce using rule 39 (term -> NUM .)
+    MINUS           reduce using rule 39 (term -> NUM .)
+    MUL             reduce using rule 39 (term -> NUM .)
+    DIV             reduce using rule 39 (term -> NUM .)
+    MOD             reduce using rule 39 (term -> NUM .)
+    EQUTO           reduce using rule 39 (term -> NUM .)
+    NOEQU           reduce using rule 39 (term -> NUM .)
+    LESS            reduce using rule 39 (term -> NUM .)
+    MORE            reduce using rule 39 (term -> NUM .)
+    NEWLINE         reduce using rule 39 (term -> NUM .)
+    $end            reduce using rule 39 (term -> NUM .)
+    LSTATE          reduce using rule 39 (term -> NUM .)
+    RSTATE          reduce using rule 39 (term -> NUM .)
+    RPAREN          reduce using rule 39 (term -> NUM .)
+    ,               reduce using rule 39 (term -> NUM .)
+
+
+state 39
+
+    (52) arraysh -> WORD [ WORD . ]
+
+    ]               shift and go to state 67
+
+
+state 40
+
+    (51) arraysh -> WORD [ NUM . ]
+
+    ]               shift and go to state 68
+
+
+state 41
+
+    (44) exassign -> arraysh EQU expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    NEWLINE         reduce using rule 44 (exassign -> arraysh EQU expression .)
+    $end            reduce using rule 44 (exassign -> arraysh EQU expression .)
+    LSTATE          reduce using rule 44 (exassign -> arraysh EQU expression .)
+    RSTATE          reduce using rule 44 (exassign -> arraysh EQU expression .)
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+
+state 42
+
+    (50) declare -> DECL WORD EQU . term
+    (53) declare -> DECL WORD EQU . LSTATE arrayX RSTATE
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    LSTATE          shift and go to state 70
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    term                           shift and go to state 69
+    arraysh                        shift and go to state 37
+
+state 43
+
+    (54) declare -> DECL WORD LARRY . NUM RARRY
+    (55) declare -> DECL WORD LARRY . NUM RARRY EQU LSTATE arrayX RSTATE
+
+    NUM             shift and go to state 71
+
+
+state 44
+
+    (59) exprint -> TEXT LPAREN WORD . printMore RPAREN
+    (60) printMore -> . , expression printMore
+    (61) printMore -> . empty empty empty
+    (62) empty -> .
+
+    ,               shift and go to state 73
+    RPAREN          reduce using rule 62 (empty -> .)
+
+    printMore                      shift and go to state 72
+    empty                          shift and go to state 74
+
+state 45
+
+    (13) exif -> SO LPAREN expression . RPAREN LSTATE statement RSTATE
+    (14) exif -> SO LPAREN expression . RPAREN NEWLINE LSTATE statement RSTATE
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    RPAREN          shift and go to state 75
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+
+state 46
+
+    (18) exloop -> LOOP LPAREN expression . RPAREN LSTATE statement RSTATE
+    (19) exloop -> LOOP LPAREN expression . RPAREN LSTATE NEWLINE statement RSTATE
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    RPAREN          shift and go to state 76
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+
+state 47
+
+    (20) exrepeat -> REPEAT LPAREN expression . RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> REPEAT LPAREN expression . RPAREN NEWLINE LSTATE statement RSTATE
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    RPAREN          shift and go to state 77
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+
+state 48
+
+    (2) statement -> statement NEWLINE statement NEWLINE .
+    (1) statement -> statement NEWLINE . statement
+    (2) statement -> statement NEWLINE . statement NEWLINE
+    (10) statement -> statement NEWLINE .
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+  ! reduce/reduce conflict for NEWLINE resolved using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
+  ! reduce/reduce conflict for $end resolved using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
+  ! reduce/reduce conflict for LSTATE resolved using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
+  ! reduce/reduce conflict for RSTATE resolved using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    $end            reduce using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
+    LSTATE          reduce using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
+    RSTATE          reduce using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+  ! NEWLINE         [ reduce using rule 2 (statement -> statement NEWLINE statement NEWLINE .) ]
+  ! NEWLINE         [ reduce using rule 10 (statement -> statement NEWLINE .) ]
+  ! $end            [ reduce using rule 10 (statement -> statement NEWLINE .) ]
+  ! LSTATE          [ reduce using rule 10 (statement -> statement NEWLINE .) ]
+  ! RSTATE          [ reduce using rule 10 (statement -> statement NEWLINE .) ]
+
+    statement                      shift and go to state 30
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 49
+
+    (16) exelse -> OTHERWISE LSTATE statement . LSTATE OTHERWISE
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+    LSTATE          shift and go to state 78
+    NEWLINE         shift and go to state 17
+
+
+state 50
+
+    (17) exelse -> OTHERWISE LSTATE NEWLINE . statement RSTATE
+    (11) statement -> NEWLINE . statement
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+    statement                      shift and go to state 79
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 51
+
+    (22) expression -> expression PLUS . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 80
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 52
+
+    (25) expression -> expression MINUS . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 81
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 53
+
+    (28) expression -> expression MUL . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 82
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 54
+
+    (31) expression -> expression DIV . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 83
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 55
+
+    (34) expression -> expression MOD . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 84
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 56
+
+    (45) expression -> expression EQUTO . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 85
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 57
+
+    (46) expression -> expression NOEQU . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 86
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 58
+
+    (47) expression -> expression LESS . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 87
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 59
+
+    (48) expression -> expression MORE . expression
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 88
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 60
+
+    (23) expression -> term PLUS . term
+    (24) expression -> term PLUS . expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+
+    term                           shift and go to state 89
+    expression                     shift and go to state 90
+    arraysh                        shift and go to state 37
+
+state 61
+
+    (26) expression -> term MINUS . term
+    (27) expression -> term MINUS . expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+
+    term                           shift and go to state 91
+    expression                     shift and go to state 92
+    arraysh                        shift and go to state 37
+
+state 62
+
+    (29) expression -> term MUL . term
+    (30) expression -> term MUL . expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+
+    term                           shift and go to state 93
+    expression                     shift and go to state 94
+    arraysh                        shift and go to state 37
+
+state 63
+
+    (32) expression -> term DIV . term
+    (33) expression -> term DIV . expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+
+    term                           shift and go to state 95
+    expression                     shift and go to state 96
+    arraysh                        shift and go to state 37
+
+state 64
+
+    (35) expression -> term MOD . term
+    (36) expression -> term MOD . expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+
+    term                           shift and go to state 97
+    expression                     shift and go to state 98
+    arraysh                        shift and go to state 37
+
+state 65
+
+    (41) expression -> MINUS expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 41 (expression -> MINUS expression .)
+    MINUS           reduce using rule 41 (expression -> MINUS expression .)
+    EQUTO           reduce using rule 41 (expression -> MINUS expression .)
+    NOEQU           reduce using rule 41 (expression -> MINUS expression .)
+    NEWLINE         reduce using rule 41 (expression -> MINUS expression .)
+    $end            reduce using rule 41 (expression -> MINUS expression .)
+    LSTATE          reduce using rule 41 (expression -> MINUS expression .)
+    RSTATE          reduce using rule 41 (expression -> MINUS expression .)
+    RPAREN          reduce using rule 41 (expression -> MINUS expression .)
+    ,               reduce using rule 41 (expression -> MINUS expression .)
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! MUL             [ reduce using rule 41 (expression -> MINUS expression .) ]
+  ! DIV             [ reduce using rule 41 (expression -> MINUS expression .) ]
+  ! MOD             [ reduce using rule 41 (expression -> MINUS expression .) ]
+  ! LESS            [ reduce using rule 41 (expression -> MINUS expression .) ]
+  ! MORE            [ reduce using rule 41 (expression -> MINUS expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 66
+
+    (42) expression -> LPAREN expression . RPAREN
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    RPAREN          shift and go to state 99
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+
+state 67
+
+    (52) arraysh -> WORD [ WORD ] .
+
+    EQU             reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    PLUS            reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    MINUS           reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    MUL             reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    DIV             reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    MOD             reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    EQUTO           reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    NOEQU           reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    LESS            reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    MORE            reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    NEWLINE         reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    $end            reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    LSTATE          reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    RSTATE          reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    RPAREN          reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+    ,               reduce using rule 52 (arraysh -> WORD [ WORD ] .)
+
+
+state 68
+
+    (51) arraysh -> WORD [ NUM ] .
+
+    EQU             reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    PLUS            reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    MINUS           reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    MUL             reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    DIV             reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    MOD             reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    EQUTO           reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    NOEQU           reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    LESS            reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    MORE            reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    NEWLINE         reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    $end            reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    LSTATE          reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    RSTATE          reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    RPAREN          reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+    ,               reduce using rule 51 (arraysh -> WORD [ NUM ] .)
+
+
+state 69
+
+    (50) declare -> DECL WORD EQU term .
+
+    NEWLINE         reduce using rule 50 (declare -> DECL WORD EQU term .)
+    $end            reduce using rule 50 (declare -> DECL WORD EQU term .)
+    LSTATE          reduce using rule 50 (declare -> DECL WORD EQU term .)
+    RSTATE          reduce using rule 50 (declare -> DECL WORD EQU term .)
+
+
+state 70
+
+    (53) declare -> DECL WORD EQU LSTATE . arrayX RSTATE
+    (56) arrayX -> . NUM arrayY
+
+    NUM             shift and go to state 101
+
+    arrayX                         shift and go to state 100
+
+state 71
+
+    (54) declare -> DECL WORD LARRY NUM . RARRY
+    (55) declare -> DECL WORD LARRY NUM . RARRY EQU LSTATE arrayX RSTATE
+
+    RARRY           shift and go to state 102
+
+
+state 72
+
+    (59) exprint -> TEXT LPAREN WORD printMore . RPAREN
+
+    RPAREN          shift and go to state 103
+
+
+state 73
+
+    (60) printMore -> , . expression printMore
+    (22) expression -> . expression PLUS expression
+    (23) expression -> . term PLUS term
+    (24) expression -> . term PLUS expression
+    (25) expression -> . expression MINUS expression
+    (26) expression -> . term MINUS term
+    (27) expression -> . term MINUS expression
+    (28) expression -> . expression MUL expression
+    (29) expression -> . term MUL term
+    (30) expression -> . term MUL expression
+    (31) expression -> . expression DIV expression
+    (32) expression -> . term DIV term
+    (33) expression -> . term DIV expression
+    (34) expression -> . expression MOD expression
+    (35) expression -> . term MOD term
+    (36) expression -> . term MOD expression
+    (40) expression -> . term
+    (41) expression -> . MINUS expression
+    (42) expression -> . LPAREN expression RPAREN
+    (45) expression -> . expression EQUTO expression
+    (46) expression -> . expression NOEQU expression
+    (47) expression -> . expression LESS expression
+    (48) expression -> . expression MORE expression
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    MINUS           shift and go to state 35
+    LPAREN          shift and go to state 36
+    WORD            shift and go to state 32
+    NUM             shift and go to state 38
+
+    expression                     shift and go to state 104
+    term                           shift and go to state 34
+    arraysh                        shift and go to state 37
+
+state 74
+
+    (61) printMore -> empty . empty empty
+    (62) empty -> .
+
+    RPAREN          reduce using rule 62 (empty -> .)
+
+    empty                          shift and go to state 105
+
+state 75
+
+    (13) exif -> SO LPAREN expression RPAREN . LSTATE statement RSTATE
+    (14) exif -> SO LPAREN expression RPAREN . NEWLINE LSTATE statement RSTATE
+
+    LSTATE          shift and go to state 106
+    NEWLINE         shift and go to state 107
+
+
+state 76
+
+    (18) exloop -> LOOP LPAREN expression RPAREN . LSTATE statement RSTATE
+    (19) exloop -> LOOP LPAREN expression RPAREN . LSTATE NEWLINE statement RSTATE
+
+    LSTATE          shift and go to state 108
+
+
+state 77
+
+    (20) exrepeat -> REPEAT LPAREN expression RPAREN . LSTATE statement RSTATE
+    (21) exrepeat -> REPEAT LPAREN expression RPAREN . NEWLINE LSTATE statement RSTATE
+
+    LSTATE          shift and go to state 109
+    NEWLINE         shift and go to state 110
+
+
+state 78
+
+    (16) exelse -> OTHERWISE LSTATE statement LSTATE . OTHERWISE
+
+    OTHERWISE       shift and go to state 111
+
+
+state 79
+
+    (17) exelse -> OTHERWISE LSTATE NEWLINE statement . RSTATE
+    (11) statement -> NEWLINE statement .
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    RSTATE          shift and go to state 112
+    LSTATE          reduce using rule 11 (statement -> NEWLINE statement .)
+    NEWLINE         shift and go to state 17
+
+  ! NEWLINE         [ reduce using rule 11 (statement -> NEWLINE statement .) ]
+
+
+state 80
+
+    (22) expression -> expression PLUS expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 22 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 22 (expression -> expression PLUS expression .)
+    EQUTO           reduce using rule 22 (expression -> expression PLUS expression .)
+    NOEQU           reduce using rule 22 (expression -> expression PLUS expression .)
+    NEWLINE         reduce using rule 22 (expression -> expression PLUS expression .)
+    $end            reduce using rule 22 (expression -> expression PLUS expression .)
+    LSTATE          reduce using rule 22 (expression -> expression PLUS expression .)
+    RSTATE          reduce using rule 22 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 22 (expression -> expression PLUS expression .)
+    ,               reduce using rule 22 (expression -> expression PLUS expression .)
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! MUL             [ reduce using rule 22 (expression -> expression PLUS expression .) ]
+  ! DIV             [ reduce using rule 22 (expression -> expression PLUS expression .) ]
+  ! MOD             [ reduce using rule 22 (expression -> expression PLUS expression .) ]
+  ! LESS            [ reduce using rule 22 (expression -> expression PLUS expression .) ]
+  ! MORE            [ reduce using rule 22 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 81
+
+    (25) expression -> expression MINUS expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 25 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 25 (expression -> expression MINUS expression .)
+    EQUTO           reduce using rule 25 (expression -> expression MINUS expression .)
+    NOEQU           reduce using rule 25 (expression -> expression MINUS expression .)
+    NEWLINE         reduce using rule 25 (expression -> expression MINUS expression .)
+    $end            reduce using rule 25 (expression -> expression MINUS expression .)
+    LSTATE          reduce using rule 25 (expression -> expression MINUS expression .)
+    RSTATE          reduce using rule 25 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 25 (expression -> expression MINUS expression .)
+    ,               reduce using rule 25 (expression -> expression MINUS expression .)
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! MUL             [ reduce using rule 25 (expression -> expression MINUS expression .) ]
+  ! DIV             [ reduce using rule 25 (expression -> expression MINUS expression .) ]
+  ! MOD             [ reduce using rule 25 (expression -> expression MINUS expression .) ]
+  ! LESS            [ reduce using rule 25 (expression -> expression MINUS expression .) ]
+  ! MORE            [ reduce using rule 25 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 82
+
+    (28) expression -> expression MUL expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 28 (expression -> expression MUL expression .)
+    MINUS           reduce using rule 28 (expression -> expression MUL expression .)
+    MUL             reduce using rule 28 (expression -> expression MUL expression .)
+    DIV             reduce using rule 28 (expression -> expression MUL expression .)
+    MOD             reduce using rule 28 (expression -> expression MUL expression .)
+    EQUTO           reduce using rule 28 (expression -> expression MUL expression .)
+    NOEQU           reduce using rule 28 (expression -> expression MUL expression .)
+    NEWLINE         reduce using rule 28 (expression -> expression MUL expression .)
+    $end            reduce using rule 28 (expression -> expression MUL expression .)
+    LSTATE          reduce using rule 28 (expression -> expression MUL expression .)
+    RSTATE          reduce using rule 28 (expression -> expression MUL expression .)
+    RPAREN          reduce using rule 28 (expression -> expression MUL expression .)
+    ,               reduce using rule 28 (expression -> expression MUL expression .)
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! LESS            [ reduce using rule 28 (expression -> expression MUL expression .) ]
+  ! MORE            [ reduce using rule 28 (expression -> expression MUL expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! MUL             [ shift and go to state 53 ]
+  ! DIV             [ shift and go to state 54 ]
+  ! MOD             [ shift and go to state 55 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 83
+
+    (31) expression -> expression DIV expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 31 (expression -> expression DIV expression .)
+    MINUS           reduce using rule 31 (expression -> expression DIV expression .)
+    MUL             reduce using rule 31 (expression -> expression DIV expression .)
+    DIV             reduce using rule 31 (expression -> expression DIV expression .)
+    MOD             reduce using rule 31 (expression -> expression DIV expression .)
+    EQUTO           reduce using rule 31 (expression -> expression DIV expression .)
+    NOEQU           reduce using rule 31 (expression -> expression DIV expression .)
+    NEWLINE         reduce using rule 31 (expression -> expression DIV expression .)
+    $end            reduce using rule 31 (expression -> expression DIV expression .)
+    LSTATE          reduce using rule 31 (expression -> expression DIV expression .)
+    RSTATE          reduce using rule 31 (expression -> expression DIV expression .)
+    RPAREN          reduce using rule 31 (expression -> expression DIV expression .)
+    ,               reduce using rule 31 (expression -> expression DIV expression .)
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! LESS            [ reduce using rule 31 (expression -> expression DIV expression .) ]
+  ! MORE            [ reduce using rule 31 (expression -> expression DIV expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! MUL             [ shift and go to state 53 ]
+  ! DIV             [ shift and go to state 54 ]
+  ! MOD             [ shift and go to state 55 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 84
+
+    (34) expression -> expression MOD expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 34 (expression -> expression MOD expression .)
+    MINUS           reduce using rule 34 (expression -> expression MOD expression .)
+    MUL             reduce using rule 34 (expression -> expression MOD expression .)
+    DIV             reduce using rule 34 (expression -> expression MOD expression .)
+    MOD             reduce using rule 34 (expression -> expression MOD expression .)
+    EQUTO           reduce using rule 34 (expression -> expression MOD expression .)
+    NOEQU           reduce using rule 34 (expression -> expression MOD expression .)
+    NEWLINE         reduce using rule 34 (expression -> expression MOD expression .)
+    $end            reduce using rule 34 (expression -> expression MOD expression .)
+    LSTATE          reduce using rule 34 (expression -> expression MOD expression .)
+    RSTATE          reduce using rule 34 (expression -> expression MOD expression .)
+    RPAREN          reduce using rule 34 (expression -> expression MOD expression .)
+    ,               reduce using rule 34 (expression -> expression MOD expression .)
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! LESS            [ reduce using rule 34 (expression -> expression MOD expression .) ]
+  ! MORE            [ reduce using rule 34 (expression -> expression MOD expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! MUL             [ shift and go to state 53 ]
+  ! DIV             [ shift and go to state 54 ]
+  ! MOD             [ shift and go to state 55 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 85
+
+    (45) expression -> expression EQUTO expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for MUL resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for MOD resolved as shift
+  ! shift/reduce conflict for EQUTO resolved as shift
+  ! shift/reduce conflict for NOEQU resolved as shift
+  ! shift/reduce conflict for LESS resolved as shift
+  ! shift/reduce conflict for MORE resolved as shift
+    NEWLINE         reduce using rule 45 (expression -> expression EQUTO expression .)
+    $end            reduce using rule 45 (expression -> expression EQUTO expression .)
+    LSTATE          reduce using rule 45 (expression -> expression EQUTO expression .)
+    RSTATE          reduce using rule 45 (expression -> expression EQUTO expression .)
+    RPAREN          reduce using rule 45 (expression -> expression EQUTO expression .)
+    ,               reduce using rule 45 (expression -> expression EQUTO expression .)
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! PLUS            [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+  ! MINUS           [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+  ! MUL             [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+  ! DIV             [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+  ! MOD             [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+  ! EQUTO           [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+  ! NOEQU           [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+  ! LESS            [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+  ! MORE            [ reduce using rule 45 (expression -> expression EQUTO expression .) ]
+
+
+state 86
+
+    (46) expression -> expression NOEQU expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for MUL resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for MOD resolved as shift
+  ! shift/reduce conflict for EQUTO resolved as shift
+  ! shift/reduce conflict for NOEQU resolved as shift
+  ! shift/reduce conflict for LESS resolved as shift
+  ! shift/reduce conflict for MORE resolved as shift
+    NEWLINE         reduce using rule 46 (expression -> expression NOEQU expression .)
+    $end            reduce using rule 46 (expression -> expression NOEQU expression .)
+    LSTATE          reduce using rule 46 (expression -> expression NOEQU expression .)
+    RSTATE          reduce using rule 46 (expression -> expression NOEQU expression .)
+    RPAREN          reduce using rule 46 (expression -> expression NOEQU expression .)
+    ,               reduce using rule 46 (expression -> expression NOEQU expression .)
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! PLUS            [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+  ! MINUS           [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+  ! MUL             [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+  ! DIV             [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+  ! MOD             [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+  ! EQUTO           [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+  ! NOEQU           [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+  ! LESS            [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+  ! MORE            [ reduce using rule 46 (expression -> expression NOEQU expression .) ]
+
+
+state 87
+
+    (47) expression -> expression LESS expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 47 (expression -> expression LESS expression .)
+    MINUS           reduce using rule 47 (expression -> expression LESS expression .)
+    MUL             reduce using rule 47 (expression -> expression LESS expression .)
+    DIV             reduce using rule 47 (expression -> expression LESS expression .)
+    MOD             reduce using rule 47 (expression -> expression LESS expression .)
+    EQUTO           reduce using rule 47 (expression -> expression LESS expression .)
+    NOEQU           reduce using rule 47 (expression -> expression LESS expression .)
+    LESS            reduce using rule 47 (expression -> expression LESS expression .)
+    MORE            reduce using rule 47 (expression -> expression LESS expression .)
+    NEWLINE         reduce using rule 47 (expression -> expression LESS expression .)
+    $end            reduce using rule 47 (expression -> expression LESS expression .)
+    LSTATE          reduce using rule 47 (expression -> expression LESS expression .)
+    RSTATE          reduce using rule 47 (expression -> expression LESS expression .)
+    RPAREN          reduce using rule 47 (expression -> expression LESS expression .)
+    ,               reduce using rule 47 (expression -> expression LESS expression .)
+
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! MUL             [ shift and go to state 53 ]
+  ! DIV             [ shift and go to state 54 ]
+  ! MOD             [ shift and go to state 55 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+  ! LESS            [ shift and go to state 58 ]
+  ! MORE            [ shift and go to state 59 ]
+
+
+state 88
+
+    (48) expression -> expression MORE expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 48 (expression -> expression MORE expression .)
+    MINUS           reduce using rule 48 (expression -> expression MORE expression .)
+    MUL             reduce using rule 48 (expression -> expression MORE expression .)
+    DIV             reduce using rule 48 (expression -> expression MORE expression .)
+    MOD             reduce using rule 48 (expression -> expression MORE expression .)
+    EQUTO           reduce using rule 48 (expression -> expression MORE expression .)
+    NOEQU           reduce using rule 48 (expression -> expression MORE expression .)
+    LESS            reduce using rule 48 (expression -> expression MORE expression .)
+    MORE            reduce using rule 48 (expression -> expression MORE expression .)
+    NEWLINE         reduce using rule 48 (expression -> expression MORE expression .)
+    $end            reduce using rule 48 (expression -> expression MORE expression .)
+    LSTATE          reduce using rule 48 (expression -> expression MORE expression .)
+    RSTATE          reduce using rule 48 (expression -> expression MORE expression .)
+    RPAREN          reduce using rule 48 (expression -> expression MORE expression .)
+    ,               reduce using rule 48 (expression -> expression MORE expression .)
+
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! MUL             [ shift and go to state 53 ]
+  ! DIV             [ shift and go to state 54 ]
+  ! MOD             [ shift and go to state 55 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+  ! LESS            [ shift and go to state 58 ]
+  ! MORE            [ shift and go to state 59 ]
+
+
+state 89
+
+    (23) expression -> term PLUS term .
+    (23) expression -> term . PLUS term
+    (24) expression -> term . PLUS expression
+    (26) expression -> term . MINUS term
+    (27) expression -> term . MINUS expression
+    (29) expression -> term . MUL term
+    (30) expression -> term . MUL expression
+    (32) expression -> term . DIV term
+    (33) expression -> term . DIV expression
+    (35) expression -> term . MOD term
+    (36) expression -> term . MOD expression
+    (40) expression -> term .
+
+  ! reduce/reduce conflict for PLUS resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for MINUS resolved using rule 23 (expression -> term PLUS term .)
+  ! shift/reduce conflict for MUL resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for MOD resolved as shift
+  ! reduce/reduce conflict for EQUTO resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for NOEQU resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for LESS resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for MORE resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for NEWLINE resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for LSTATE resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for RSTATE resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 23 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for , resolved using rule 23 (expression -> term PLUS term .)
+    PLUS            reduce using rule 23 (expression -> term PLUS term .)
+    MINUS           reduce using rule 23 (expression -> term PLUS term .)
+    EQUTO           reduce using rule 23 (expression -> term PLUS term .)
+    NOEQU           reduce using rule 23 (expression -> term PLUS term .)
+    LESS            reduce using rule 23 (expression -> term PLUS term .)
+    MORE            reduce using rule 23 (expression -> term PLUS term .)
+    NEWLINE         reduce using rule 23 (expression -> term PLUS term .)
+    $end            reduce using rule 23 (expression -> term PLUS term .)
+    LSTATE          reduce using rule 23 (expression -> term PLUS term .)
+    RSTATE          reduce using rule 23 (expression -> term PLUS term .)
+    RPAREN          reduce using rule 23 (expression -> term PLUS term .)
+    ,               reduce using rule 23 (expression -> term PLUS term .)
+    MUL             shift and go to state 62
+    DIV             shift and go to state 63
+    MOD             shift and go to state 64
+
+  ! MUL             [ reduce using rule 23 (expression -> term PLUS term .) ]
+  ! DIV             [ reduce using rule 23 (expression -> term PLUS term .) ]
+  ! MOD             [ reduce using rule 23 (expression -> term PLUS term .) ]
+  ! PLUS            [ shift and go to state 60 ]
+  ! MINUS           [ shift and go to state 61 ]
+  ! PLUS            [ reduce using rule 40 (expression -> term .) ]
+  ! MINUS           [ reduce using rule 40 (expression -> term .) ]
+  ! MUL             [ reduce using rule 40 (expression -> term .) ]
+  ! DIV             [ reduce using rule 40 (expression -> term .) ]
+  ! MOD             [ reduce using rule 40 (expression -> term .) ]
+  ! EQUTO           [ reduce using rule 40 (expression -> term .) ]
+  ! NOEQU           [ reduce using rule 40 (expression -> term .) ]
+  ! LESS            [ reduce using rule 40 (expression -> term .) ]
+  ! MORE            [ reduce using rule 40 (expression -> term .) ]
+  ! NEWLINE         [ reduce using rule 40 (expression -> term .) ]
+  ! $end            [ reduce using rule 40 (expression -> term .) ]
+  ! LSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RPAREN          [ reduce using rule 40 (expression -> term .) ]
+  ! ,               [ reduce using rule 40 (expression -> term .) ]
+
+
+state 90
+
+    (24) expression -> term PLUS expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 24 (expression -> term PLUS expression .)
+    MINUS           reduce using rule 24 (expression -> term PLUS expression .)
+    EQUTO           reduce using rule 24 (expression -> term PLUS expression .)
+    NOEQU           reduce using rule 24 (expression -> term PLUS expression .)
+    NEWLINE         reduce using rule 24 (expression -> term PLUS expression .)
+    $end            reduce using rule 24 (expression -> term PLUS expression .)
+    LSTATE          reduce using rule 24 (expression -> term PLUS expression .)
+    RSTATE          reduce using rule 24 (expression -> term PLUS expression .)
+    RPAREN          reduce using rule 24 (expression -> term PLUS expression .)
+    ,               reduce using rule 24 (expression -> term PLUS expression .)
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! MUL             [ reduce using rule 24 (expression -> term PLUS expression .) ]
+  ! DIV             [ reduce using rule 24 (expression -> term PLUS expression .) ]
+  ! MOD             [ reduce using rule 24 (expression -> term PLUS expression .) ]
+  ! LESS            [ reduce using rule 24 (expression -> term PLUS expression .) ]
+  ! MORE            [ reduce using rule 24 (expression -> term PLUS expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 91
+
+    (26) expression -> term MINUS term .
+    (23) expression -> term . PLUS term
+    (24) expression -> term . PLUS expression
+    (26) expression -> term . MINUS term
+    (27) expression -> term . MINUS expression
+    (29) expression -> term . MUL term
+    (30) expression -> term . MUL expression
+    (32) expression -> term . DIV term
+    (33) expression -> term . DIV expression
+    (35) expression -> term . MOD term
+    (36) expression -> term . MOD expression
+    (40) expression -> term .
+
+  ! reduce/reduce conflict for PLUS resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for MINUS resolved using rule 26 (expression -> term MINUS term .)
+  ! shift/reduce conflict for MUL resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for MOD resolved as shift
+  ! reduce/reduce conflict for EQUTO resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for NOEQU resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for LESS resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for MORE resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for NEWLINE resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for $end resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for LSTATE resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for RSTATE resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 26 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for , resolved using rule 26 (expression -> term MINUS term .)
+    PLUS            reduce using rule 26 (expression -> term MINUS term .)
+    MINUS           reduce using rule 26 (expression -> term MINUS term .)
+    EQUTO           reduce using rule 26 (expression -> term MINUS term .)
+    NOEQU           reduce using rule 26 (expression -> term MINUS term .)
+    LESS            reduce using rule 26 (expression -> term MINUS term .)
+    MORE            reduce using rule 26 (expression -> term MINUS term .)
+    NEWLINE         reduce using rule 26 (expression -> term MINUS term .)
+    $end            reduce using rule 26 (expression -> term MINUS term .)
+    LSTATE          reduce using rule 26 (expression -> term MINUS term .)
+    RSTATE          reduce using rule 26 (expression -> term MINUS term .)
+    RPAREN          reduce using rule 26 (expression -> term MINUS term .)
+    ,               reduce using rule 26 (expression -> term MINUS term .)
+    MUL             shift and go to state 62
+    DIV             shift and go to state 63
+    MOD             shift and go to state 64
+
+  ! MUL             [ reduce using rule 26 (expression -> term MINUS term .) ]
+  ! DIV             [ reduce using rule 26 (expression -> term MINUS term .) ]
+  ! MOD             [ reduce using rule 26 (expression -> term MINUS term .) ]
+  ! PLUS            [ shift and go to state 60 ]
+  ! MINUS           [ shift and go to state 61 ]
+  ! PLUS            [ reduce using rule 40 (expression -> term .) ]
+  ! MINUS           [ reduce using rule 40 (expression -> term .) ]
+  ! MUL             [ reduce using rule 40 (expression -> term .) ]
+  ! DIV             [ reduce using rule 40 (expression -> term .) ]
+  ! MOD             [ reduce using rule 40 (expression -> term .) ]
+  ! EQUTO           [ reduce using rule 40 (expression -> term .) ]
+  ! NOEQU           [ reduce using rule 40 (expression -> term .) ]
+  ! LESS            [ reduce using rule 40 (expression -> term .) ]
+  ! MORE            [ reduce using rule 40 (expression -> term .) ]
+  ! NEWLINE         [ reduce using rule 40 (expression -> term .) ]
+  ! $end            [ reduce using rule 40 (expression -> term .) ]
+  ! LSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RPAREN          [ reduce using rule 40 (expression -> term .) ]
+  ! ,               [ reduce using rule 40 (expression -> term .) ]
+
+
+state 92
+
+    (27) expression -> term MINUS expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 27 (expression -> term MINUS expression .)
+    MINUS           reduce using rule 27 (expression -> term MINUS expression .)
+    EQUTO           reduce using rule 27 (expression -> term MINUS expression .)
+    NOEQU           reduce using rule 27 (expression -> term MINUS expression .)
+    NEWLINE         reduce using rule 27 (expression -> term MINUS expression .)
+    $end            reduce using rule 27 (expression -> term MINUS expression .)
+    LSTATE          reduce using rule 27 (expression -> term MINUS expression .)
+    RSTATE          reduce using rule 27 (expression -> term MINUS expression .)
+    RPAREN          reduce using rule 27 (expression -> term MINUS expression .)
+    ,               reduce using rule 27 (expression -> term MINUS expression .)
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! MUL             [ reduce using rule 27 (expression -> term MINUS expression .) ]
+  ! DIV             [ reduce using rule 27 (expression -> term MINUS expression .) ]
+  ! MOD             [ reduce using rule 27 (expression -> term MINUS expression .) ]
+  ! LESS            [ reduce using rule 27 (expression -> term MINUS expression .) ]
+  ! MORE            [ reduce using rule 27 (expression -> term MINUS expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 93
+
+    (29) expression -> term MUL term .
+    (23) expression -> term . PLUS term
+    (24) expression -> term . PLUS expression
+    (26) expression -> term . MINUS term
+    (27) expression -> term . MINUS expression
+    (29) expression -> term . MUL term
+    (30) expression -> term . MUL expression
+    (32) expression -> term . DIV term
+    (33) expression -> term . DIV expression
+    (35) expression -> term . MOD term
+    (36) expression -> term . MOD expression
+    (40) expression -> term .
+
+  ! reduce/reduce conflict for PLUS resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for MINUS resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for MUL resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for DIV resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for MOD resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for EQUTO resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for NOEQU resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for LESS resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for MORE resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for NEWLINE resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for $end resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for LSTATE resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for RSTATE resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 29 (expression -> term MUL term .)
+  ! reduce/reduce conflict for , resolved using rule 29 (expression -> term MUL term .)
+    PLUS            reduce using rule 29 (expression -> term MUL term .)
+    MINUS           reduce using rule 29 (expression -> term MUL term .)
+    MUL             reduce using rule 29 (expression -> term MUL term .)
+    DIV             reduce using rule 29 (expression -> term MUL term .)
+    MOD             reduce using rule 29 (expression -> term MUL term .)
+    EQUTO           reduce using rule 29 (expression -> term MUL term .)
+    NOEQU           reduce using rule 29 (expression -> term MUL term .)
+    LESS            reduce using rule 29 (expression -> term MUL term .)
+    MORE            reduce using rule 29 (expression -> term MUL term .)
+    NEWLINE         reduce using rule 29 (expression -> term MUL term .)
+    $end            reduce using rule 29 (expression -> term MUL term .)
+    LSTATE          reduce using rule 29 (expression -> term MUL term .)
+    RSTATE          reduce using rule 29 (expression -> term MUL term .)
+    RPAREN          reduce using rule 29 (expression -> term MUL term .)
+    ,               reduce using rule 29 (expression -> term MUL term .)
+
+  ! PLUS            [ shift and go to state 60 ]
+  ! MINUS           [ shift and go to state 61 ]
+  ! MUL             [ shift and go to state 62 ]
+  ! DIV             [ shift and go to state 63 ]
+  ! MOD             [ shift and go to state 64 ]
+  ! PLUS            [ reduce using rule 40 (expression -> term .) ]
+  ! MINUS           [ reduce using rule 40 (expression -> term .) ]
+  ! MUL             [ reduce using rule 40 (expression -> term .) ]
+  ! DIV             [ reduce using rule 40 (expression -> term .) ]
+  ! MOD             [ reduce using rule 40 (expression -> term .) ]
+  ! EQUTO           [ reduce using rule 40 (expression -> term .) ]
+  ! NOEQU           [ reduce using rule 40 (expression -> term .) ]
+  ! LESS            [ reduce using rule 40 (expression -> term .) ]
+  ! MORE            [ reduce using rule 40 (expression -> term .) ]
+  ! NEWLINE         [ reduce using rule 40 (expression -> term .) ]
+  ! $end            [ reduce using rule 40 (expression -> term .) ]
+  ! LSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RPAREN          [ reduce using rule 40 (expression -> term .) ]
+  ! ,               [ reduce using rule 40 (expression -> term .) ]
+
+
+state 94
+
+    (30) expression -> term MUL expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 30 (expression -> term MUL expression .)
+    MINUS           reduce using rule 30 (expression -> term MUL expression .)
+    MUL             reduce using rule 30 (expression -> term MUL expression .)
+    DIV             reduce using rule 30 (expression -> term MUL expression .)
+    MOD             reduce using rule 30 (expression -> term MUL expression .)
+    EQUTO           reduce using rule 30 (expression -> term MUL expression .)
+    NOEQU           reduce using rule 30 (expression -> term MUL expression .)
+    NEWLINE         reduce using rule 30 (expression -> term MUL expression .)
+    $end            reduce using rule 30 (expression -> term MUL expression .)
+    LSTATE          reduce using rule 30 (expression -> term MUL expression .)
+    RSTATE          reduce using rule 30 (expression -> term MUL expression .)
+    RPAREN          reduce using rule 30 (expression -> term MUL expression .)
+    ,               reduce using rule 30 (expression -> term MUL expression .)
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! LESS            [ reduce using rule 30 (expression -> term MUL expression .) ]
+  ! MORE            [ reduce using rule 30 (expression -> term MUL expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! MUL             [ shift and go to state 53 ]
+  ! DIV             [ shift and go to state 54 ]
+  ! MOD             [ shift and go to state 55 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 95
+
+    (32) expression -> term DIV term .
+    (23) expression -> term . PLUS term
+    (24) expression -> term . PLUS expression
+    (26) expression -> term . MINUS term
+    (27) expression -> term . MINUS expression
+    (29) expression -> term . MUL term
+    (30) expression -> term . MUL expression
+    (32) expression -> term . DIV term
+    (33) expression -> term . DIV expression
+    (35) expression -> term . MOD term
+    (36) expression -> term . MOD expression
+    (40) expression -> term .
+
+  ! reduce/reduce conflict for PLUS resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for MINUS resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for MUL resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for DIV resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for MOD resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for EQUTO resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for NOEQU resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for LESS resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for MORE resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for NEWLINE resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for $end resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for LSTATE resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for RSTATE resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 32 (expression -> term DIV term .)
+  ! reduce/reduce conflict for , resolved using rule 32 (expression -> term DIV term .)
+    PLUS            reduce using rule 32 (expression -> term DIV term .)
+    MINUS           reduce using rule 32 (expression -> term DIV term .)
+    MUL             reduce using rule 32 (expression -> term DIV term .)
+    DIV             reduce using rule 32 (expression -> term DIV term .)
+    MOD             reduce using rule 32 (expression -> term DIV term .)
+    EQUTO           reduce using rule 32 (expression -> term DIV term .)
+    NOEQU           reduce using rule 32 (expression -> term DIV term .)
+    LESS            reduce using rule 32 (expression -> term DIV term .)
+    MORE            reduce using rule 32 (expression -> term DIV term .)
+    NEWLINE         reduce using rule 32 (expression -> term DIV term .)
+    $end            reduce using rule 32 (expression -> term DIV term .)
+    LSTATE          reduce using rule 32 (expression -> term DIV term .)
+    RSTATE          reduce using rule 32 (expression -> term DIV term .)
+    RPAREN          reduce using rule 32 (expression -> term DIV term .)
+    ,               reduce using rule 32 (expression -> term DIV term .)
+
+  ! PLUS            [ shift and go to state 60 ]
+  ! MINUS           [ shift and go to state 61 ]
+  ! MUL             [ shift and go to state 62 ]
+  ! DIV             [ shift and go to state 63 ]
+  ! MOD             [ shift and go to state 64 ]
+  ! PLUS            [ reduce using rule 40 (expression -> term .) ]
+  ! MINUS           [ reduce using rule 40 (expression -> term .) ]
+  ! MUL             [ reduce using rule 40 (expression -> term .) ]
+  ! DIV             [ reduce using rule 40 (expression -> term .) ]
+  ! MOD             [ reduce using rule 40 (expression -> term .) ]
+  ! EQUTO           [ reduce using rule 40 (expression -> term .) ]
+  ! NOEQU           [ reduce using rule 40 (expression -> term .) ]
+  ! LESS            [ reduce using rule 40 (expression -> term .) ]
+  ! MORE            [ reduce using rule 40 (expression -> term .) ]
+  ! NEWLINE         [ reduce using rule 40 (expression -> term .) ]
+  ! $end            [ reduce using rule 40 (expression -> term .) ]
+  ! LSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RPAREN          [ reduce using rule 40 (expression -> term .) ]
+  ! ,               [ reduce using rule 40 (expression -> term .) ]
+
+
+state 96
+
+    (33) expression -> term DIV expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 33 (expression -> term DIV expression .)
+    MINUS           reduce using rule 33 (expression -> term DIV expression .)
+    MUL             reduce using rule 33 (expression -> term DIV expression .)
+    DIV             reduce using rule 33 (expression -> term DIV expression .)
+    MOD             reduce using rule 33 (expression -> term DIV expression .)
+    EQUTO           reduce using rule 33 (expression -> term DIV expression .)
+    NOEQU           reduce using rule 33 (expression -> term DIV expression .)
+    NEWLINE         reduce using rule 33 (expression -> term DIV expression .)
+    $end            reduce using rule 33 (expression -> term DIV expression .)
+    LSTATE          reduce using rule 33 (expression -> term DIV expression .)
+    RSTATE          reduce using rule 33 (expression -> term DIV expression .)
+    RPAREN          reduce using rule 33 (expression -> term DIV expression .)
+    ,               reduce using rule 33 (expression -> term DIV expression .)
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! LESS            [ reduce using rule 33 (expression -> term DIV expression .) ]
+  ! MORE            [ reduce using rule 33 (expression -> term DIV expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! MUL             [ shift and go to state 53 ]
+  ! DIV             [ shift and go to state 54 ]
+  ! MOD             [ shift and go to state 55 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 97
+
+    (35) expression -> term MOD term .
+    (23) expression -> term . PLUS term
+    (24) expression -> term . PLUS expression
+    (26) expression -> term . MINUS term
+    (27) expression -> term . MINUS expression
+    (29) expression -> term . MUL term
+    (30) expression -> term . MUL expression
+    (32) expression -> term . DIV term
+    (33) expression -> term . DIV expression
+    (35) expression -> term . MOD term
+    (36) expression -> term . MOD expression
+    (40) expression -> term .
+
+  ! reduce/reduce conflict for PLUS resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for MINUS resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for MUL resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for DIV resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for MOD resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for EQUTO resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for NOEQU resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for LESS resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for MORE resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for NEWLINE resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for $end resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for LSTATE resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for RSTATE resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 35 (expression -> term MOD term .)
+  ! reduce/reduce conflict for , resolved using rule 35 (expression -> term MOD term .)
+    PLUS            reduce using rule 35 (expression -> term MOD term .)
+    MINUS           reduce using rule 35 (expression -> term MOD term .)
+    MUL             reduce using rule 35 (expression -> term MOD term .)
+    DIV             reduce using rule 35 (expression -> term MOD term .)
+    MOD             reduce using rule 35 (expression -> term MOD term .)
+    EQUTO           reduce using rule 35 (expression -> term MOD term .)
+    NOEQU           reduce using rule 35 (expression -> term MOD term .)
+    LESS            reduce using rule 35 (expression -> term MOD term .)
+    MORE            reduce using rule 35 (expression -> term MOD term .)
+    NEWLINE         reduce using rule 35 (expression -> term MOD term .)
+    $end            reduce using rule 35 (expression -> term MOD term .)
+    LSTATE          reduce using rule 35 (expression -> term MOD term .)
+    RSTATE          reduce using rule 35 (expression -> term MOD term .)
+    RPAREN          reduce using rule 35 (expression -> term MOD term .)
+    ,               reduce using rule 35 (expression -> term MOD term .)
+
+  ! PLUS            [ shift and go to state 60 ]
+  ! MINUS           [ shift and go to state 61 ]
+  ! MUL             [ shift and go to state 62 ]
+  ! DIV             [ shift and go to state 63 ]
+  ! MOD             [ shift and go to state 64 ]
+  ! PLUS            [ reduce using rule 40 (expression -> term .) ]
+  ! MINUS           [ reduce using rule 40 (expression -> term .) ]
+  ! MUL             [ reduce using rule 40 (expression -> term .) ]
+  ! DIV             [ reduce using rule 40 (expression -> term .) ]
+  ! MOD             [ reduce using rule 40 (expression -> term .) ]
+  ! EQUTO           [ reduce using rule 40 (expression -> term .) ]
+  ! NOEQU           [ reduce using rule 40 (expression -> term .) ]
+  ! LESS            [ reduce using rule 40 (expression -> term .) ]
+  ! MORE            [ reduce using rule 40 (expression -> term .) ]
+  ! NEWLINE         [ reduce using rule 40 (expression -> term .) ]
+  ! $end            [ reduce using rule 40 (expression -> term .) ]
+  ! LSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RSTATE          [ reduce using rule 40 (expression -> term .) ]
+  ! RPAREN          [ reduce using rule 40 (expression -> term .) ]
+  ! ,               [ reduce using rule 40 (expression -> term .) ]
+
+
+state 98
+
+    (36) expression -> term MOD expression .
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+
+    PLUS            reduce using rule 36 (expression -> term MOD expression .)
+    MINUS           reduce using rule 36 (expression -> term MOD expression .)
+    MUL             reduce using rule 36 (expression -> term MOD expression .)
+    DIV             reduce using rule 36 (expression -> term MOD expression .)
+    MOD             reduce using rule 36 (expression -> term MOD expression .)
+    EQUTO           reduce using rule 36 (expression -> term MOD expression .)
+    NOEQU           reduce using rule 36 (expression -> term MOD expression .)
+    NEWLINE         reduce using rule 36 (expression -> term MOD expression .)
+    $end            reduce using rule 36 (expression -> term MOD expression .)
+    LSTATE          reduce using rule 36 (expression -> term MOD expression .)
+    RSTATE          reduce using rule 36 (expression -> term MOD expression .)
+    RPAREN          reduce using rule 36 (expression -> term MOD expression .)
+    ,               reduce using rule 36 (expression -> term MOD expression .)
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+
+  ! LESS            [ reduce using rule 36 (expression -> term MOD expression .) ]
+  ! MORE            [ reduce using rule 36 (expression -> term MOD expression .) ]
+  ! PLUS            [ shift and go to state 51 ]
+  ! MINUS           [ shift and go to state 52 ]
+  ! MUL             [ shift and go to state 53 ]
+  ! DIV             [ shift and go to state 54 ]
+  ! MOD             [ shift and go to state 55 ]
+  ! EQUTO           [ shift and go to state 56 ]
+  ! NOEQU           [ shift and go to state 57 ]
+
+
+state 99
+
+    (42) expression -> LPAREN expression RPAREN .
+
+    PLUS            reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    MUL             reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    DIV             reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    MOD             reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    EQUTO           reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    NOEQU           reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    LESS            reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    MORE            reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    LSTATE          reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    RSTATE          reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+    ,               reduce using rule 42 (expression -> LPAREN expression RPAREN .)
+
+
+state 100
+
+    (53) declare -> DECL WORD EQU LSTATE arrayX . RSTATE
+
+    RSTATE          shift and go to state 113
+
+
+state 101
+
+    (56) arrayX -> NUM . arrayY
+    (57) arrayY -> . , NUM arrayY
+    (58) arrayY -> . empty empty empty
+    (62) empty -> .
+
+    ,               shift and go to state 115
+    RSTATE          reduce using rule 62 (empty -> .)
+
+    arrayY                         shift and go to state 114
+    empty                          shift and go to state 116
+
+state 102
+
+    (54) declare -> DECL WORD LARRY NUM RARRY .
+    (55) declare -> DECL WORD LARRY NUM RARRY . EQU LSTATE arrayX RSTATE
+
+    NEWLINE         reduce using rule 54 (declare -> DECL WORD LARRY NUM RARRY .)
+    $end            reduce using rule 54 (declare -> DECL WORD LARRY NUM RARRY .)
+    LSTATE          reduce using rule 54 (declare -> DECL WORD LARRY NUM RARRY .)
+    RSTATE          reduce using rule 54 (declare -> DECL WORD LARRY NUM RARRY .)
+    EQU             shift and go to state 117
+
+
+state 103
+
+    (59) exprint -> TEXT LPAREN WORD printMore RPAREN .
+
+    NEWLINE         reduce using rule 59 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
+    $end            reduce using rule 59 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
+    LSTATE          reduce using rule 59 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
+    RSTATE          reduce using rule 59 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
+
+
+state 104
+
+    (60) printMore -> , expression . printMore
+    (22) expression -> expression . PLUS expression
+    (25) expression -> expression . MINUS expression
+    (28) expression -> expression . MUL expression
+    (31) expression -> expression . DIV expression
+    (34) expression -> expression . MOD expression
+    (45) expression -> expression . EQUTO expression
+    (46) expression -> expression . NOEQU expression
+    (47) expression -> expression . LESS expression
+    (48) expression -> expression . MORE expression
+    (60) printMore -> . , expression printMore
+    (61) printMore -> . empty empty empty
+    (62) empty -> .
+
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    MUL             shift and go to state 53
+    DIV             shift and go to state 54
+    MOD             shift and go to state 55
+    EQUTO           shift and go to state 56
+    NOEQU           shift and go to state 57
+    LESS            shift and go to state 58
+    MORE            shift and go to state 59
+    ,               shift and go to state 73
+    RPAREN          reduce using rule 62 (empty -> .)
+
+    printMore                      shift and go to state 118
+    empty                          shift and go to state 74
+
+state 105
+
+    (61) printMore -> empty empty . empty
+    (62) empty -> .
+
+    RPAREN          reduce using rule 62 (empty -> .)
+
+    empty                          shift and go to state 119
+
+state 106
+
+    (13) exif -> SO LPAREN expression RPAREN LSTATE . statement RSTATE
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+    statement                      shift and go to state 120
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 107
+
+    (14) exif -> SO LPAREN expression RPAREN NEWLINE . LSTATE statement RSTATE
+
+    LSTATE          shift and go to state 121
+
+
+state 108
+
+    (18) exloop -> LOOP LPAREN expression RPAREN LSTATE . statement RSTATE
+    (19) exloop -> LOOP LPAREN expression RPAREN LSTATE . NEWLINE statement RSTATE
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    NEWLINE         shift and go to state 123
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+    statement                      shift and go to state 122
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 109
+
+    (20) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE . statement RSTATE
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+    statement                      shift and go to state 124
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 110
+
+    (21) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE . LSTATE statement RSTATE
+
+    LSTATE          shift and go to state 125
+
+
+state 111
+
+    (16) exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .
+
+    NEWLINE         reduce using rule 16 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
+    $end            reduce using rule 16 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
+    LSTATE          reduce using rule 16 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
+    RSTATE          reduce using rule 16 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
+
+
+state 112
+
+    (17) exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .
+
+    NEWLINE         reduce using rule 17 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
+    $end            reduce using rule 17 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
+    LSTATE          reduce using rule 17 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
+    RSTATE          reduce using rule 17 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
+
+
+state 113
+
+    (53) declare -> DECL WORD EQU LSTATE arrayX RSTATE .
+
+    NEWLINE         reduce using rule 53 (declare -> DECL WORD EQU LSTATE arrayX RSTATE .)
+    $end            reduce using rule 53 (declare -> DECL WORD EQU LSTATE arrayX RSTATE .)
+    LSTATE          reduce using rule 53 (declare -> DECL WORD EQU LSTATE arrayX RSTATE .)
+    RSTATE          reduce using rule 53 (declare -> DECL WORD EQU LSTATE arrayX RSTATE .)
+
+
+state 114
+
+    (56) arrayX -> NUM arrayY .
+
+    RSTATE          reduce using rule 56 (arrayX -> NUM arrayY .)
+
+
+state 115
+
+    (57) arrayY -> , . NUM arrayY
+
+    NUM             shift and go to state 126
+
+
+state 116
+
+    (58) arrayY -> empty . empty empty
+    (62) empty -> .
+
+    RSTATE          reduce using rule 62 (empty -> .)
+
+    empty                          shift and go to state 127
+
+state 117
+
+    (55) declare -> DECL WORD LARRY NUM RARRY EQU . LSTATE arrayX RSTATE
+
+    LSTATE          shift and go to state 128
+
+
+state 118
+
+    (60) printMore -> , expression printMore .
+
+    RPAREN          reduce using rule 60 (printMore -> , expression printMore .)
+
+
+state 119
+
+    (61) printMore -> empty empty empty .
+
+    RPAREN          reduce using rule 61 (printMore -> empty empty empty .)
+
+
+state 120
+
+    (13) exif -> SO LPAREN expression RPAREN LSTATE statement . RSTATE
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+    RSTATE          shift and go to state 129
+    NEWLINE         shift and go to state 17
+
+
+state 121
+
+    (14) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE . statement RSTATE
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+    statement                      shift and go to state 130
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 122
+
+    (18) exloop -> LOOP LPAREN expression RPAREN LSTATE statement . RSTATE
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+    RSTATE          shift and go to state 131
+    NEWLINE         shift and go to state 17
+
+
+state 123
+
+    (19) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE . statement RSTATE
+    (11) statement -> NEWLINE . statement
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+    statement                      shift and go to state 132
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 124
+
+    (20) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement . RSTATE
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+    RSTATE          shift and go to state 133
+    NEWLINE         shift and go to state 17
+
+
+state 125
+
+    (21) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE . statement RSTATE
+    (1) statement -> . statement NEWLINE statement
+    (2) statement -> . statement NEWLINE statement NEWLINE
+    (3) statement -> . exassign
+    (4) statement -> . declare
+    (5) statement -> . exprint
+    (6) statement -> . exif
+    (7) statement -> . exelif
+    (8) statement -> . exloop
+    (9) statement -> . exrepeat
+    (10) statement -> . statement NEWLINE
+    (11) statement -> . NEWLINE statement
+    (12) statement -> . exloop NEWLINE
+    (43) exassign -> . WORD EQU expression
+    (44) exassign -> . arraysh EQU expression
+    (49) declare -> . DECL WORD
+    (50) declare -> . DECL WORD EQU term
+    (53) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
+    (54) declare -> . DECL WORD LARRY NUM RARRY
+    (55) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) exprint -> . TEXT LPAREN WORD printMore RPAREN
+    (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
+    (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (15) exelif -> . exif exelse
+    (18) exloop -> . LOOP LPAREN expression RPAREN LSTATE statement RSTATE
+    (19) exloop -> . LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
+    (20) exrepeat -> . REPEAT LPAREN expression RPAREN LSTATE statement RSTATE
+    (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
+    (51) arraysh -> . WORD [ NUM ]
+    (52) arraysh -> . WORD [ WORD ]
+
+    NEWLINE         shift and go to state 2
+    WORD            shift and go to state 10
+    DECL            shift and go to state 12
+    TEXT            shift and go to state 13
+    SO              shift and go to state 14
+    LOOP            shift and go to state 15
+    REPEAT          shift and go to state 16
+
+    statement                      shift and go to state 134
+    exassign                       shift and go to state 3
+    declare                        shift and go to state 4
+    exprint                        shift and go to state 5
+    exif                           shift and go to state 6
+    exelif                         shift and go to state 7
+    exloop                         shift and go to state 8
+    exrepeat                       shift and go to state 9
+    arraysh                        shift and go to state 11
+
+state 126
+
+    (57) arrayY -> , NUM . arrayY
+    (57) arrayY -> . , NUM arrayY
+    (58) arrayY -> . empty empty empty
+    (62) empty -> .
+
+    ,               shift and go to state 115
+    RSTATE          reduce using rule 62 (empty -> .)
+
+    arrayY                         shift and go to state 135
+    empty                          shift and go to state 116
+
+state 127
+
+    (58) arrayY -> empty empty . empty
+    (62) empty -> .
+
+    RSTATE          reduce using rule 62 (empty -> .)
+
+    empty                          shift and go to state 136
+
+state 128
+
+    (55) declare -> DECL WORD LARRY NUM RARRY EQU LSTATE . arrayX RSTATE
+    (56) arrayX -> . NUM arrayY
+
+    NUM             shift and go to state 101
+
+    arrayX                         shift and go to state 137
+
+state 129
+
+    (13) exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .
+
+    OTHERWISE       reduce using rule 13 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
+    NEWLINE         reduce using rule 13 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
+    $end            reduce using rule 13 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
+    LSTATE          reduce using rule 13 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
+    RSTATE          reduce using rule 13 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
+
+
+state 130
+
+    (14) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement . RSTATE
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+    RSTATE          shift and go to state 138
+    NEWLINE         shift and go to state 17
+
+
+state 131
+
+    (18) exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .
+
+    NEWLINE         reduce using rule 18 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
+    $end            reduce using rule 18 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
+    LSTATE          reduce using rule 18 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
+    RSTATE          reduce using rule 18 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
+
+
+state 132
+
+    (19) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement . RSTATE
+    (11) statement -> NEWLINE statement .
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+  ! shift/reduce conflict for RSTATE resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    RSTATE          shift and go to state 139
+    NEWLINE         shift and go to state 17
+
+  ! RSTATE          [ reduce using rule 11 (statement -> NEWLINE statement .) ]
+  ! NEWLINE         [ reduce using rule 11 (statement -> NEWLINE statement .) ]
+
+
+state 133
+
+    (20) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .
+
+    NEWLINE         reduce using rule 20 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
+    $end            reduce using rule 20 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
+    LSTATE          reduce using rule 20 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
+    RSTATE          reduce using rule 20 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
+
+
+state 134
+
+    (21) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement . RSTATE
+    (1) statement -> statement . NEWLINE statement
+    (2) statement -> statement . NEWLINE statement NEWLINE
+    (10) statement -> statement . NEWLINE
+
+    RSTATE          shift and go to state 140
+    NEWLINE         shift and go to state 17
+
+
+state 135
+
+    (57) arrayY -> , NUM arrayY .
+
+    RSTATE          reduce using rule 57 (arrayY -> , NUM arrayY .)
+
+
+state 136
+
+    (58) arrayY -> empty empty empty .
+
+    RSTATE          reduce using rule 58 (arrayY -> empty empty empty .)
+
+
+state 137
+
+    (55) declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX . RSTATE
+
+    RSTATE          shift and go to state 141
+
+
+state 138
+
+    (14) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .
+
+    OTHERWISE       reduce using rule 14 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    NEWLINE         reduce using rule 14 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    $end            reduce using rule 14 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    LSTATE          reduce using rule 14 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    RSTATE          reduce using rule 14 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+
+
+state 139
+
+    (19) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .
+
+    NEWLINE         reduce using rule 19 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
+    $end            reduce using rule 19 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
+    LSTATE          reduce using rule 19 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
+    RSTATE          reduce using rule 19 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
+
+
+state 140
+
+    (21) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .
+
+    NEWLINE         reduce using rule 21 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    $end            reduce using rule 21 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    LSTATE          reduce using rule 21 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    RSTATE          reduce using rule 21 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+
+
+state 141
+
+    (55) declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .
+
+    NEWLINE         reduce using rule 55 (declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+    $end            reduce using rule 55 (declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+    LSTATE          reduce using rule 55 (declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+    RSTATE          reduce using rule 55 (declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for NEWLINE in state 8 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 17 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 18 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 30 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 34 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 34 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 34 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 34 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 34 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 48 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 79 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 85 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 85 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 85 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 85 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 85 resolved as shift
+WARNING: shift/reduce conflict for EQUTO in state 85 resolved as shift
+WARNING: shift/reduce conflict for NOEQU in state 85 resolved as shift
+WARNING: shift/reduce conflict for LESS in state 85 resolved as shift
+WARNING: shift/reduce conflict for MORE in state 85 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 86 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 86 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 86 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 86 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 86 resolved as shift
+WARNING: shift/reduce conflict for EQUTO in state 86 resolved as shift
+WARNING: shift/reduce conflict for NOEQU in state 86 resolved as shift
+WARNING: shift/reduce conflict for LESS in state 86 resolved as shift
+WARNING: shift/reduce conflict for MORE in state 86 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 89 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 89 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 89 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 91 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 91 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 91 resolved as shift
+WARNING: shift/reduce conflict for RSTATE in state 132 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 132 resolved as shift
+WARNING: reduce/reduce conflict in state 48 resolved using rule (statement -> statement NEWLINE statement NEWLINE)
+WARNING: rejected rule (statement -> statement NEWLINE) in state 48
+WARNING: reduce/reduce conflict in state 89 resolved using rule (expression -> term PLUS term)
+WARNING: rejected rule (expression -> term) in state 89
+WARNING: reduce/reduce conflict in state 91 resolved using rule (expression -> term MINUS term)
+WARNING: rejected rule (expression -> term) in state 91
+WARNING: reduce/reduce conflict in state 93 resolved using rule (expression -> term MUL term)
+WARNING: rejected rule (expression -> term) in state 93
+WARNING: reduce/reduce conflict in state 95 resolved using rule (expression -> term DIV term)
+WARNING: rejected rule (expression -> term) in state 95
+WARNING: reduce/reduce conflict in state 97 resolved using rule (expression -> term MOD term)
+WARNING: rejected rule (expression -> term) in state 97
