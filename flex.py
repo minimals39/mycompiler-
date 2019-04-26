@@ -4,7 +4,7 @@ import ply.lex as lex
 tokens = (
 	'INT64','WORD','NUM','HEX','TEXT','LOOP','REPEAT',
 	'SO','NOTSO','OTHERWISE','EQU','PLUS','MINUS','MUL','DIV',
-	'SEMI','COMMA','MOD','DECADE','LPAREN','RPAREN',
+	'SEMI','COMMA','MOD','DECADE','LPAREN','RPAREN','LARRY','RARRY',
 	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU')
 #Reseved word
 RESERVED = {
@@ -42,6 +42,8 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_LSTATE = r'\{'
 t_RSTATE = r'\}'
+t_LARRY = r'\['
+t_RARRY = r'\]'
 t_LESS = r'<<'
 t_MORE = r'>>'
 t_EQUTO = r'=='
@@ -86,7 +88,7 @@ lexer = lex.lex()
  
  # Test it out
 data = '''
-(a+b-{h*n}%t)<=>
+(a+b-{h*n}%t)<=>[]
 
 
 

@@ -101,7 +101,7 @@ def p_declare_const(p):
 
 #----------------declare array-------------
 def p_defineexp_array1(p):
-    'defineexp : VAR ID "=" "{" arrayX "}"'
+    'declare : DECL WORD EQU LSTATE arrayX RSTATE'
     p[0] = ("var_array", p[2], p[5])
 
 
