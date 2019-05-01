@@ -165,9 +165,9 @@ def p_declare_const(p):
     '''declare : typeconst WORD
                | typeconst WORD EQU term'''
     if(len(p) == 3) :
-        p[0] = ("decl", p[2],  p[3], 0)
+        p[0] = ("decl", p[1],  p[2], 0)
     else : 
-        p[0] = ("decl", p[2] , p[3], p[5])
+        p[0] = ("decl", p[1] , p[2], p[4])
 
 
 #----------------declare array-------------

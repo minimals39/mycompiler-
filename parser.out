@@ -4,6 +4,7 @@ Unused terminals:
 
     BACK
     DECADE
+    DECL
     INT64
     NOTSO
     SEMI
@@ -64,13 +65,13 @@ Rule 50    expression -> expression EQUTO expression
 Rule 51    expression -> expression NOEQU expression
 Rule 52    expression -> expression LESS expression
 Rule 53    expression -> expression MORE expression
-Rule 54    declare -> DECL typeconst WORD
-Rule 55    declare -> DECL typeconst WORD EQU term
+Rule 54    declare -> typeconst WORD
+Rule 55    declare -> typeconst WORD EQU term
 Rule 56    arraysh -> WORD LARRY NUM RARRY
 Rule 57    arraysh -> WORD LARRY WORD RARRY
-Rule 58    declare -> DECL WORD EQU LSTATE arrayX RSTATE
-Rule 59    declare -> DECL WORD LARRY NUM RARRY
-Rule 60    declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+Rule 58    declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE
+Rule 59    declare -> TYPE_A WORD LARRY NUM RARRY
+Rule 60    declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
 Rule 61    arrayX -> NUM arrayY
 Rule 62    arrayY -> COMMA NUM arrayY
 Rule 63    arrayY -> empty empty empty
@@ -85,7 +86,7 @@ Terminals, with rules where they appear
 BACK                 : 
 COMMA                : 62
 DECADE               : 
-DECL                 : 54 55 58 59 60
+DECL                 : 
 DIV                  : 31 32 33
 EQU                  : 48 49 55 58 60
 EQUTO                : 50
@@ -113,7 +114,7 @@ RSTATE               : 13 14 17 18 19 20 21 58 60
 SEMI                 : 
 SO                   : 13 14
 TEXT                 : 64
-TYPE_A               : 43
+TYPE_A               : 43 58 59 60
 TYPE_H               : 41
 TYPE_N               : 42
 TYPE_S               : 44
@@ -159,11 +160,11 @@ state 0
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -174,14 +175,21 @@ state 0
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
     statement                      shift and go to state 1
     exassign                       shift and go to state 3
@@ -192,6 +200,7 @@ state 0
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
 state 1
 
@@ -200,7 +209,7 @@ state 1
     (2) statement -> statement . NEWLINE statement NEWLINE
     (10) statement -> statement . NEWLINE
 
-    NEWLINE         shift and go to state 17
+    NEWLINE         shift and go to state 21
 
 
 state 2
@@ -220,11 +229,11 @@ state 2
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -235,16 +244,23 @@ state 2
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
-    statement                      shift and go to state 18
+    statement                      shift and go to state 22
     exassign                       shift and go to state 3
     declare                        shift and go to state 4
     exprint                        shift and go to state 5
@@ -253,6 +269,7 @@ state 2
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
 state 3
 
@@ -295,9 +312,9 @@ state 6
     $end            reduce using rule 6 (statement -> exif .)
     LSTATE          reduce using rule 6 (statement -> exif .)
     RSTATE          reduce using rule 6 (statement -> exif .)
-    OTHERWISE       shift and go to state 20
+    OTHERWISE       shift and go to state 24
 
-    exelse                         shift and go to state 19
+    exelse                         shift and go to state 23
 
 state 7
 
@@ -318,7 +335,7 @@ state 8
     $end            reduce using rule 8 (statement -> exloop .)
     LSTATE          reduce using rule 8 (statement -> exloop .)
     RSTATE          reduce using rule 8 (statement -> exloop .)
-    NEWLINE         shift and go to state 21
+    NEWLINE         shift and go to state 25
 
   ! NEWLINE         [ reduce using rule 8 (statement -> exloop .) ]
 
@@ -339,45 +356,46 @@ state 10
     (56) arraysh -> WORD . LARRY NUM RARRY
     (57) arraysh -> WORD . LARRY WORD RARRY
 
-    EQU             shift and go to state 22
-    LARRY           shift and go to state 23
+    EQU             shift and go to state 26
+    LARRY           shift and go to state 27
 
 
 state 11
 
     (49) exassign -> arraysh . EQU expression
 
-    EQU             shift and go to state 24
+    EQU             shift and go to state 28
 
 
 state 12
 
-    (54) declare -> DECL . typeconst WORD
-    (55) declare -> DECL . typeconst WORD EQU term
-    (58) declare -> DECL . WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> DECL . WORD LARRY NUM RARRY
-    (60) declare -> DECL . WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (41) typeconst -> . TYPE_H
-    (42) typeconst -> . TYPE_N
-    (43) typeconst -> . TYPE_A
-    (44) typeconst -> . TYPE_S
+    (54) declare -> typeconst . WORD
+    (55) declare -> typeconst . WORD EQU term
 
-    WORD            shift and go to state 26
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_A          shift and go to state 29
-    TYPE_S          shift and go to state 30
+    WORD            shift and go to state 29
 
-    typeconst                      shift and go to state 25
 
 state 13
+
+    (58) declare -> TYPE_A . WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> TYPE_A . WORD LARRY NUM RARRY
+    (60) declare -> TYPE_A . WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (43) typeconst -> TYPE_A .
+
+  ! shift/reduce conflict for WORD resolved as shift
+    WORD            shift and go to state 30
+
+  ! WORD            [ reduce using rule 43 (typeconst -> TYPE_A .) ]
+
+
+state 14
 
     (64) exprint -> TEXT . LPAREN WORD printMore RPAREN
 
     LPAREN          shift and go to state 31
 
 
-state 14
+state 15
 
     (13) exif -> SO . LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> SO . LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -385,7 +403,7 @@ state 14
     LPAREN          shift and go to state 32
 
 
-state 15
+state 16
 
     (18) exloop -> LOOP . LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exloop -> LOOP . LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
@@ -393,7 +411,7 @@ state 15
     LPAREN          shift and go to state 33
 
 
-state 16
+state 17
 
     (20) exrepeat -> REPEAT . LPAREN expression RPAREN LSTATE statement RSTATE
     (21) exrepeat -> REPEAT . LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -401,7 +419,28 @@ state 16
     LPAREN          shift and go to state 34
 
 
-state 17
+state 18
+
+    (41) typeconst -> TYPE_H .
+
+    WORD            reduce using rule 41 (typeconst -> TYPE_H .)
+
+
+state 19
+
+    (42) typeconst -> TYPE_N .
+
+    WORD            reduce using rule 42 (typeconst -> TYPE_N .)
+
+
+state 20
+
+    (44) typeconst -> TYPE_S .
+
+    WORD            reduce using rule 44 (typeconst -> TYPE_S .)
+
+
+state 21
 
     (1) statement -> statement NEWLINE . statement
     (2) statement -> statement NEWLINE . statement NEWLINE
@@ -420,11 +459,11 @@ state 17
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -435,6 +474,10 @@ state 17
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
   ! shift/reduce conflict for NEWLINE resolved as shift
     $end            reduce using rule 10 (statement -> statement NEWLINE .)
@@ -442,11 +485,14 @@ state 17
     RSTATE          reduce using rule 10 (statement -> statement NEWLINE .)
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
   ! NEWLINE         [ reduce using rule 10 (statement -> statement NEWLINE .) ]
 
@@ -459,8 +505,9 @@ state 17
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
-state 18
+state 22
 
     (11) statement -> NEWLINE statement .
     (1) statement -> statement . NEWLINE statement
@@ -471,12 +518,12 @@ state 18
     $end            reduce using rule 11 (statement -> NEWLINE statement .)
     LSTATE          reduce using rule 11 (statement -> NEWLINE statement .)
     RSTATE          reduce using rule 11 (statement -> NEWLINE statement .)
-    NEWLINE         shift and go to state 17
+    NEWLINE         shift and go to state 21
 
   ! NEWLINE         [ reduce using rule 11 (statement -> NEWLINE statement .) ]
 
 
-state 19
+state 23
 
     (15) exelif -> exif exelse .
 
@@ -486,7 +533,7 @@ state 19
     RSTATE          reduce using rule 15 (exelif -> exif exelse .)
 
 
-state 20
+state 24
 
     (16) exelse -> OTHERWISE . LSTATE statement LSTATE OTHERWISE
     (17) exelse -> OTHERWISE . LSTATE NEWLINE statement RSTATE
@@ -494,7 +541,7 @@ state 20
     LSTATE          shift and go to state 36
 
 
-state 21
+state 25
 
     (12) statement -> exloop NEWLINE .
 
@@ -504,7 +551,7 @@ state 21
     RSTATE          reduce using rule 12 (statement -> exloop NEWLINE .)
 
 
-state 22
+state 26
 
     (48) exassign -> WORD EQU . expression
     (22) expression -> . expression PLUS expression
@@ -546,7 +593,7 @@ state 22
     term                           shift and go to state 39
     arraysh                        shift and go to state 42
 
-state 23
+state 27
 
     (56) arraysh -> WORD LARRY . NUM RARRY
     (57) arraysh -> WORD LARRY . WORD RARRY
@@ -555,7 +602,7 @@ state 23
     WORD            shift and go to state 45
 
 
-state 24
+state 28
 
     (49) exassign -> arraysh EQU . expression
     (22) expression -> . expression PLUS expression
@@ -597,50 +644,26 @@ state 24
     expression                     shift and go to state 47
     term                           shift and go to state 39
 
-state 25
-
-    (54) declare -> DECL typeconst . WORD
-    (55) declare -> DECL typeconst . WORD EQU term
-
-    WORD            shift and go to state 48
-
-
-state 26
-
-    (58) declare -> DECL WORD . EQU LSTATE arrayX RSTATE
-    (59) declare -> DECL WORD . LARRY NUM RARRY
-    (60) declare -> DECL WORD . LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-
-    EQU             shift and go to state 49
-    LARRY           shift and go to state 50
-
-
-state 27
-
-    (41) typeconst -> TYPE_H .
-
-    WORD            reduce using rule 41 (typeconst -> TYPE_H .)
-
-
-state 28
-
-    (42) typeconst -> TYPE_N .
-
-    WORD            reduce using rule 42 (typeconst -> TYPE_N .)
-
-
 state 29
 
-    (43) typeconst -> TYPE_A .
+    (54) declare -> typeconst WORD .
+    (55) declare -> typeconst WORD . EQU term
 
-    WORD            reduce using rule 43 (typeconst -> TYPE_A .)
+    NEWLINE         reduce using rule 54 (declare -> typeconst WORD .)
+    $end            reduce using rule 54 (declare -> typeconst WORD .)
+    LSTATE          reduce using rule 54 (declare -> typeconst WORD .)
+    RSTATE          reduce using rule 54 (declare -> typeconst WORD .)
+    EQU             shift and go to state 48
 
 
 state 30
 
-    (44) typeconst -> TYPE_S .
+    (58) declare -> TYPE_A WORD . EQU LSTATE arrayX RSTATE
+    (59) declare -> TYPE_A WORD . LARRY NUM RARRY
+    (60) declare -> TYPE_A WORD . LARRY NUM RARRY EQU LSTATE arrayX RSTATE
 
-    WORD            reduce using rule 44 (typeconst -> TYPE_S .)
+    EQU             shift and go to state 49
+    LARRY           shift and go to state 50
 
 
 state 31
@@ -814,11 +837,11 @@ state 36
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -829,14 +852,21 @@ state 36
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 57
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
     statement                      shift and go to state 56
     exassign                       shift and go to state 3
@@ -847,6 +877,7 @@ state 36
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
 state 37
 
@@ -869,7 +900,7 @@ state 37
     RSTATE          reduce using rule 37 (term -> WORD .)
     RPAREN          reduce using rule 37 (term -> WORD .)
     ,               reduce using rule 37 (term -> WORD .)
-    LARRY           shift and go to state 23
+    LARRY           shift and go to state 27
 
 
 state 38
@@ -1133,27 +1164,32 @@ state 47
 
 state 48
 
-    (54) declare -> DECL typeconst WORD .
-    (55) declare -> DECL typeconst WORD . EQU term
+    (55) declare -> typeconst WORD EQU . term
+    (37) term -> . WORD
+    (38) term -> . arraysh
+    (39) term -> . NUM
+    (40) term -> . HEX
+    (56) arraysh -> . WORD LARRY NUM RARRY
+    (57) arraysh -> . WORD LARRY WORD RARRY
 
-    NEWLINE         reduce using rule 54 (declare -> DECL typeconst WORD .)
-    $end            reduce using rule 54 (declare -> DECL typeconst WORD .)
-    LSTATE          reduce using rule 54 (declare -> DECL typeconst WORD .)
-    RSTATE          reduce using rule 54 (declare -> DECL typeconst WORD .)
-    EQU             shift and go to state 76
+    WORD            shift and go to state 37
+    NUM             shift and go to state 43
+    HEX             shift and go to state 44
 
+    term                           shift and go to state 76
+    arraysh                        shift and go to state 42
 
 state 49
 
-    (58) declare -> DECL WORD EQU . LSTATE arrayX RSTATE
+    (58) declare -> TYPE_A WORD EQU . LSTATE arrayX RSTATE
 
     LSTATE          shift and go to state 77
 
 
 state 50
 
-    (59) declare -> DECL WORD LARRY . NUM RARRY
-    (60) declare -> DECL WORD LARRY . NUM RARRY EQU LSTATE arrayX RSTATE
+    (59) declare -> TYPE_A WORD LARRY . NUM RARRY
+    (60) declare -> TYPE_A WORD LARRY . NUM RARRY EQU LSTATE arrayX RSTATE
 
     NUM             shift and go to state 78
 
@@ -1269,11 +1305,11 @@ state 55
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -1284,6 +1320,10 @@ state 55
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
   ! reduce/reduce conflict for NEWLINE resolved using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
   ! reduce/reduce conflict for $end resolved using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
@@ -1295,11 +1335,14 @@ state 55
     RSTATE          reduce using rule 2 (statement -> statement NEWLINE statement NEWLINE .)
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
   ! NEWLINE         [ reduce using rule 2 (statement -> statement NEWLINE statement NEWLINE .) ]
   ! NEWLINE         [ reduce using rule 10 (statement -> statement NEWLINE .) ]
@@ -1316,6 +1359,7 @@ state 55
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
 state 56
 
@@ -1325,7 +1369,7 @@ state 56
     (10) statement -> statement . NEWLINE
 
     LSTATE          shift and go to state 85
-    NEWLINE         shift and go to state 17
+    NEWLINE         shift and go to state 21
 
 
 state 57
@@ -1346,11 +1390,11 @@ state 57
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -1361,14 +1405,21 @@ state 57
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
     statement                      shift and go to state 86
     exassign                       shift and go to state 3
@@ -1379,6 +1430,7 @@ state 57
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
 state 58
 
@@ -2084,43 +2136,36 @@ state 75
 
 state 76
 
-    (55) declare -> DECL typeconst WORD EQU . term
-    (37) term -> . WORD
-    (38) term -> . arraysh
-    (39) term -> . NUM
-    (40) term -> . HEX
-    (56) arraysh -> . WORD LARRY NUM RARRY
-    (57) arraysh -> . WORD LARRY WORD RARRY
+    (55) declare -> typeconst WORD EQU term .
 
-    WORD            shift and go to state 37
-    NUM             shift and go to state 43
-    HEX             shift and go to state 44
+    NEWLINE         reduce using rule 55 (declare -> typeconst WORD EQU term .)
+    $end            reduce using rule 55 (declare -> typeconst WORD EQU term .)
+    LSTATE          reduce using rule 55 (declare -> typeconst WORD EQU term .)
+    RSTATE          reduce using rule 55 (declare -> typeconst WORD EQU term .)
 
-    term                           shift and go to state 107
-    arraysh                        shift and go to state 42
 
 state 77
 
-    (58) declare -> DECL WORD EQU LSTATE . arrayX RSTATE
+    (58) declare -> TYPE_A WORD EQU LSTATE . arrayX RSTATE
     (61) arrayX -> . NUM arrayY
 
-    NUM             shift and go to state 109
+    NUM             shift and go to state 108
 
-    arrayX                         shift and go to state 108
+    arrayX                         shift and go to state 107
 
 state 78
 
-    (59) declare -> DECL WORD LARRY NUM . RARRY
-    (60) declare -> DECL WORD LARRY NUM . RARRY EQU LSTATE arrayX RSTATE
+    (59) declare -> TYPE_A WORD LARRY NUM . RARRY
+    (60) declare -> TYPE_A WORD LARRY NUM . RARRY EQU LSTATE arrayX RSTATE
 
-    RARRY           shift and go to state 110
+    RARRY           shift and go to state 109
 
 
 state 79
 
     (64) exprint -> TEXT LPAREN WORD printMore . RPAREN
 
-    RPAREN          shift and go to state 111
+    RPAREN          shift and go to state 110
 
 
 state 80
@@ -2161,7 +2206,7 @@ state 80
     NUM             shift and go to state 43
     HEX             shift and go to state 44
 
-    expression                     shift and go to state 112
+    expression                     shift and go to state 111
     term                           shift and go to state 39
     arraysh                        shift and go to state 42
 
@@ -2172,15 +2217,15 @@ state 81
 
     RPAREN          reduce using rule 67 (empty -> .)
 
-    empty                          shift and go to state 113
+    empty                          shift and go to state 112
 
 state 82
 
     (13) exif -> SO LPAREN expression RPAREN . LSTATE statement RSTATE
     (14) exif -> SO LPAREN expression RPAREN . NEWLINE LSTATE statement RSTATE
 
-    LSTATE          shift and go to state 114
-    NEWLINE         shift and go to state 115
+    LSTATE          shift and go to state 113
+    NEWLINE         shift and go to state 114
 
 
 state 83
@@ -2188,7 +2233,7 @@ state 83
     (18) exloop -> LOOP LPAREN expression RPAREN . LSTATE statement RSTATE
     (19) exloop -> LOOP LPAREN expression RPAREN . LSTATE NEWLINE statement RSTATE
 
-    LSTATE          shift and go to state 116
+    LSTATE          shift and go to state 115
 
 
 state 84
@@ -2196,15 +2241,15 @@ state 84
     (20) exrepeat -> REPEAT LPAREN expression RPAREN . LSTATE statement RSTATE
     (21) exrepeat -> REPEAT LPAREN expression RPAREN . NEWLINE LSTATE statement RSTATE
 
-    LSTATE          shift and go to state 117
-    NEWLINE         shift and go to state 118
+    LSTATE          shift and go to state 116
+    NEWLINE         shift and go to state 117
 
 
 state 85
 
     (16) exelse -> OTHERWISE LSTATE statement LSTATE . OTHERWISE
 
-    OTHERWISE       shift and go to state 119
+    OTHERWISE       shift and go to state 118
 
 
 state 86
@@ -2216,9 +2261,9 @@ state 86
     (10) statement -> statement . NEWLINE
 
   ! shift/reduce conflict for NEWLINE resolved as shift
-    RSTATE          shift and go to state 120
+    RSTATE          shift and go to state 119
     LSTATE          reduce using rule 11 (statement -> NEWLINE statement .)
-    NEWLINE         shift and go to state 17
+    NEWLINE         shift and go to state 21
 
   ! NEWLINE         [ reduce using rule 11 (statement -> NEWLINE statement .) ]
 
@@ -3164,47 +3209,37 @@ state 106
 
 state 107
 
-    (55) declare -> DECL typeconst WORD EQU term .
+    (58) declare -> TYPE_A WORD EQU LSTATE arrayX . RSTATE
 
-    NEWLINE         reduce using rule 55 (declare -> DECL typeconst WORD EQU term .)
-    $end            reduce using rule 55 (declare -> DECL typeconst WORD EQU term .)
-    LSTATE          reduce using rule 55 (declare -> DECL typeconst WORD EQU term .)
-    RSTATE          reduce using rule 55 (declare -> DECL typeconst WORD EQU term .)
+    RSTATE          shift and go to state 120
 
 
 state 108
-
-    (58) declare -> DECL WORD EQU LSTATE arrayX . RSTATE
-
-    RSTATE          shift and go to state 121
-
-
-state 109
 
     (61) arrayX -> NUM . arrayY
     (62) arrayY -> . COMMA NUM arrayY
     (63) arrayY -> . empty empty empty
     (67) empty -> .
 
-    COMMA           shift and go to state 123
+    COMMA           shift and go to state 122
     RSTATE          reduce using rule 67 (empty -> .)
 
-    arrayY                         shift and go to state 122
-    empty                          shift and go to state 124
+    arrayY                         shift and go to state 121
+    empty                          shift and go to state 123
+
+state 109
+
+    (59) declare -> TYPE_A WORD LARRY NUM RARRY .
+    (60) declare -> TYPE_A WORD LARRY NUM RARRY . EQU LSTATE arrayX RSTATE
+
+    NEWLINE         reduce using rule 59 (declare -> TYPE_A WORD LARRY NUM RARRY .)
+    $end            reduce using rule 59 (declare -> TYPE_A WORD LARRY NUM RARRY .)
+    LSTATE          reduce using rule 59 (declare -> TYPE_A WORD LARRY NUM RARRY .)
+    RSTATE          reduce using rule 59 (declare -> TYPE_A WORD LARRY NUM RARRY .)
+    EQU             shift and go to state 124
+
 
 state 110
-
-    (59) declare -> DECL WORD LARRY NUM RARRY .
-    (60) declare -> DECL WORD LARRY NUM RARRY . EQU LSTATE arrayX RSTATE
-
-    NEWLINE         reduce using rule 59 (declare -> DECL WORD LARRY NUM RARRY .)
-    $end            reduce using rule 59 (declare -> DECL WORD LARRY NUM RARRY .)
-    LSTATE          reduce using rule 59 (declare -> DECL WORD LARRY NUM RARRY .)
-    RSTATE          reduce using rule 59 (declare -> DECL WORD LARRY NUM RARRY .)
-    EQU             shift and go to state 125
-
-
-state 111
 
     (64) exprint -> TEXT LPAREN WORD printMore RPAREN .
 
@@ -3214,7 +3249,7 @@ state 111
     RSTATE          reduce using rule 64 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
 
 
-state 112
+state 111
 
     (65) printMore -> , expression . printMore
     (22) expression -> expression . PLUS expression
@@ -3242,19 +3277,19 @@ state 112
     ,               shift and go to state 80
     RPAREN          reduce using rule 67 (empty -> .)
 
-    printMore                      shift and go to state 126
+    printMore                      shift and go to state 125
     empty                          shift and go to state 81
 
-state 113
+state 112
 
     (66) printMore -> empty empty . empty
     (67) empty -> .
 
     RPAREN          reduce using rule 67 (empty -> .)
 
-    empty                          shift and go to state 127
+    empty                          shift and go to state 126
 
-state 114
+state 113
 
     (13) exif -> SO LPAREN expression RPAREN LSTATE . statement RSTATE
     (1) statement -> . statement NEWLINE statement
@@ -3271,11 +3306,11 @@ state 114
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -3286,16 +3321,23 @@ state 114
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
-    statement                      shift and go to state 128
+    statement                      shift and go to state 127
     exassign                       shift and go to state 3
     declare                        shift and go to state 4
     exprint                        shift and go to state 5
@@ -3304,15 +3346,16 @@ state 114
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
-state 115
+state 114
 
     (14) exif -> SO LPAREN expression RPAREN NEWLINE . LSTATE statement RSTATE
 
-    LSTATE          shift and go to state 129
+    LSTATE          shift and go to state 128
 
 
-state 116
+state 115
 
     (18) exloop -> LOOP LPAREN expression RPAREN LSTATE . statement RSTATE
     (19) exloop -> LOOP LPAREN expression RPAREN LSTATE . NEWLINE statement RSTATE
@@ -3330,11 +3373,11 @@ state 116
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -3345,16 +3388,23 @@ state 116
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
-    NEWLINE         shift and go to state 131
+    NEWLINE         shift and go to state 130
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
-    statement                      shift and go to state 130
+    statement                      shift and go to state 129
     exassign                       shift and go to state 3
     declare                        shift and go to state 4
     exprint                        shift and go to state 5
@@ -3363,8 +3413,9 @@ state 116
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
-state 117
+state 116
 
     (20) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE . statement RSTATE
     (1) statement -> . statement NEWLINE statement
@@ -3381,11 +3432,11 @@ state 117
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -3396,16 +3447,23 @@ state 117
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
-    statement                      shift and go to state 132
+    statement                      shift and go to state 131
     exassign                       shift and go to state 3
     declare                        shift and go to state 4
     exprint                        shift and go to state 5
@@ -3414,15 +3472,16 @@ state 117
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
-state 118
+state 117
 
     (21) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE . LSTATE statement RSTATE
 
-    LSTATE          shift and go to state 133
+    LSTATE          shift and go to state 132
 
 
-state 119
+state 118
 
     (16) exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .
 
@@ -3432,7 +3491,7 @@ state 119
     RSTATE          reduce using rule 16 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
 
 
-state 120
+state 119
 
     (17) exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .
 
@@ -3442,72 +3501,72 @@ state 120
     RSTATE          reduce using rule 17 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
 
 
+state 120
+
+    (58) declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .
+
+    NEWLINE         reduce using rule 58 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
+    $end            reduce using rule 58 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
+    LSTATE          reduce using rule 58 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
+    RSTATE          reduce using rule 58 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
+
+
 state 121
-
-    (58) declare -> DECL WORD EQU LSTATE arrayX RSTATE .
-
-    NEWLINE         reduce using rule 58 (declare -> DECL WORD EQU LSTATE arrayX RSTATE .)
-    $end            reduce using rule 58 (declare -> DECL WORD EQU LSTATE arrayX RSTATE .)
-    LSTATE          reduce using rule 58 (declare -> DECL WORD EQU LSTATE arrayX RSTATE .)
-    RSTATE          reduce using rule 58 (declare -> DECL WORD EQU LSTATE arrayX RSTATE .)
-
-
-state 122
 
     (61) arrayX -> NUM arrayY .
 
     RSTATE          reduce using rule 61 (arrayX -> NUM arrayY .)
 
 
-state 123
+state 122
 
     (62) arrayY -> COMMA . NUM arrayY
 
-    NUM             shift and go to state 134
+    NUM             shift and go to state 133
 
 
-state 124
+state 123
 
     (63) arrayY -> empty . empty empty
     (67) empty -> .
 
     RSTATE          reduce using rule 67 (empty -> .)
 
-    empty                          shift and go to state 135
+    empty                          shift and go to state 134
+
+state 124
+
+    (60) declare -> TYPE_A WORD LARRY NUM RARRY EQU . LSTATE arrayX RSTATE
+
+    LSTATE          shift and go to state 135
+
 
 state 125
-
-    (60) declare -> DECL WORD LARRY NUM RARRY EQU . LSTATE arrayX RSTATE
-
-    LSTATE          shift and go to state 136
-
-
-state 126
 
     (65) printMore -> , expression printMore .
 
     RPAREN          reduce using rule 65 (printMore -> , expression printMore .)
 
 
-state 127
+state 126
 
     (66) printMore -> empty empty empty .
 
     RPAREN          reduce using rule 66 (printMore -> empty empty empty .)
 
 
-state 128
+state 127
 
     (13) exif -> SO LPAREN expression RPAREN LSTATE statement . RSTATE
     (1) statement -> statement . NEWLINE statement
     (2) statement -> statement . NEWLINE statement NEWLINE
     (10) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 137
-    NEWLINE         shift and go to state 17
+    RSTATE          shift and go to state 136
+    NEWLINE         shift and go to state 21
 
 
-state 129
+state 128
 
     (14) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE . statement RSTATE
     (1) statement -> . statement NEWLINE statement
@@ -3524,11 +3583,11 @@ state 129
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -3539,16 +3598,23 @@ state 129
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
-    statement                      shift and go to state 138
+    statement                      shift and go to state 137
     exassign                       shift and go to state 3
     declare                        shift and go to state 4
     exprint                        shift and go to state 5
@@ -3557,19 +3623,20 @@ state 129
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
-state 130
+state 129
 
     (18) exloop -> LOOP LPAREN expression RPAREN LSTATE statement . RSTATE
     (1) statement -> statement . NEWLINE statement
     (2) statement -> statement . NEWLINE statement NEWLINE
     (10) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 139
-    NEWLINE         shift and go to state 17
+    RSTATE          shift and go to state 138
+    NEWLINE         shift and go to state 21
 
 
-state 131
+state 130
 
     (19) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE . statement RSTATE
     (11) statement -> NEWLINE . statement
@@ -3587,11 +3654,11 @@ state 131
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -3602,16 +3669,23 @@ state 131
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
-    statement                      shift and go to state 140
+    statement                      shift and go to state 139
     exassign                       shift and go to state 3
     declare                        shift and go to state 4
     exprint                        shift and go to state 5
@@ -3620,19 +3694,20 @@ state 131
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
-state 132
+state 131
 
     (20) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement . RSTATE
     (1) statement -> statement . NEWLINE statement
     (2) statement -> statement . NEWLINE statement NEWLINE
     (10) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 141
-    NEWLINE         shift and go to state 17
+    RSTATE          shift and go to state 140
+    NEWLINE         shift and go to state 21
 
 
-state 133
+state 132
 
     (21) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE . statement RSTATE
     (1) statement -> . statement NEWLINE statement
@@ -3649,11 +3724,11 @@ state 133
     (12) statement -> . exloop NEWLINE
     (48) exassign -> . WORD EQU expression
     (49) exassign -> . arraysh EQU expression
-    (54) declare -> . DECL typeconst WORD
-    (55) declare -> . DECL typeconst WORD EQU term
-    (58) declare -> . DECL WORD EQU LSTATE arrayX RSTATE
-    (59) declare -> . DECL WORD LARRY NUM RARRY
-    (60) declare -> . DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
+    (54) declare -> . typeconst WORD
+    (55) declare -> . typeconst WORD EQU term
+    (58) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
+    (59) declare -> . TYPE_A WORD LARRY NUM RARRY
+    (60) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
     (64) exprint -> . TEXT LPAREN WORD printMore RPAREN
     (13) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (14) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -3664,16 +3739,23 @@ state 133
     (21) exrepeat -> . REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (56) arraysh -> . WORD LARRY NUM RARRY
     (57) arraysh -> . WORD LARRY WORD RARRY
+    (41) typeconst -> . TYPE_H
+    (42) typeconst -> . TYPE_N
+    (43) typeconst -> . TYPE_A
+    (44) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 2
     WORD            shift and go to state 10
-    DECL            shift and go to state 12
-    TEXT            shift and go to state 13
-    SO              shift and go to state 14
-    LOOP            shift and go to state 15
-    REPEAT          shift and go to state 16
+    TYPE_A          shift and go to state 13
+    TEXT            shift and go to state 14
+    SO              shift and go to state 15
+    LOOP            shift and go to state 16
+    REPEAT          shift and go to state 17
+    TYPE_H          shift and go to state 18
+    TYPE_N          shift and go to state 19
+    TYPE_S          shift and go to state 20
 
-    statement                      shift and go to state 142
+    statement                      shift and go to state 141
     exassign                       shift and go to state 3
     declare                        shift and go to state 4
     exprint                        shift and go to state 5
@@ -3682,39 +3764,40 @@ state 133
     exloop                         shift and go to state 8
     exrepeat                       shift and go to state 9
     arraysh                        shift and go to state 11
+    typeconst                      shift and go to state 12
 
-state 134
+state 133
 
     (62) arrayY -> COMMA NUM . arrayY
     (62) arrayY -> . COMMA NUM arrayY
     (63) arrayY -> . empty empty empty
     (67) empty -> .
 
-    COMMA           shift and go to state 123
+    COMMA           shift and go to state 122
     RSTATE          reduce using rule 67 (empty -> .)
 
-    arrayY                         shift and go to state 143
-    empty                          shift and go to state 124
+    arrayY                         shift and go to state 142
+    empty                          shift and go to state 123
 
-state 135
+state 134
 
     (63) arrayY -> empty empty . empty
     (67) empty -> .
 
     RSTATE          reduce using rule 67 (empty -> .)
 
-    empty                          shift and go to state 144
+    empty                          shift and go to state 143
 
-state 136
+state 135
 
-    (60) declare -> DECL WORD LARRY NUM RARRY EQU LSTATE . arrayX RSTATE
+    (60) declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE . arrayX RSTATE
     (61) arrayX -> . NUM arrayY
 
-    NUM             shift and go to state 109
+    NUM             shift and go to state 108
 
-    arrayX                         shift and go to state 145
+    arrayX                         shift and go to state 144
 
-state 137
+state 136
 
     (13) exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .
 
@@ -3725,18 +3808,18 @@ state 137
     RSTATE          reduce using rule 13 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
 
 
-state 138
+state 137
 
     (14) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement . RSTATE
     (1) statement -> statement . NEWLINE statement
     (2) statement -> statement . NEWLINE statement NEWLINE
     (10) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 146
-    NEWLINE         shift and go to state 17
+    RSTATE          shift and go to state 145
+    NEWLINE         shift and go to state 21
 
 
-state 139
+state 138
 
     (18) exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .
 
@@ -3746,7 +3829,7 @@ state 139
     RSTATE          reduce using rule 18 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
 
 
-state 140
+state 139
 
     (19) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement . RSTATE
     (11) statement -> NEWLINE statement .
@@ -3756,14 +3839,14 @@ state 140
 
   ! shift/reduce conflict for RSTATE resolved as shift
   ! shift/reduce conflict for NEWLINE resolved as shift
-    RSTATE          shift and go to state 147
-    NEWLINE         shift and go to state 17
+    RSTATE          shift and go to state 146
+    NEWLINE         shift and go to state 21
 
   ! RSTATE          [ reduce using rule 11 (statement -> NEWLINE statement .) ]
   ! NEWLINE         [ reduce using rule 11 (statement -> NEWLINE statement .) ]
 
 
-state 141
+state 140
 
     (20) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .
 
@@ -3773,39 +3856,39 @@ state 141
     RSTATE          reduce using rule 20 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
 
 
-state 142
+state 141
 
     (21) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement . RSTATE
     (1) statement -> statement . NEWLINE statement
     (2) statement -> statement . NEWLINE statement NEWLINE
     (10) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 148
-    NEWLINE         shift and go to state 17
+    RSTATE          shift and go to state 147
+    NEWLINE         shift and go to state 21
 
 
-state 143
+state 142
 
     (62) arrayY -> COMMA NUM arrayY .
 
     RSTATE          reduce using rule 62 (arrayY -> COMMA NUM arrayY .)
 
 
-state 144
+state 143
 
     (63) arrayY -> empty empty empty .
 
     RSTATE          reduce using rule 63 (arrayY -> empty empty empty .)
 
 
+state 144
+
+    (60) declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX . RSTATE
+
+    RSTATE          shift and go to state 148
+
+
 state 145
-
-    (60) declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX . RSTATE
-
-    RSTATE          shift and go to state 149
-
-
-state 146
 
     (14) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .
 
@@ -3816,7 +3899,7 @@ state 146
     RSTATE          reduce using rule 14 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
 
 
-state 147
+state 146
 
     (19) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .
 
@@ -3826,7 +3909,7 @@ state 147
     RSTATE          reduce using rule 19 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
 
 
-state 148
+state 147
 
     (21) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .
 
@@ -3836,21 +3919,22 @@ state 148
     RSTATE          reduce using rule 21 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
 
 
-state 149
+state 148
 
-    (60) declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .
+    (60) declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .
 
-    NEWLINE         reduce using rule 60 (declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
-    $end            reduce using rule 60 (declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
-    LSTATE          reduce using rule 60 (declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
-    RSTATE          reduce using rule 60 (declare -> DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+    NEWLINE         reduce using rule 60 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+    $end            reduce using rule 60 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+    LSTATE          reduce using rule 60 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+    RSTATE          reduce using rule 60 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
 WARNING: shift/reduce conflict for NEWLINE in state 8 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 17 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 18 resolved as shift
+WARNING: shift/reduce conflict for WORD in state 13 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 21 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 22 resolved as shift
 WARNING: shift/reduce conflict for NEWLINE in state 35 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 39 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 39 resolved as shift
@@ -3883,8 +3967,8 @@ WARNING: shift/reduce conflict for MOD in state 96 resolved as shift
 WARNING: shift/reduce conflict for MUL in state 98 resolved as shift
 WARNING: shift/reduce conflict for DIV in state 98 resolved as shift
 WARNING: shift/reduce conflict for MOD in state 98 resolved as shift
-WARNING: shift/reduce conflict for RSTATE in state 140 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 140 resolved as shift
+WARNING: shift/reduce conflict for RSTATE in state 139 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 139 resolved as shift
 WARNING: reduce/reduce conflict in state 55 resolved using rule (statement -> statement NEWLINE statement NEWLINE)
 WARNING: rejected rule (statement -> statement NEWLINE) in state 55
 WARNING: reduce/reduce conflict in state 96 resolved using rule (expression -> term PLUS term)
