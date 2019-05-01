@@ -106,12 +106,16 @@ def p_expression_operators(p):
 def p_value(p):
     '''term : WORD
            | arraysh
-           | NUM'''
+           | NUM
+           | HEX'''
     p[0] = p[1]
 
-def p_value_hex(p):
-    '''term : HEXT HEX'''
-    p[0] = p[2]
+def p_value_hexdecstr(p):
+    '''typeconst : TYPE_H
+            | TYPE_N
+            | TYPE_A
+            | TYPE_S'''
+    p[0] = p[1]
 
 
 def p_expression_standalone(p):
@@ -158,12 +162,13 @@ def p_expression_MORE(p):
 #----------------declare----------------------
 
 def p_declare_const(p):
-    '''declare : DECL WORD
-               | DECL WORD EQU term'''
+    '''declare : DECL typeconst WORD
+               | DECL typeconst WORD EQU term'''
     if(len(p) == 3) :
-        p[0] = ("decl", p[2], 0)
+        p[0] = ("decl", p[2],  p[3], 0)
     else : 
-        p[0] = ("decl", p[2], p[4])
+        p[0] = ("decl", p[2] , p[3], p[5])
+
 
 #----------------declare array-------------
 

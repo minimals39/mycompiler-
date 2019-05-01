@@ -2,10 +2,10 @@ import ply.lex as lex
 
 #list token
 tokens = (
-	'INT64','WORD','NUM','HEXT','HEX','TEXT','LOOP','REPEAT',
+	'INT64','WORD','NUM','HEX','TEXT','LOOP','REPEAT',
 	'SO','NOTSO','OTHERWISE','EQU','PLUS','MINUS','MUL','DIV',
 	'SEMI','COMMA','MOD','DECADE','LPAREN','RPAREN','LARRY','RARRY',
-	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU','DECL', )
+	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU','DECL', 'TYPE_S', 'TYPE_N','TYPE_A',"TYPE_H")
 #Reseved word
 RESERVED = {
 	"int64":"INT64",
@@ -16,7 +16,10 @@ RESERVED = {
 	"loop" : "LOOP",
 	"repeat" : "REPEAT",
 	"decade" : "DECADE",
-	"hext" : "HEXT",
+	"type_s" : "TYPE_S",
+     "type_a" : "TYPE_A",
+     "type_n" : "TYPE_N",
+     "type_h" : "TYPE_H",
 	"decl" : "DECL",
      "text" : "TEXT"
 }
