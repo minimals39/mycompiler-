@@ -1,9 +1,11 @@
+from ply import *
 import argparse
 import flex
-import parser
+import myparser
 import genasm
 import subprocess
 import platform
+
 
 system_platform = platform.system()
 
@@ -15,7 +17,7 @@ system_platform = platform.system()
 
 lines = open("text.bcc", 'r').read()
 #genasm.lexer = flex.lexer
-result = parser.parser(lines)
+result = parser.parse(lines)
 print(result)
 #genasm.statement_main(result)
 

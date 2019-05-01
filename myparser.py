@@ -242,3 +242,5 @@ while True:
     result = parser.parse(s)
     print(result)
 
+def parse(s, debug=False):
+    return parser.parse(s, tracking=True, debug=debug)
