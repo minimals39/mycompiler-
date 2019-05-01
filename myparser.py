@@ -162,8 +162,8 @@ def p_expression_MORE(p):
 #----------------declare----------------------
 
 def p_declare_const(p):
-    '''declare : DECL typeconst WORD
-               | DECL typeconst WORD EQU term'''
+    '''declare : typeconst WORD
+               | typeconst WORD EQU term'''
     if(len(p) == 3) :
         p[0] = ("decl", p[2],  p[3], 0)
     else : 
@@ -178,17 +178,17 @@ def p_defineexp_arrayshort(p):
     p[0] = ("array", p[1], p[3])
 
 def p_defineexp_arraya(p):
-    'declare : DECL WORD EQU LSTATE arrayX RSTATE'
+    'declare : TYPE_A WORD EQU LSTATE arrayX RSTATE'
     p[0] = ("var_array", p[2], p[5])
 
 
 def p_defineexp_arrayb(p):
-    'declare : DECL WORD LARRY NUM RARRY'
+    'declare : TYPE_A WORD LARRY NUM RARRY'
     p[0] = ("var_array", p[2], p[4], 0)
 
 
 def p_defineexp_arrayc(p):
-    'declare : DECL WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE'
+    'declare : TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE'
     p[0] = ("var_array", p[2], p[4], p[8])
 
 
