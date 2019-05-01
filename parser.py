@@ -109,6 +109,10 @@ def p_value(p):
            | NUM'''
     p[0] = p[1]
 
+def p_value_hex(p):
+    '''term : HEXT HEX'''
+    p[0] = p[2]
+
 
 def p_expression_standalone(p):
     '''expression : term'''
@@ -156,7 +160,7 @@ def p_expression_MORE(p):
 def p_declare_const(p):
     '''declare : DECL WORD
                | DECL WORD EQU term'''
-    if(len(p) == 4) :
+    if(len(p) == 3) :
         p[0] = ("decl", p[2], 0)
     else : 
         p[0] = ("decl", p[2], p[4])

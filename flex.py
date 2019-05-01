@@ -2,7 +2,7 @@ import ply.lex as lex
 
 #list token
 tokens = (
-	'INT64','WORD','NUM','HEX','TEXT','LOOP','REPEAT',
+	'INT64','WORD','NUM','HEXT','HEX','TEXT','LOOP','REPEAT',
 	'SO','NOTSO','OTHERWISE','EQU','PLUS','MINUS','MUL','DIV',
 	'SEMI','COMMA','MOD','DECADE','LPAREN','RPAREN','LARRY','RARRY',
 	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU','DECL', )
@@ -16,7 +16,7 @@ RESERVED = {
 	"loop" : "LOOP",
 	"repeat" : "REPEAT",
 	"decade" : "DECADE",
-	"hex" : "HEX",
+	"hext" : "HEXT",
 	"decl" : "DECL",
      "text" : "TEXT"
 }
@@ -56,6 +56,12 @@ def t_newline(t):
     t.type = 'NEWLINE'
     return t
 
+def t_HEX(t):
+    r'[a-fA-F0-9]+[hH]'
+    if t.value[:2] == '0h':
+        t.value = str(t.value)
+    t.type = 'HEX'
+    return t
 
 def t_WORD(t):
      r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -67,12 +73,6 @@ def t_NUM(t):
     t.value = int(t.value)
     return t
 
-def t_HEX(t):
-    r'0[hH][0-9a-fA-F]+|\d+|-\d+'
-    if t.value[:2] == '0h':
-        t.value = str(int(t.value.replace('0h', '0x'), 16))
-    t.type = 'HEX'
-    return t
 
  # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t'
@@ -92,7 +92,7 @@ lexer = lex.lex()
  
  # Test it out
 data = '''
-TEXT( << >> {} []) 2 f + - * / %
+TEXT( << >> {} []) 2 f + - * / % 2h
 
 
 
