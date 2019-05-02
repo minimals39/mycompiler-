@@ -80,8 +80,8 @@ Rule 65    declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
 Rule 66    arrayX -> NUM arrayY
 Rule 67    arrayY -> COMMA NUM arrayY
 Rule 68    arrayY -> empty empty empty
-Rule 69    exprint -> TEXT LPAREN WORD printMore RPAREN
-Rule 70    exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+Rule 69    exprint -> TEXT LPAREN expression printMore RPAREN
+Rule 70    exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN
 Rule 71    printMore -> COMMA expression printMore
 Rule 72    printMore -> empty empty empty
 Rule 73    printMore -> COMMA QUOT expression QUOT printMore
@@ -125,7 +125,7 @@ TYPE_A               : 48 63 64 65
 TYPE_H               : 46
 TYPE_N               : 47
 TYPE_S               : 49
-WORD                 : 42 53 59 60 61 62 62 63 64 65 69 70
+WORD                 : 42 53 59 60 61 62 62 63 64 65
 error                : 
 
 Nonterminals, with rules where they appear
@@ -142,7 +142,7 @@ exelif               : 12
 exelse               : 20
 exif                 : 11 20
 exloop               : 13 17
-expression           : 5 18 19 23 24 25 26 27 27 29 30 30 32 33 33 35 36 36 38 39 39 41 51 52 53 54 55 55 56 56 57 57 58 58 71 73
+expression           : 5 18 19 23 24 25 26 27 27 29 30 30 32 33 33 35 36 36 38 39 39 41 51 52 53 54 55 55 56 56 57 57 58 58 69 70 71 73
 exprint              : 10
 exrepeat             : 14
 line                 : 1 0
@@ -202,8 +202,8 @@ state 0
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -309,8 +309,8 @@ state 2
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -460,8 +460,8 @@ state 6
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -929,8 +929,8 @@ state 21
 
 state 22
 
-    (69) exprint -> TEXT . LPAREN WORD printMore RPAREN
-    (70) exprint -> TEXT . LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> TEXT . LPAREN expression printMore RPAREN
+    (70) exprint -> TEXT . LPAREN QUOT expression QUOT printMore RPAREN
 
     LPAREN          shift and go to state 62
 
@@ -1052,8 +1052,8 @@ state 32
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -2090,12 +2090,47 @@ state 61
 
 state 62
 
-    (69) exprint -> TEXT LPAREN . WORD printMore RPAREN
-    (70) exprint -> TEXT LPAREN . QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> TEXT LPAREN . expression printMore RPAREN
+    (70) exprint -> TEXT LPAREN . QUOT expression QUOT printMore RPAREN
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . term PLUS term
+    (29) expression -> . term PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . term MINUS term
+    (32) expression -> . term MINUS expression
+    (33) expression -> . expression MUL expression
+    (34) expression -> . term MUL term
+    (35) expression -> . term MUL expression
+    (36) expression -> . expression DIV expression
+    (37) expression -> . term DIV term
+    (38) expression -> . term DIV expression
+    (39) expression -> . expression MOD expression
+    (40) expression -> . term MOD term
+    (41) expression -> . term MOD expression
+    (50) expression -> . term
+    (51) expression -> . MINUS expression
+    (52) expression -> . LPAREN expression RPAREN
+    (55) expression -> . expression EQUTO expression
+    (56) expression -> . expression NOEQU expression
+    (57) expression -> . expression LESS expression
+    (58) expression -> . expression MORE expression
+    (42) term -> . WORD
+    (43) term -> . arraysh
+    (44) term -> . NUM
+    (45) term -> . HEX
+    (61) arraysh -> . WORD LARRY NUM RARRY
+    (62) arraysh -> . WORD LARRY WORD RARRY
 
-    WORD            shift and go to state 95
     QUOT            shift and go to state 96
+    MINUS           shift and go to state 15
+    LPAREN          shift and go to state 16
+    WORD            shift and go to state 54
+    NUM             shift and go to state 21
+    HEX             shift and go to state 26
 
+    expression                     shift and go to state 95
+    term                           shift and go to state 14
+    arraysh                        shift and go to state 55
 
 state 63
 
@@ -2774,8 +2809,8 @@ state 76
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -3780,12 +3815,30 @@ state 94
 
 state 95
 
-    (69) exprint -> TEXT LPAREN WORD . printMore RPAREN
+    (69) exprint -> TEXT LPAREN expression . printMore RPAREN
+    (27) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (33) expression -> expression . MUL expression
+    (36) expression -> expression . DIV expression
+    (39) expression -> expression . MOD expression
+    (55) expression -> expression . EQUTO expression
+    (56) expression -> expression . NOEQU expression
+    (57) expression -> expression . LESS expression
+    (58) expression -> expression . MORE expression
     (71) printMore -> . COMMA expression printMore
     (72) printMore -> . empty empty empty
     (73) printMore -> . COMMA QUOT expression QUOT printMore
     (74) empty -> .
 
+    PLUS            shift and go to state 33
+    MINUS           shift and go to state 34
+    MUL             shift and go to state 35
+    DIV             shift and go to state 36
+    MOD             shift and go to state 37
+    EQUTO           shift and go to state 38
+    NOEQU           shift and go to state 39
+    LESS            shift and go to state 40
+    MORE            shift and go to state 41
     COMMA           shift and go to state 109
     RPAREN          reduce using rule 74 (empty -> .)
 
@@ -3794,10 +3847,45 @@ state 95
 
 state 96
 
-    (70) exprint -> TEXT LPAREN QUOT . WORD QUOT printMore RPAREN
+    (70) exprint -> TEXT LPAREN QUOT . expression QUOT printMore RPAREN
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . term PLUS term
+    (29) expression -> . term PLUS expression
+    (30) expression -> . expression MINUS expression
+    (31) expression -> . term MINUS term
+    (32) expression -> . term MINUS expression
+    (33) expression -> . expression MUL expression
+    (34) expression -> . term MUL term
+    (35) expression -> . term MUL expression
+    (36) expression -> . expression DIV expression
+    (37) expression -> . term DIV term
+    (38) expression -> . term DIV expression
+    (39) expression -> . expression MOD expression
+    (40) expression -> . term MOD term
+    (41) expression -> . term MOD expression
+    (50) expression -> . term
+    (51) expression -> . MINUS expression
+    (52) expression -> . LPAREN expression RPAREN
+    (55) expression -> . expression EQUTO expression
+    (56) expression -> . expression NOEQU expression
+    (57) expression -> . expression LESS expression
+    (58) expression -> . expression MORE expression
+    (42) term -> . WORD
+    (43) term -> . arraysh
+    (44) term -> . NUM
+    (45) term -> . HEX
+    (61) arraysh -> . WORD LARRY NUM RARRY
+    (62) arraysh -> . WORD LARRY WORD RARRY
 
-    WORD            shift and go to state 111
+    MINUS           shift and go to state 15
+    LPAREN          shift and go to state 16
+    WORD            shift and go to state 54
+    NUM             shift and go to state 21
+    HEX             shift and go to state 26
 
+    expression                     shift and go to state 111
+    term                           shift and go to state 14
+    arraysh                        shift and go to state 55
 
 state 97
 
@@ -3902,8 +3990,8 @@ state 100
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -4036,8 +4124,8 @@ state 102
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -4186,7 +4274,7 @@ state 107
 
 state 108
 
-    (69) exprint -> TEXT LPAREN WORD printMore . RPAREN
+    (69) exprint -> TEXT LPAREN expression printMore . RPAREN
 
     RPAREN          shift and go to state 120
 
@@ -4246,9 +4334,27 @@ state 110
 
 state 111
 
-    (70) exprint -> TEXT LPAREN QUOT WORD . QUOT printMore RPAREN
+    (70) exprint -> TEXT LPAREN QUOT expression . QUOT printMore RPAREN
+    (27) expression -> expression . PLUS expression
+    (30) expression -> expression . MINUS expression
+    (33) expression -> expression . MUL expression
+    (36) expression -> expression . DIV expression
+    (39) expression -> expression . MOD expression
+    (55) expression -> expression . EQUTO expression
+    (56) expression -> expression . NOEQU expression
+    (57) expression -> expression . LESS expression
+    (58) expression -> expression . MORE expression
 
     QUOT            shift and go to state 124
+    PLUS            shift and go to state 33
+    MINUS           shift and go to state 34
+    MUL             shift and go to state 35
+    DIV             shift and go to state 36
+    MOD             shift and go to state 37
+    EQUTO           shift and go to state 38
+    NOEQU           shift and go to state 39
+    LESS            shift and go to state 40
+    MORE            shift and go to state 41
 
 
 state 112
@@ -4347,25 +4453,25 @@ state 119
 
 state 120
 
-    (69) exprint -> TEXT LPAREN WORD printMore RPAREN .
+    (69) exprint -> TEXT LPAREN expression printMore RPAREN .
 
-    NEWLINE         reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    MINUS           reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    LPAREN          reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    WORD            reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    TYPE_A          reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    TEXT            reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    SO              reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    LOOP            reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    REPEAT          reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    NUM             reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    HEX             reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    TYPE_H          reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    TYPE_N          reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    TYPE_S          reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    $end            reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    LSTATE          reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
-    RSTATE          reduce using rule 69 (exprint -> TEXT LPAREN WORD printMore RPAREN .)
+    NEWLINE         reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    MINUS           reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    LPAREN          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    WORD            reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    TYPE_A          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    TEXT            reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    SO              reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    LOOP            reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    REPEAT          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    NUM             reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    HEX             reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    TYPE_H          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    TYPE_N          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    TYPE_S          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    $end            reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    LSTATE          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    RSTATE          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
 
 
 state 121
@@ -4453,7 +4559,7 @@ state 123
 
 state 124
 
-    (70) exprint -> TEXT LPAREN QUOT WORD QUOT . printMore RPAREN
+    (70) exprint -> TEXT LPAREN QUOT expression QUOT . printMore RPAREN
     (71) printMore -> . COMMA expression printMore
     (72) printMore -> . empty empty empty
     (73) printMore -> . COMMA QUOT expression QUOT printMore
@@ -4487,8 +4593,8 @@ state 125
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -4555,8 +4661,8 @@ state 127
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -4615,8 +4721,8 @@ state 128
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -4800,7 +4906,7 @@ state 139
 
 state 140
 
-    (70) exprint -> TEXT LPAREN QUOT WORD QUOT printMore . RPAREN
+    (70) exprint -> TEXT LPAREN QUOT expression QUOT printMore . RPAREN
 
     RPAREN          shift and go to state 151
 
@@ -4838,8 +4944,8 @@ state 142
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -4910,8 +5016,8 @@ state 144
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -4981,8 +5087,8 @@ state 146
     (63) declare -> . TYPE_A WORD EQU LSTATE arrayX RSTATE
     (64) declare -> . TYPE_A WORD LARRY NUM RARRY
     (65) declare -> . TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE
-    (69) exprint -> . TEXT LPAREN WORD printMore RPAREN
-    (70) exprint -> . TEXT LPAREN QUOT WORD QUOT printMore RPAREN
+    (69) exprint -> . TEXT LPAREN expression printMore RPAREN
+    (70) exprint -> . TEXT LPAREN QUOT expression QUOT printMore RPAREN
     (18) exif -> . SO LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> . SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
     (20) exelif -> . exif exelse
@@ -5066,25 +5172,25 @@ state 150
 
 state 151
 
-    (70) exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .
+    (70) exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .
 
-    NEWLINE         reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    MINUS           reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    LPAREN          reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    WORD            reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    TYPE_A          reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    TEXT            reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    SO              reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    LOOP            reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    REPEAT          reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    NUM             reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    HEX             reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    TYPE_H          reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    TYPE_N          reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    TYPE_S          reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    $end            reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    LSTATE          reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
-    RSTATE          reduce using rule 70 (exprint -> TEXT LPAREN QUOT WORD QUOT printMore RPAREN .)
+    NEWLINE         reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    MINUS           reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    LPAREN          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    WORD            reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    TYPE_A          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    TEXT            reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    SO              reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    LOOP            reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    REPEAT          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    NUM             reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    HEX             reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    TYPE_H          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    TYPE_N          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    TYPE_S          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    $end            reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    LSTATE          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    RSTATE          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
 
 
 state 152

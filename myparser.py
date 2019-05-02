@@ -223,11 +223,12 @@ def p_arrayY_simple(p):
 
 
 def p_exprint(p):
-    'exprint : TEXT LPAREN WORD printMore RPAREN'
+    'exprint : TEXT LPAREN expression printMore RPAREN'
     p[0] = ('print', p[3], p[4])
 
+
 def p_exprint2(p):
-    'exprint : TEXT LPAREN QUOT WORD QUOT printMore RPAREN'
+    'exprint : TEXT LPAREN QUOT expression QUOT printMore RPAREN'
     p[0] = ('print','string', p[4], p[6])
 
 
