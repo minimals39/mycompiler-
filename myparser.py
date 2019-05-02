@@ -10,6 +10,17 @@ precedence = (
 )
 
 #--------------------------------------------------------------------------------------------------------------
+def p_start(p):
+	''' line	: 	Input line '''
+	if(not p[1] == None and not p[2] == None):
+		p[0] = ("Start", p[1], p[2])
+	else:
+		p[0] = ("End")
+    
+def p_exstatement(p):
+    ''' Input     :   statement
+                  |   expression'''
+    p[0] = p[1]
 
 def p_statement_multiple(p):
     '''statement : statement NEWLINE statement
