@@ -42,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state relative-caret-position="102">
+              <caret line="6" column="15" lean-forward="true" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
               </folding>
@@ -79,19 +79,24 @@
       <file leaf-file-name="text.bcc" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/text.bcc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+            <state relative-caret-position="51">
+              <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="genasm.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="genasm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/genasm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="342">
+              <caret line="80" column="44" lean-forward="false" selection-start-line="80" selection-start-column="44" selection-end-line="80" selection-end-column="44" />
+              <folding>
+                <element signature="e#833#891#0" expanded="false" />
+                <element signature="e#924#968#0" expanded="false" />
+                <element signature="e#1000#1045#0" expanded="false" />
+                <element signature="e#1138#1329#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -99,8 +104,8 @@
       <file leaf-file-name="examplegenasm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examplegenasm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="631">
-              <caret line="217" column="46" lean-forward="false" selection-start-line="217" selection-start-column="46" selection-end-line="217" selection-end-column="46" />
+            <state relative-caret-position="-525">
+              <caret line="111" column="0" lean-forward="false" selection-start-line="111" selection-start-column="0" selection-end-line="122" selection-end-column="73" />
               <folding />
             </state>
           </provider>
@@ -130,12 +135,12 @@
       <list>
         <option value="$PROJECT_DIR$/ply/Genasm.py" />
         <option value="$PROJECT_DIR$/parser.py" />
-        <option value="$PROJECT_DIR$/text.bcc" />
         <option value="$PROJECT_DIR$/flex.py" />
         <option value="$PROJECT_DIR$/myparser.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/examplegenasm.py" />
         <option value="$PROJECT_DIR$/genasm.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/text.bcc" />
       </list>
     </option>
   </component>
@@ -431,7 +436,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -439,7 +446,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3009">
           <caret line="177" column="19" lean-forward="false" selection-start-line="177" selection-start-column="19" selection-end-line="177" selection-end-column="19" />
-          <folding />
+          <folding>
+            <element signature="e#833#891#0" expanded="false" />
+            <element signature="e#924#968#0" expanded="false" />
+            <element signature="e#1000#1045#0" expanded="false" />
+            <element signature="e#1138#1329#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -497,7 +509,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3689">
           <caret line="217" column="46" lean-forward="false" selection-start-line="217" selection-start-column="46" selection-end-line="217" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#833#891#0" expanded="false" />
+            <element signature="e#924#968#0" expanded="false" />
+            <element signature="e#1000#1045#0" expanded="false" />
+            <element signature="e#1138#1329#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -532,7 +549,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3009">
           <caret line="177" column="19" lean-forward="false" selection-start-line="177" selection-start-column="19" selection-end-line="177" selection-end-column="19" />
-          <folding />
+          <folding>
+            <element signature="e#833#891#0" expanded="false" />
+            <element signature="e#924#968#0" expanded="false" />
+            <element signature="e#1000#1045#0" expanded="false" />
+            <element signature="e#1138#1329#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -606,7 +628,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3689">
           <caret line="217" column="46" lean-forward="false" selection-start-line="217" selection-start-column="46" selection-end-line="217" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#833#891#0" expanded="false" />
+            <element signature="e#924#968#0" expanded="false" />
+            <element signature="e#1000#1045#0" expanded="false" />
+            <element signature="e#1138#1329#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -659,7 +686,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2365">
           <caret line="177" column="19" lean-forward="false" selection-start-line="177" selection-start-column="19" selection-end-line="177" selection-end-column="19" />
-          <folding />
+          <folding>
+            <element signature="e#833#891#0" expanded="false" />
+            <element signature="e#924#968#0" expanded="false" />
+            <element signature="e#1000#1045#0" expanded="false" />
+            <element signature="e#1138#1329#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -707,7 +739,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3689">
           <caret line="217" column="46" lean-forward="false" selection-start-line="217" selection-start-column="46" selection-end-line="217" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#833#891#0" expanded="false" />
+            <element signature="e#924#968#0" expanded="false" />
+            <element signature="e#1000#1045#0" expanded="false" />
+            <element signature="e#1138#1329#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -730,14 +767,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/parser.py" />
-    <entry file="file://$PROJECT_DIR$/text.bcc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/flex.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="529">
@@ -764,29 +793,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examplegenasm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="631">
-          <caret line="217" column="46" lean-forward="false" selection-start-line="217" selection-start-column="46" selection-end-line="217" selection-end-column="46" />
+        <state relative-caret-position="-525">
+          <caret line="111" column="0" lean-forward="false" selection-start-line="111" selection-start-column="0" selection-end-line="122" selection-end-column="73" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/genasm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="342">
+          <caret line="80" column="44" lean-forward="false" selection-start-line="80" selection-start-column="44" selection-end-line="80" selection-end-column="44" />
+          <folding>
+            <element signature="e#833#891#0" expanded="false" />
+            <element signature="e#924#968#0" expanded="false" />
+            <element signature="e#1000#1045#0" expanded="false" />
+            <element signature="e#1138#1329#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/text.bcc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="15" lean-forward="true" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
