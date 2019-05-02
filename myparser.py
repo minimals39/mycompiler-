@@ -11,12 +11,16 @@ precedence = (
 
 #--------------------------------------------------------------------------------------------------------------
 def p_start(p):
-	''' line	: 	Input line '''
+	''' line	: 	Input line 
+                |   EXIT empty'''
 	if(not p[1] == None and not p[2] == None):
 		p[0] = ("Start", p[1], p[2])
 	else:
 		p[0] = ("End")
-    
+def p_exit(p):
+    'EXIT :'
+    pass
+
 def p_exstatement(p):
     ''' Input     :   statement
                   |   expression'''
