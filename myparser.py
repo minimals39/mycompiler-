@@ -228,7 +228,7 @@ def p_exprint(p):
 
 
 def p_print_content(p):
-    '''printMore : "," expression printMore
+    '''printMore : COMMA expression printMore
                  | empty empty empty'''
     p[0] = ('argument', p[2], p[3])
 

@@ -81,15 +81,14 @@ Rule 66    arrayX -> NUM arrayY
 Rule 67    arrayY -> COMMA NUM arrayY
 Rule 68    arrayY -> empty empty empty
 Rule 69    exprint -> TEXT LPAREN WORD printMore RPAREN
-Rule 70    printMore -> , expression printMore
+Rule 70    printMore -> COMMA expression printMore
 Rule 71    printMore -> empty empty empty
 Rule 72    empty -> <empty>
 
 Terminals, with rules where they appear
 
-,                    : 70
 BACK                 : 
-COMMA                : 67
+COMMA                : 67 70
 DECADE               : 
 DECL                 : 
 DIV                  : 36 37 38
@@ -708,7 +707,7 @@ state 14
     RPAREN          reduce using rule 50 (expression -> term .)
     LSTATE          reduce using rule 50 (expression -> term .)
     RSTATE          reduce using rule 50 (expression -> term .)
-    ,               reduce using rule 50 (expression -> term .)
+    COMMA           reduce using rule 50 (expression -> term .)
 
   ! PLUS            [ reduce using rule 50 (expression -> term .) ]
   ! MINUS           [ reduce using rule 50 (expression -> term .) ]
@@ -917,7 +916,7 @@ state 21
     RPAREN          reduce using rule 44 (term -> NUM .)
     LSTATE          reduce using rule 44 (term -> NUM .)
     RSTATE          reduce using rule 44 (term -> NUM .)
-    ,               reduce using rule 44 (term -> NUM .)
+    COMMA           reduce using rule 44 (term -> NUM .)
 
 
 state 22
@@ -981,7 +980,7 @@ state 26
     RPAREN          reduce using rule 45 (term -> HEX .)
     LSTATE          reduce using rule 45 (term -> HEX .)
     RSTATE          reduce using rule 45 (term -> HEX .)
-    ,               reduce using rule 45 (term -> HEX .)
+    COMMA           reduce using rule 45 (term -> HEX .)
 
 
 state 27
@@ -1835,7 +1834,7 @@ state 53
     RPAREN          reduce using rule 51 (expression -> MINUS expression .)
     LSTATE          reduce using rule 51 (expression -> MINUS expression .)
     RSTATE          reduce using rule 51 (expression -> MINUS expression .)
-    ,               reduce using rule 51 (expression -> MINUS expression .)
+    COMMA           reduce using rule 51 (expression -> MINUS expression .)
     MUL             shift and go to state 35
     DIV             shift and go to state 36
     MOD             shift and go to state 37
@@ -1885,7 +1884,7 @@ state 54
     RPAREN          reduce using rule 42 (term -> WORD .)
     LSTATE          reduce using rule 42 (term -> WORD .)
     RSTATE          reduce using rule 42 (term -> WORD .)
-    ,               reduce using rule 42 (term -> WORD .)
+    COMMA           reduce using rule 42 (term -> WORD .)
     LARRY           shift and go to state 58
 
 
@@ -1919,7 +1918,7 @@ state 55
     RPAREN          reduce using rule 43 (term -> arraysh .)
     LSTATE          reduce using rule 43 (term -> arraysh .)
     RSTATE          reduce using rule 43 (term -> arraysh .)
-    ,               reduce using rule 43 (term -> arraysh .)
+    COMMA           reduce using rule 43 (term -> arraysh .)
 
 
 state 56
@@ -2275,7 +2274,7 @@ state 67
     RPAREN          reduce using rule 27 (expression -> expression PLUS expression .)
     LSTATE          reduce using rule 27 (expression -> expression PLUS expression .)
     RSTATE          reduce using rule 27 (expression -> expression PLUS expression .)
-    ,               reduce using rule 27 (expression -> expression PLUS expression .)
+    COMMA           reduce using rule 27 (expression -> expression PLUS expression .)
     MUL             shift and go to state 35
     DIV             shift and go to state 36
     MOD             shift and go to state 37
@@ -2327,7 +2326,7 @@ state 68
     RPAREN          reduce using rule 30 (expression -> expression MINUS expression .)
     LSTATE          reduce using rule 30 (expression -> expression MINUS expression .)
     RSTATE          reduce using rule 30 (expression -> expression MINUS expression .)
-    ,               reduce using rule 30 (expression -> expression MINUS expression .)
+    COMMA           reduce using rule 30 (expression -> expression MINUS expression .)
     MUL             shift and go to state 35
     DIV             shift and go to state 36
     MOD             shift and go to state 37
@@ -2382,7 +2381,7 @@ state 69
     RPAREN          reduce using rule 33 (expression -> expression MUL expression .)
     LSTATE          reduce using rule 33 (expression -> expression MUL expression .)
     RSTATE          reduce using rule 33 (expression -> expression MUL expression .)
-    ,               reduce using rule 33 (expression -> expression MUL expression .)
+    COMMA           reduce using rule 33 (expression -> expression MUL expression .)
     LESS            shift and go to state 40
     MORE            shift and go to state 41
 
@@ -2434,7 +2433,7 @@ state 70
     RPAREN          reduce using rule 36 (expression -> expression DIV expression .)
     LSTATE          reduce using rule 36 (expression -> expression DIV expression .)
     RSTATE          reduce using rule 36 (expression -> expression DIV expression .)
-    ,               reduce using rule 36 (expression -> expression DIV expression .)
+    COMMA           reduce using rule 36 (expression -> expression DIV expression .)
     LESS            shift and go to state 40
     MORE            shift and go to state 41
 
@@ -2486,7 +2485,7 @@ state 71
     RPAREN          reduce using rule 39 (expression -> expression MOD expression .)
     LSTATE          reduce using rule 39 (expression -> expression MOD expression .)
     RSTATE          reduce using rule 39 (expression -> expression MOD expression .)
-    ,               reduce using rule 39 (expression -> expression MOD expression .)
+    COMMA           reduce using rule 39 (expression -> expression MOD expression .)
     LESS            shift and go to state 40
     MORE            shift and go to state 41
 
@@ -2540,7 +2539,7 @@ state 72
     RPAREN          reduce using rule 55 (expression -> expression EQUTO expression .)
     LSTATE          reduce using rule 55 (expression -> expression EQUTO expression .)
     RSTATE          reduce using rule 55 (expression -> expression EQUTO expression .)
-    ,               reduce using rule 55 (expression -> expression EQUTO expression .)
+    COMMA           reduce using rule 55 (expression -> expression EQUTO expression .)
     PLUS            shift and go to state 33
     MINUS           shift and go to state 34
     MUL             shift and go to state 35
@@ -2601,7 +2600,7 @@ state 73
     RPAREN          reduce using rule 56 (expression -> expression NOEQU expression .)
     LSTATE          reduce using rule 56 (expression -> expression NOEQU expression .)
     RSTATE          reduce using rule 56 (expression -> expression NOEQU expression .)
-    ,               reduce using rule 56 (expression -> expression NOEQU expression .)
+    COMMA           reduce using rule 56 (expression -> expression NOEQU expression .)
     PLUS            shift and go to state 33
     MINUS           shift and go to state 34
     MUL             shift and go to state 35
@@ -2662,7 +2661,7 @@ state 74
     RPAREN          reduce using rule 57 (expression -> expression LESS expression .)
     LSTATE          reduce using rule 57 (expression -> expression LESS expression .)
     RSTATE          reduce using rule 57 (expression -> expression LESS expression .)
-    ,               reduce using rule 57 (expression -> expression LESS expression .)
+    COMMA           reduce using rule 57 (expression -> expression LESS expression .)
 
   ! PLUS            [ shift and go to state 33 ]
   ! MINUS           [ shift and go to state 34 ]
@@ -2714,7 +2713,7 @@ state 75
     RPAREN          reduce using rule 58 (expression -> expression MORE expression .)
     LSTATE          reduce using rule 58 (expression -> expression MORE expression .)
     RSTATE          reduce using rule 58 (expression -> expression MORE expression .)
-    ,               reduce using rule 58 (expression -> expression MORE expression .)
+    COMMA           reduce using rule 58 (expression -> expression MORE expression .)
 
   ! PLUS            [ shift and go to state 33 ]
   ! MINUS           [ shift and go to state 34 ]
@@ -2828,7 +2827,7 @@ state 77
   ! reduce/reduce conflict for RPAREN resolved using rule 28 (expression -> term PLUS term .)
   ! reduce/reduce conflict for LSTATE resolved using rule 28 (expression -> term PLUS term .)
   ! reduce/reduce conflict for RSTATE resolved using rule 28 (expression -> term PLUS term .)
-  ! reduce/reduce conflict for , resolved using rule 28 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for COMMA resolved using rule 28 (expression -> term PLUS term .)
     PLUS            reduce using rule 28 (expression -> term PLUS term .)
     MINUS           reduce using rule 28 (expression -> term PLUS term .)
     EQUTO           reduce using rule 28 (expression -> term PLUS term .)
@@ -2852,7 +2851,7 @@ state 77
     RPAREN          reduce using rule 28 (expression -> term PLUS term .)
     LSTATE          reduce using rule 28 (expression -> term PLUS term .)
     RSTATE          reduce using rule 28 (expression -> term PLUS term .)
-    ,               reduce using rule 28 (expression -> term PLUS term .)
+    COMMA           reduce using rule 28 (expression -> term PLUS term .)
     MUL             shift and go to state 50
     DIV             shift and go to state 51
     MOD             shift and go to state 52
@@ -2888,7 +2887,7 @@ state 77
   ! RPAREN          [ reduce using rule 50 (expression -> term .) ]
   ! LSTATE          [ reduce using rule 50 (expression -> term .) ]
   ! RSTATE          [ reduce using rule 50 (expression -> term .) ]
-  ! ,               [ reduce using rule 50 (expression -> term .) ]
+  ! COMMA           [ reduce using rule 50 (expression -> term .) ]
 
 
 state 78
@@ -2925,7 +2924,7 @@ state 78
     RPAREN          reduce using rule 29 (expression -> term PLUS expression .)
     LSTATE          reduce using rule 29 (expression -> term PLUS expression .)
     RSTATE          reduce using rule 29 (expression -> term PLUS expression .)
-    ,               reduce using rule 29 (expression -> term PLUS expression .)
+    COMMA           reduce using rule 29 (expression -> term PLUS expression .)
     MUL             shift and go to state 35
     DIV             shift and go to state 36
     MOD             shift and go to state 37
@@ -2984,7 +2983,7 @@ state 79
   ! reduce/reduce conflict for RPAREN resolved using rule 31 (expression -> term MINUS term .)
   ! reduce/reduce conflict for LSTATE resolved using rule 31 (expression -> term MINUS term .)
   ! reduce/reduce conflict for RSTATE resolved using rule 31 (expression -> term MINUS term .)
-  ! reduce/reduce conflict for , resolved using rule 31 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for COMMA resolved using rule 31 (expression -> term MINUS term .)
     PLUS            reduce using rule 31 (expression -> term MINUS term .)
     MINUS           reduce using rule 31 (expression -> term MINUS term .)
     EQUTO           reduce using rule 31 (expression -> term MINUS term .)
@@ -3008,7 +3007,7 @@ state 79
     RPAREN          reduce using rule 31 (expression -> term MINUS term .)
     LSTATE          reduce using rule 31 (expression -> term MINUS term .)
     RSTATE          reduce using rule 31 (expression -> term MINUS term .)
-    ,               reduce using rule 31 (expression -> term MINUS term .)
+    COMMA           reduce using rule 31 (expression -> term MINUS term .)
     MUL             shift and go to state 50
     DIV             shift and go to state 51
     MOD             shift and go to state 52
@@ -3044,7 +3043,7 @@ state 79
   ! RPAREN          [ reduce using rule 50 (expression -> term .) ]
   ! LSTATE          [ reduce using rule 50 (expression -> term .) ]
   ! RSTATE          [ reduce using rule 50 (expression -> term .) ]
-  ! ,               [ reduce using rule 50 (expression -> term .) ]
+  ! COMMA           [ reduce using rule 50 (expression -> term .) ]
 
 
 state 80
@@ -3081,7 +3080,7 @@ state 80
     RPAREN          reduce using rule 32 (expression -> term MINUS expression .)
     LSTATE          reduce using rule 32 (expression -> term MINUS expression .)
     RSTATE          reduce using rule 32 (expression -> term MINUS expression .)
-    ,               reduce using rule 32 (expression -> term MINUS expression .)
+    COMMA           reduce using rule 32 (expression -> term MINUS expression .)
     MUL             shift and go to state 35
     DIV             shift and go to state 36
     MOD             shift and go to state 37
@@ -3140,7 +3139,7 @@ state 81
   ! reduce/reduce conflict for RPAREN resolved using rule 34 (expression -> term MUL term .)
   ! reduce/reduce conflict for LSTATE resolved using rule 34 (expression -> term MUL term .)
   ! reduce/reduce conflict for RSTATE resolved using rule 34 (expression -> term MUL term .)
-  ! reduce/reduce conflict for , resolved using rule 34 (expression -> term MUL term .)
+  ! reduce/reduce conflict for COMMA resolved using rule 34 (expression -> term MUL term .)
     PLUS            reduce using rule 34 (expression -> term MUL term .)
     MINUS           reduce using rule 34 (expression -> term MUL term .)
     MUL             reduce using rule 34 (expression -> term MUL term .)
@@ -3167,7 +3166,7 @@ state 81
     RPAREN          reduce using rule 34 (expression -> term MUL term .)
     LSTATE          reduce using rule 34 (expression -> term MUL term .)
     RSTATE          reduce using rule 34 (expression -> term MUL term .)
-    ,               reduce using rule 34 (expression -> term MUL term .)
+    COMMA           reduce using rule 34 (expression -> term MUL term .)
 
   ! PLUS            [ shift and go to state 48 ]
   ! MINUS           [ shift and go to state 49 ]
@@ -3200,7 +3199,7 @@ state 81
   ! RPAREN          [ reduce using rule 50 (expression -> term .) ]
   ! LSTATE          [ reduce using rule 50 (expression -> term .) ]
   ! RSTATE          [ reduce using rule 50 (expression -> term .) ]
-  ! ,               [ reduce using rule 50 (expression -> term .) ]
+  ! COMMA           [ reduce using rule 50 (expression -> term .) ]
 
 
 state 82
@@ -3240,7 +3239,7 @@ state 82
     RPAREN          reduce using rule 35 (expression -> term MUL expression .)
     LSTATE          reduce using rule 35 (expression -> term MUL expression .)
     RSTATE          reduce using rule 35 (expression -> term MUL expression .)
-    ,               reduce using rule 35 (expression -> term MUL expression .)
+    COMMA           reduce using rule 35 (expression -> term MUL expression .)
     LESS            shift and go to state 40
     MORE            shift and go to state 41
 
@@ -3296,7 +3295,7 @@ state 83
   ! reduce/reduce conflict for RPAREN resolved using rule 37 (expression -> term DIV term .)
   ! reduce/reduce conflict for LSTATE resolved using rule 37 (expression -> term DIV term .)
   ! reduce/reduce conflict for RSTATE resolved using rule 37 (expression -> term DIV term .)
-  ! reduce/reduce conflict for , resolved using rule 37 (expression -> term DIV term .)
+  ! reduce/reduce conflict for COMMA resolved using rule 37 (expression -> term DIV term .)
     PLUS            reduce using rule 37 (expression -> term DIV term .)
     MINUS           reduce using rule 37 (expression -> term DIV term .)
     MUL             reduce using rule 37 (expression -> term DIV term .)
@@ -3323,7 +3322,7 @@ state 83
     RPAREN          reduce using rule 37 (expression -> term DIV term .)
     LSTATE          reduce using rule 37 (expression -> term DIV term .)
     RSTATE          reduce using rule 37 (expression -> term DIV term .)
-    ,               reduce using rule 37 (expression -> term DIV term .)
+    COMMA           reduce using rule 37 (expression -> term DIV term .)
 
   ! PLUS            [ shift and go to state 48 ]
   ! MINUS           [ shift and go to state 49 ]
@@ -3356,7 +3355,7 @@ state 83
   ! RPAREN          [ reduce using rule 50 (expression -> term .) ]
   ! LSTATE          [ reduce using rule 50 (expression -> term .) ]
   ! RSTATE          [ reduce using rule 50 (expression -> term .) ]
-  ! ,               [ reduce using rule 50 (expression -> term .) ]
+  ! COMMA           [ reduce using rule 50 (expression -> term .) ]
 
 
 state 84
@@ -3396,7 +3395,7 @@ state 84
     RPAREN          reduce using rule 38 (expression -> term DIV expression .)
     LSTATE          reduce using rule 38 (expression -> term DIV expression .)
     RSTATE          reduce using rule 38 (expression -> term DIV expression .)
-    ,               reduce using rule 38 (expression -> term DIV expression .)
+    COMMA           reduce using rule 38 (expression -> term DIV expression .)
     LESS            shift and go to state 40
     MORE            shift and go to state 41
 
@@ -3452,7 +3451,7 @@ state 85
   ! reduce/reduce conflict for RPAREN resolved using rule 40 (expression -> term MOD term .)
   ! reduce/reduce conflict for LSTATE resolved using rule 40 (expression -> term MOD term .)
   ! reduce/reduce conflict for RSTATE resolved using rule 40 (expression -> term MOD term .)
-  ! reduce/reduce conflict for , resolved using rule 40 (expression -> term MOD term .)
+  ! reduce/reduce conflict for COMMA resolved using rule 40 (expression -> term MOD term .)
     PLUS            reduce using rule 40 (expression -> term MOD term .)
     MINUS           reduce using rule 40 (expression -> term MOD term .)
     MUL             reduce using rule 40 (expression -> term MOD term .)
@@ -3479,7 +3478,7 @@ state 85
     RPAREN          reduce using rule 40 (expression -> term MOD term .)
     LSTATE          reduce using rule 40 (expression -> term MOD term .)
     RSTATE          reduce using rule 40 (expression -> term MOD term .)
-    ,               reduce using rule 40 (expression -> term MOD term .)
+    COMMA           reduce using rule 40 (expression -> term MOD term .)
 
   ! PLUS            [ shift and go to state 48 ]
   ! MINUS           [ shift and go to state 49 ]
@@ -3512,7 +3511,7 @@ state 85
   ! RPAREN          [ reduce using rule 50 (expression -> term .) ]
   ! LSTATE          [ reduce using rule 50 (expression -> term .) ]
   ! RSTATE          [ reduce using rule 50 (expression -> term .) ]
-  ! ,               [ reduce using rule 50 (expression -> term .) ]
+  ! COMMA           [ reduce using rule 50 (expression -> term .) ]
 
 
 state 86
@@ -3552,7 +3551,7 @@ state 86
     RPAREN          reduce using rule 41 (expression -> term MOD expression .)
     LSTATE          reduce using rule 41 (expression -> term MOD expression .)
     RSTATE          reduce using rule 41 (expression -> term MOD expression .)
-    ,               reduce using rule 41 (expression -> term MOD expression .)
+    COMMA           reduce using rule 41 (expression -> term MOD expression .)
     LESS            shift and go to state 40
     MORE            shift and go to state 41
 
@@ -3597,7 +3596,7 @@ state 87
     RPAREN          reduce using rule 52 (expression -> LPAREN expression RPAREN .)
     LSTATE          reduce using rule 52 (expression -> LPAREN expression RPAREN .)
     RSTATE          reduce using rule 52 (expression -> LPAREN expression RPAREN .)
-    ,               reduce using rule 52 (expression -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 52 (expression -> LPAREN expression RPAREN .)
 
 
 state 88
@@ -3735,11 +3734,11 @@ state 94
 state 95
 
     (69) exprint -> TEXT LPAREN WORD . printMore RPAREN
-    (70) printMore -> . , expression printMore
+    (70) printMore -> . COMMA expression printMore
     (71) printMore -> . empty empty empty
     (72) empty -> .
 
-    ,               shift and go to state 108
+    COMMA           shift and go to state 108
     RPAREN          reduce using rule 72 (empty -> .)
 
     printMore                      shift and go to state 107
@@ -4049,7 +4048,7 @@ state 102
     RPAREN          reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
     LSTATE          reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
     RSTATE          reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
-    ,               reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
+    COMMA           reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
 
 
 state 103
@@ -4083,7 +4082,7 @@ state 103
     RPAREN          reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
     LSTATE          reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
     RSTATE          reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
-    ,               reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
+    COMMA           reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
 
 
 state 104
@@ -4135,7 +4134,7 @@ state 107
 
 state 108
 
-    (70) printMore -> , . expression printMore
+    (70) printMore -> COMMA . expression printMore
     (27) expression -> . expression PLUS expression
     (28) expression -> . term PLUS term
     (29) expression -> . term PLUS expression
@@ -4303,7 +4302,7 @@ state 118
 
 state 119
 
-    (70) printMore -> , expression . printMore
+    (70) printMore -> COMMA expression . printMore
     (27) expression -> expression . PLUS expression
     (30) expression -> expression . MINUS expression
     (33) expression -> expression . MUL expression
@@ -4313,7 +4312,7 @@ state 119
     (56) expression -> expression . NOEQU expression
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
-    (70) printMore -> . , expression printMore
+    (70) printMore -> . COMMA expression printMore
     (71) printMore -> . empty empty empty
     (72) empty -> .
 
@@ -4326,7 +4325,7 @@ state 119
     NOEQU           shift and go to state 39
     LESS            shift and go to state 40
     MORE            shift and go to state 41
-    ,               shift and go to state 108
+    COMMA           shift and go to state 108
     RPAREN          reduce using rule 72 (empty -> .)
 
     printMore                      shift and go to state 133
@@ -4634,9 +4633,9 @@ state 132
 
 state 133
 
-    (70) printMore -> , expression printMore .
+    (70) printMore -> COMMA expression printMore .
 
-    RPAREN          reduce using rule 70 (printMore -> , expression printMore .)
+    RPAREN          reduce using rule 70 (printMore -> COMMA expression printMore .)
 
 
 state 134
