@@ -5,7 +5,7 @@ tokens = (
 	'INT64','WORD','NUM','HEX','TEXT','LOOP','REPEAT',
 	'SO','NOTSO','OTHERWISE','EQU','PLUS','MINUS','MUL','DIV',
 	'SEMI','COMMA','MOD','DECADE','LPAREN','RPAREN','LARRY','RARRY',
-	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU','DECL', 'TYPE_S', 'TYPE_N','TYPE_A',"TYPE_H")
+	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU','DECL', 'TYPE_S', 'TYPE_N','TYPE_A',"TYPE_H",'QUOT')
 #Reseved word
 RESERVED = {
 	"int64":"INT64",
@@ -52,6 +52,7 @@ t_LESS = r'<<'
 t_MORE = r'>>'
 t_EQUTO = r'=='
 t_NOEQU = r'<=>'
+t_QUOT = '\"'
 
 def t_newline(t):
     r'\n+'
@@ -95,7 +96,7 @@ lexer = lex.lex()
  
  # Test it out
 data = '''
-TEXT( << >> {} []) 2 f + - * / % 2h
+TEXT( " << >> {} []) 2 f + - * / % 2h
 
 
 
