@@ -16,10 +16,10 @@ system_platform = platform.system()
 # args = parser.parse_args()
 
 lines = open("text.bcc", 'r').read()
-#genasm.lexer = flex.lexer
-result = parser.parse(lines)
+genasm.lexer = flex.lexer
+result = myparser.parse(lines)
 print(result)
-#genasm.statement_main(result)
+genasm.statement_main(result)
 
 
 #print("\n----- ASM simple -----")

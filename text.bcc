@@ -1,1 +1,5 @@
-decl x
+type_n a = 1
+type_h a = 1
+type_s a = 1
+type_a a[10] = {1,2,3}
+

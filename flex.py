@@ -105,10 +105,10 @@ TEXT( << >> {} []) 2 f + - * / % 2h
 lexer.input(data)
  
  # Tokenize
-while True:
+'''while True:
      tok = lexer.token()
      if not tok: 
          break      # No more input
-     print(tok)
+     print(tok)'''
  
 #When executed, the example will produce the following output:
