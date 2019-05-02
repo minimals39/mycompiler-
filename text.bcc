@@ -1,4 +1,1 @@
-type_n a = 1
-type_h a = 1
-type_s a = 1
-text(a)
+type_a a[10] = {10,20,30}
