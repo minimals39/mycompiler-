@@ -1,3 +1,1 @@
-type_n a = 1
-type_s b = "ab"
-text(b,a)
+a = b

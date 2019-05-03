@@ -27,6 +27,11 @@ str_prefix = "_STR"
 reg_order = ["rcx", "rdx", "r8", "r9"]
 
 #------------------------------------ Get Set Add Function
+def checktype(a,b):
+    if global_var2[a] == global_var2[b]:
+        return True
+    else:
+        return False
 
 def get_var(symbol):
     if symbol in global_var:
@@ -108,8 +113,9 @@ def statement_main(tuple):
     elif state == "print":
         print("")
         print_routine(stateTuple)
-    elif state == "FORLOOP":
+    elif state == "assign":
         print("")
+        assign_routine(stateTuple)
     elif state == "WHILELOOP":
         print("")
 
@@ -140,8 +146,9 @@ def statement_main_from_multi(tuple):
     elif state == "print":
         print("")
         print_routine(stateTuple)
-    elif state == "FORLOOP":
+    elif state == "assign":
         print("")
+        assign_routine(stateTuple)
     elif state == "WHILELOOP":
         print("")
 
@@ -153,6 +160,9 @@ def statement_main_from_multi(tuple):
 
 
 #------------------------------------ All Function Section
+def assign_routine(stm):
+    if checktype(stm[1],stm[2]):
+
 
 def multiple_stm_routine(stm):
     statement_main_from_multi(stm[1])
