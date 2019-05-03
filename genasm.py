@@ -301,7 +301,10 @@ def declare_var(var_name, value, assign=None):
                 global_var2[var_name] = 'string'
                 addDataString(var_name, value)
         elif assign == "array":
-            asmdata += var_name + " times " + str(value) + " dq 0" + "\n"
+            asmdata += var_name + ' dq "%d " '
+            for i in range(value-1):
+                asmdata += ',0'
+            asmdata += "\n"
         elif assign == None:
             print("something is wrong law na")
 
@@ -321,26 +324,18 @@ def declaration_routine(stm):
         declare_var(stm[2],stmint,'int')
 
 def Array_routine(stm):
-    if type(stm[3]) != tuple:
-        declare_var(stm[1],stm[2],"array")
-    else:
-        declare_var(stm[1], stm[2], "array")
-        now = stm[3]
-        arraynum = 1
+    arrcounter = 1
+    declare_var(stm[1],stm[2],"array")
+    if type(stm[3]) == tuple:
+        thisstm = stm[3]
         while True:
-            try:
-                if now[0] == "argument":
-                    if(now[1] == None):
-                        break
-                    addText("mov rax, %s" % now[1])
-                    addText("mov [%s + %s * 8], rax" % (stm[1], arraynum))
-                    arraynum+=1
-            except:
-                break
-            try:
-                now = now[2]
-            except:
-                break
+            if thisstm[1] != None:
+                addText("mov rax, %s" % thisstm[1])
+                addText("mov [%s + %s * 8], rax" % (stm[1], arrcounter))
+                arrcounter += 1
+                thisstm = thisstm[2]
+                if thisstm[1] == None:
+                    break
 
 def print_routine(stm):
     print("-> print_routine")
