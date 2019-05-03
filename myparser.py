@@ -125,9 +125,12 @@ def p_value(p):
            | HEX
            '''
     p[0] = p[1]
-def p_value(p):
-    '''term : STRING_LITERAL'''
-    p[0] = ('string',p[1])
+
+def p_value2(p):
+    '''term : APOS WORD APOS
+           '''
+    p[0] = ('string',p[2])
+
 
 def p_value_hexdecstr(p):
     '''typeconst : TYPE_H
@@ -156,7 +159,6 @@ def p_expression_assign(p):
                   | arraysh EQU expression
                   '''
     p[0] = ('assign',p[1],p[3])
-
 
 def p_expression_EQUTO(p):
     '''expression : expression EQUTO expression'''
