@@ -19,9 +19,11 @@ lines = open("text.bcc", 'r').read()
 genasm.lexer = flex.lexer
 result = myparser.parse(lines)
 var = {}
-var['a'] = 'b'
+var['c'] = 'b'
 ab = "abcdefg"
 abb = "'"+ab+"'"
+if 'a' not in var:
+     print("yessssssssss")
 print(ab[:-3])
 print(result)
 genasm.statement_main(result)
