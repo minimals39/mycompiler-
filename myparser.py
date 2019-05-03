@@ -1,7 +1,7 @@
 from ply import yacc
 import flex
 import sys
-tokens = flex.tokens 
+tokens = flex.tokens
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
@@ -11,7 +11,7 @@ precedence = (
 
 #--------------------------------------------------------------------------------------------------------------
 def p_start(p):
-	''' line	: 	Input line 
+	''' line	: 	Input line
                 |   EXIT empty'''
 	if(not p[1] == None and not p[2] == None):
 		p[0] = ("Start", p[1], p[2])
@@ -88,7 +88,7 @@ def p_exrepeat(p):
     if p[5] == '\n':
         p[0] = ('repeat', p[3], p[7])
     else:
-        p[0] = ('repeat', p[3], p[6])        
+        p[0] = ('repeat', p[3], p[6])
 
 #-----------------------------------valuestuffs-----------------------------------------------------
 def p_expression_operators(p):
@@ -124,6 +124,7 @@ def p_value(p):
            | NUM
            | HEX'''
     p[0] = p[1]
+
 
 def p_value_hexdecstr(p):
     '''typeconst : TYPE_H
@@ -181,7 +182,7 @@ def p_declare_const(p):
                | typeconst WORD EQU term'''
     if(len(p) == 3) :
         p[0] = ("decl", p[1],  p[2], 0)
-    else : 
+    else :
         p[0] = ("decl", p[1] , p[2], p[4])
 
 
@@ -217,7 +218,7 @@ def p_arrayY_simple(p):
               | empty empty empty'''
     p[0] = ("argument", p[2], p[3])
 
-    
+
 
 # print ----------------------------------------
 
@@ -230,6 +231,11 @@ def p_exprint(p):
 def p_exprint2(p):
     'exprint : TEXT LPAREN QUOT expression QUOT printMore RPAREN'
     p[0] = ('print','string', p[4], p[6])
+
+def p_value2(p):
+    '''term : APOS WORD APOS
+            | APOS NUM APOS'''
+    p[0] = p[2]
 
 
 def p_print_content(p):

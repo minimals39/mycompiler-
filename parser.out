@@ -2,7 +2,6 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    APOS
     BACK
     DECADE
     DECL
@@ -83,16 +82,18 @@ Rule 67    arrayY -> COMMA NUM arrayY
 Rule 68    arrayY -> empty empty empty
 Rule 69    exprint -> TEXT LPAREN expression printMore RPAREN
 Rule 70    exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN
-Rule 71    printMore -> COMMA expression printMore
-Rule 72    printMore -> empty empty empty
-Rule 73    printMore -> COMMA QUOT expression QUOT printMore
-Rule 74    empty -> <empty>
+Rule 71    term -> APOS WORD APOS
+Rule 72    term -> APOS NUM APOS
+Rule 73    printMore -> COMMA expression printMore
+Rule 74    printMore -> empty empty empty
+Rule 75    printMore -> COMMA QUOT expression QUOT printMore
+Rule 76    empty -> <empty>
 
 Terminals, with rules where they appear
 
-APOS                 : 
+APOS                 : 71 71 72 72
 BACK                 : 
-COMMA                : 67 71 73
+COMMA                : 67 73 75
 DECADE               : 
 DECL                 : 
 DIV                  : 36 37 38
@@ -112,10 +113,10 @@ MUL                  : 33 34 35
 NEWLINE              : 6 7 7 15 16 17 19 22 24 26
 NOEQU                : 56
 NOTSO                : 
-NUM                  : 44 61 64 65 66 67
+NUM                  : 44 61 64 65 66 67 72
 OTHERWISE            : 21 21 22
 PLUS                 : 27 28 29
-QUOT                 : 70 70 73 73
+QUOT                 : 70 70 75 75
 RARRY                : 61 62 64 65
 REPEAT               : 25 26
 RPAREN               : 18 19 23 24 25 26 52 69 70
@@ -127,7 +128,7 @@ TYPE_A               : 48 63 64 65
 TYPE_H               : 46
 TYPE_N               : 47
 TYPE_S               : 49
-WORD                 : 42 53 59 60 61 62 62 63 64 65
+WORD                 : 42 53 59 60 61 62 62 63 64 65 71
 error                : 
 
 Nonterminals, with rules where they appear
@@ -138,17 +139,17 @@ arrayX               : 63 65
 arrayY               : 66 67
 arraysh              : 43 54
 declare              : 9
-empty                : 2 68 68 68 72 72 72
+empty                : 2 68 68 68 74 74 74
 exassign             : 8
 exelif               : 12
 exelse               : 20
 exif                 : 11 20
 exloop               : 13 17
-expression           : 5 18 19 23 24 25 26 27 27 29 30 30 32 33 33 35 36 36 38 39 39 41 51 52 53 54 55 55 56 56 57 57 58 58 69 70 71 73
+expression           : 5 18 19 23 24 25 26 27 27 29 30 30 32 33 33 35 36 36 38 39 39 41 51 52 53 54 55 55 56 56 57 57 58 58 69 70 73 75
 exprint              : 10
 exrepeat             : 14
 line                 : 1 0
-printMore            : 69 70 71 73
+printMore            : 69 70 73 75
 statement            : 4 6 6 7 7 15 16 18 19 21 22 23 24 25 26
 term                 : 28 28 29 31 31 32 34 34 35 37 37 38 40 40 41 50 60
 typeconst            : 59 60
@@ -217,6 +218,8 @@ state 0
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
     (46) typeconst -> . TYPE_H
@@ -236,9 +239,10 @@ state 0
     REPEAT          shift and go to state 25
     NUM             shift and go to state 21
     HEX             shift and go to state 26
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    APOS            shift and go to state 27
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
     line                           shift and go to state 1
     Input                          shift and go to state 2
@@ -324,6 +328,8 @@ state 2
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
     (46) typeconst -> . TYPE_H
@@ -343,12 +349,13 @@ state 2
     REPEAT          shift and go to state 25
     NUM             shift and go to state 21
     HEX             shift and go to state 26
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    APOS            shift and go to state 27
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
     Input                          shift and go to state 2
-    line                           shift and go to state 30
+    line                           shift and go to state 31
     EXIT                           shift and go to state 3
     statement                      shift and go to state 4
     expression                     shift and go to state 5
@@ -366,11 +373,11 @@ state 2
 state 3
 
     (2) line -> EXIT . empty
-    (74) empty -> .
+    (76) empty -> .
 
-    $end            reduce using rule 74 (empty -> .)
+    $end            reduce using rule 76 (empty -> .)
 
-    empty                          shift and go to state 31
+    empty                          shift and go to state 32
 
 state 4
 
@@ -390,11 +397,12 @@ state 4
     REPEAT          reduce using rule 4 (Input -> statement .)
     NUM             reduce using rule 4 (Input -> statement .)
     HEX             reduce using rule 4 (Input -> statement .)
+    APOS            reduce using rule 4 (Input -> statement .)
     TYPE_H          reduce using rule 4 (Input -> statement .)
     TYPE_N          reduce using rule 4 (Input -> statement .)
     TYPE_S          reduce using rule 4 (Input -> statement .)
     $end            reduce using rule 4 (Input -> statement .)
-    NEWLINE         shift and go to state 32
+    NEWLINE         shift and go to state 33
 
   ! NEWLINE         [ reduce using rule 4 (Input -> statement .) ]
 
@@ -423,19 +431,20 @@ state 5
     REPEAT          reduce using rule 5 (Input -> expression .)
     NUM             reduce using rule 5 (Input -> expression .)
     HEX             reduce using rule 5 (Input -> expression .)
+    APOS            reduce using rule 5 (Input -> expression .)
     TYPE_H          reduce using rule 5 (Input -> expression .)
     TYPE_N          reduce using rule 5 (Input -> expression .)
     TYPE_S          reduce using rule 5 (Input -> expression .)
     $end            reduce using rule 5 (Input -> expression .)
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! MINUS           [ reduce using rule 5 (Input -> expression .) ]
 
@@ -479,17 +488,17 @@ state 6
     (49) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 42
+    statement                      shift and go to state 43
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -497,7 +506,7 @@ state 6
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
 state 7
@@ -515,6 +524,7 @@ state 7
     REPEAT          reduce using rule 8 (statement -> exassign .)
     NUM             reduce using rule 8 (statement -> exassign .)
     HEX             reduce using rule 8 (statement -> exassign .)
+    APOS            reduce using rule 8 (statement -> exassign .)
     TYPE_H          reduce using rule 8 (statement -> exassign .)
     TYPE_N          reduce using rule 8 (statement -> exassign .)
     TYPE_S          reduce using rule 8 (statement -> exassign .)
@@ -538,6 +548,7 @@ state 8
     REPEAT          reduce using rule 9 (statement -> declare .)
     NUM             reduce using rule 9 (statement -> declare .)
     HEX             reduce using rule 9 (statement -> declare .)
+    APOS            reduce using rule 9 (statement -> declare .)
     TYPE_H          reduce using rule 9 (statement -> declare .)
     TYPE_N          reduce using rule 9 (statement -> declare .)
     TYPE_S          reduce using rule 9 (statement -> declare .)
@@ -561,6 +572,7 @@ state 9
     REPEAT          reduce using rule 10 (statement -> exprint .)
     NUM             reduce using rule 10 (statement -> exprint .)
     HEX             reduce using rule 10 (statement -> exprint .)
+    APOS            reduce using rule 10 (statement -> exprint .)
     TYPE_H          reduce using rule 10 (statement -> exprint .)
     TYPE_N          reduce using rule 10 (statement -> exprint .)
     TYPE_S          reduce using rule 10 (statement -> exprint .)
@@ -587,15 +599,16 @@ state 10
     REPEAT          reduce using rule 11 (statement -> exif .)
     NUM             reduce using rule 11 (statement -> exif .)
     HEX             reduce using rule 11 (statement -> exif .)
+    APOS            reduce using rule 11 (statement -> exif .)
     TYPE_H          reduce using rule 11 (statement -> exif .)
     TYPE_N          reduce using rule 11 (statement -> exif .)
     TYPE_S          reduce using rule 11 (statement -> exif .)
     $end            reduce using rule 11 (statement -> exif .)
     LSTATE          reduce using rule 11 (statement -> exif .)
     RSTATE          reduce using rule 11 (statement -> exif .)
-    OTHERWISE       shift and go to state 46
+    OTHERWISE       shift and go to state 47
 
-    exelse                         shift and go to state 45
+    exelse                         shift and go to state 46
 
 state 11
 
@@ -612,6 +625,7 @@ state 11
     REPEAT          reduce using rule 12 (statement -> exelif .)
     NUM             reduce using rule 12 (statement -> exelif .)
     HEX             reduce using rule 12 (statement -> exelif .)
+    APOS            reduce using rule 12 (statement -> exelif .)
     TYPE_H          reduce using rule 12 (statement -> exelif .)
     TYPE_N          reduce using rule 12 (statement -> exelif .)
     TYPE_S          reduce using rule 12 (statement -> exelif .)
@@ -636,13 +650,14 @@ state 12
     REPEAT          reduce using rule 13 (statement -> exloop .)
     NUM             reduce using rule 13 (statement -> exloop .)
     HEX             reduce using rule 13 (statement -> exloop .)
+    APOS            reduce using rule 13 (statement -> exloop .)
     TYPE_H          reduce using rule 13 (statement -> exloop .)
     TYPE_N          reduce using rule 13 (statement -> exloop .)
     TYPE_S          reduce using rule 13 (statement -> exloop .)
     $end            reduce using rule 13 (statement -> exloop .)
     LSTATE          reduce using rule 13 (statement -> exloop .)
     RSTATE          reduce using rule 13 (statement -> exloop .)
-    NEWLINE         shift and go to state 47
+    NEWLINE         shift and go to state 48
 
   ! NEWLINE         [ reduce using rule 13 (statement -> exloop .) ]
 
@@ -662,6 +677,7 @@ state 13
     REPEAT          reduce using rule 14 (statement -> exrepeat .)
     NUM             reduce using rule 14 (statement -> exrepeat .)
     HEX             reduce using rule 14 (statement -> exrepeat .)
+    APOS            reduce using rule 14 (statement -> exrepeat .)
     TYPE_H          reduce using rule 14 (statement -> exrepeat .)
     TYPE_N          reduce using rule 14 (statement -> exrepeat .)
     TYPE_S          reduce using rule 14 (statement -> exrepeat .)
@@ -689,11 +705,11 @@ state 14
   ! shift/reduce conflict for MUL resolved as shift
   ! shift/reduce conflict for DIV resolved as shift
   ! shift/reduce conflict for MOD resolved as shift
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
-    MOD             shift and go to state 52
+    PLUS            shift and go to state 49
+    MINUS           shift and go to state 50
+    MUL             shift and go to state 51
+    DIV             shift and go to state 52
+    MOD             shift and go to state 53
     EQUTO           reduce using rule 50 (expression -> term .)
     NOEQU           reduce using rule 50 (expression -> term .)
     LESS            reduce using rule 50 (expression -> term .)
@@ -708,6 +724,7 @@ state 14
     REPEAT          reduce using rule 50 (expression -> term .)
     NUM             reduce using rule 50 (expression -> term .)
     HEX             reduce using rule 50 (expression -> term .)
+    APOS            reduce using rule 50 (expression -> term .)
     TYPE_H          reduce using rule 50 (expression -> term .)
     TYPE_N          reduce using rule 50 (expression -> term .)
     TYPE_S          reduce using rule 50 (expression -> term .)
@@ -754,18 +771,21 @@ state 15
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 53
+    expression                     shift and go to state 54
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
 state 16
 
@@ -796,18 +816,21 @@ state 16
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 56
+    expression                     shift and go to state 57
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
 state 17
 
@@ -816,7 +839,7 @@ state 17
     (61) arraysh -> WORD . LARRY NUM RARRY
     (62) arraysh -> WORD . LARRY WORD RARRY
 
-    EQU             shift and go to state 57
+    EQU             shift and go to state 58
     PLUS            reduce using rule 42 (term -> WORD .)
     MINUS           reduce using rule 42 (term -> WORD .)
     MUL             reduce using rule 42 (term -> WORD .)
@@ -836,11 +859,12 @@ state 17
     REPEAT          reduce using rule 42 (term -> WORD .)
     NUM             reduce using rule 42 (term -> WORD .)
     HEX             reduce using rule 42 (term -> WORD .)
+    APOS            reduce using rule 42 (term -> WORD .)
     TYPE_H          reduce using rule 42 (term -> WORD .)
     TYPE_N          reduce using rule 42 (term -> WORD .)
     TYPE_S          reduce using rule 42 (term -> WORD .)
     $end            reduce using rule 42 (term -> WORD .)
-    LARRY           shift and go to state 58
+    LARRY           shift and go to state 59
 
 
 state 18
@@ -848,7 +872,7 @@ state 18
     (54) exassign -> arraysh . EQU expression
     (43) term -> arraysh .
 
-    EQU             shift and go to state 59
+    EQU             shift and go to state 60
     PLUS            reduce using rule 43 (term -> arraysh .)
     MINUS           reduce using rule 43 (term -> arraysh .)
     MUL             reduce using rule 43 (term -> arraysh .)
@@ -868,6 +892,7 @@ state 18
     REPEAT          reduce using rule 43 (term -> arraysh .)
     NUM             reduce using rule 43 (term -> arraysh .)
     HEX             reduce using rule 43 (term -> arraysh .)
+    APOS            reduce using rule 43 (term -> arraysh .)
     TYPE_H          reduce using rule 43 (term -> arraysh .)
     TYPE_N          reduce using rule 43 (term -> arraysh .)
     TYPE_S          reduce using rule 43 (term -> arraysh .)
@@ -879,7 +904,7 @@ state 19
     (59) declare -> typeconst . WORD
     (60) declare -> typeconst . WORD EQU term
 
-    WORD            shift and go to state 60
+    WORD            shift and go to state 61
 
 
 state 20
@@ -890,7 +915,7 @@ state 20
     (48) typeconst -> TYPE_A .
 
   ! shift/reduce conflict for WORD resolved as shift
-    WORD            shift and go to state 61
+    WORD            shift and go to state 62
 
   ! WORD            [ reduce using rule 48 (typeconst -> TYPE_A .) ]
 
@@ -918,6 +943,7 @@ state 21
     REPEAT          reduce using rule 44 (term -> NUM .)
     NUM             reduce using rule 44 (term -> NUM .)
     HEX             reduce using rule 44 (term -> NUM .)
+    APOS            reduce using rule 44 (term -> NUM .)
     TYPE_H          reduce using rule 44 (term -> NUM .)
     TYPE_N          reduce using rule 44 (term -> NUM .)
     TYPE_S          reduce using rule 44 (term -> NUM .)
@@ -934,7 +960,7 @@ state 22
     (69) exprint -> TEXT . LPAREN expression printMore RPAREN
     (70) exprint -> TEXT . LPAREN QUOT expression QUOT printMore RPAREN
 
-    LPAREN          shift and go to state 62
+    LPAREN          shift and go to state 63
 
 
 state 23
@@ -942,7 +968,7 @@ state 23
     (18) exif -> SO . LPAREN expression RPAREN LSTATE statement RSTATE
     (19) exif -> SO . LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
 
-    LPAREN          shift and go to state 63
+    LPAREN          shift and go to state 64
 
 
 state 24
@@ -950,7 +976,7 @@ state 24
     (23) exloop -> LOOP . LPAREN expression RPAREN LSTATE statement RSTATE
     (24) exloop -> LOOP . LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE
 
-    LPAREN          shift and go to state 64
+    LPAREN          shift and go to state 65
 
 
 state 25
@@ -958,7 +984,7 @@ state 25
     (25) exrepeat -> REPEAT . LPAREN expression RPAREN LSTATE statement RSTATE
     (26) exrepeat -> REPEAT . LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE
 
-    LPAREN          shift and go to state 65
+    LPAREN          shift and go to state 66
 
 
 state 26
@@ -984,6 +1010,7 @@ state 26
     REPEAT          reduce using rule 45 (term -> HEX .)
     NUM             reduce using rule 45 (term -> HEX .)
     HEX             reduce using rule 45 (term -> HEX .)
+    APOS            reduce using rule 45 (term -> HEX .)
     TYPE_H          reduce using rule 45 (term -> HEX .)
     TYPE_N          reduce using rule 45 (term -> HEX .)
     TYPE_S          reduce using rule 45 (term -> HEX .)
@@ -997,40 +1024,49 @@ state 26
 
 state 27
 
+    (71) term -> APOS . WORD APOS
+    (72) term -> APOS . NUM APOS
+
+    WORD            shift and go to state 67
+    NUM             shift and go to state 68
+
+
+state 28
+
     (46) typeconst -> TYPE_H .
 
     WORD            reduce using rule 46 (typeconst -> TYPE_H .)
 
 
-state 28
+state 29
 
     (47) typeconst -> TYPE_N .
 
     WORD            reduce using rule 47 (typeconst -> TYPE_N .)
 
 
-state 29
+state 30
 
     (49) typeconst -> TYPE_S .
 
     WORD            reduce using rule 49 (typeconst -> TYPE_S .)
 
 
-state 30
+state 31
 
     (1) line -> Input line .
 
     $end            reduce using rule 1 (line -> Input line .)
 
 
-state 31
+state 32
 
     (2) line -> EXIT empty .
 
     $end            reduce using rule 2 (line -> EXIT empty .)
 
 
-state 32
+state 33
 
     (6) statement -> statement NEWLINE . statement
     (7) statement -> statement NEWLINE . statement NEWLINE
@@ -1084,19 +1120,20 @@ state 32
     LPAREN          reduce using rule 15 (statement -> statement NEWLINE .)
     NUM             reduce using rule 15 (statement -> statement NEWLINE .)
     HEX             reduce using rule 15 (statement -> statement NEWLINE .)
+    APOS            reduce using rule 15 (statement -> statement NEWLINE .)
     $end            reduce using rule 15 (statement -> statement NEWLINE .)
     LSTATE          reduce using rule 15 (statement -> statement NEWLINE .)
     RSTATE          reduce using rule 15 (statement -> statement NEWLINE .)
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
   ! NEWLINE         [ reduce using rule 15 (statement -> statement NEWLINE .) ]
   ! WORD            [ reduce using rule 15 (statement -> statement NEWLINE .) ]
@@ -1109,7 +1146,7 @@ state 32
   ! TYPE_N          [ reduce using rule 15 (statement -> statement NEWLINE .) ]
   ! TYPE_S          [ reduce using rule 15 (statement -> statement NEWLINE .) ]
 
-    statement                      shift and go to state 66
+    statement                      shift and go to state 69
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -1117,10 +1154,10 @@ state 32
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 33
+state 34
 
     (27) expression -> expression PLUS . expression
     (27) expression -> . expression PLUS expression
@@ -1149,20 +1186,23 @@ state 33
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 67
+    expression                     shift and go to state 70
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 34
+state 35
 
     (30) expression -> expression MINUS . expression
     (27) expression -> . expression PLUS expression
@@ -1191,20 +1231,23 @@ state 34
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 68
+    expression                     shift and go to state 71
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 35
+state 36
 
     (33) expression -> expression MUL . expression
     (27) expression -> . expression PLUS expression
@@ -1233,20 +1276,23 @@ state 35
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 69
+    expression                     shift and go to state 72
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 36
+state 37
 
     (36) expression -> expression DIV . expression
     (27) expression -> . expression PLUS expression
@@ -1275,20 +1321,23 @@ state 36
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 70
+    expression                     shift and go to state 73
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 37
+state 38
 
     (39) expression -> expression MOD . expression
     (27) expression -> . expression PLUS expression
@@ -1317,20 +1366,23 @@ state 37
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 71
+    expression                     shift and go to state 74
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 38
+state 39
 
     (55) expression -> expression EQUTO . expression
     (27) expression -> . expression PLUS expression
@@ -1359,20 +1411,23 @@ state 38
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 72
+    expression                     shift and go to state 75
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 39
+state 40
 
     (56) expression -> expression NOEQU . expression
     (27) expression -> . expression PLUS expression
@@ -1401,20 +1456,23 @@ state 39
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 73
+    expression                     shift and go to state 76
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 40
+state 41
 
     (57) expression -> expression LESS . expression
     (27) expression -> . expression PLUS expression
@@ -1443,20 +1501,23 @@ state 40
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 74
+    expression                     shift and go to state 77
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 41
+state 42
 
     (58) expression -> expression MORE . expression
     (27) expression -> . expression PLUS expression
@@ -1485,20 +1546,23 @@ state 41
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 75
+    expression                     shift and go to state 78
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 42
+state 43
 
     (16) statement -> NEWLINE statement .
     (6) statement -> statement . NEWLINE statement
@@ -1516,35 +1580,36 @@ state 42
     REPEAT          reduce using rule 16 (statement -> NEWLINE statement .)
     NUM             reduce using rule 16 (statement -> NEWLINE statement .)
     HEX             reduce using rule 16 (statement -> NEWLINE statement .)
+    APOS            reduce using rule 16 (statement -> NEWLINE statement .)
     TYPE_H          reduce using rule 16 (statement -> NEWLINE statement .)
     TYPE_N          reduce using rule 16 (statement -> NEWLINE statement .)
     TYPE_S          reduce using rule 16 (statement -> NEWLINE statement .)
     $end            reduce using rule 16 (statement -> NEWLINE statement .)
     LSTATE          reduce using rule 16 (statement -> NEWLINE statement .)
     RSTATE          reduce using rule 16 (statement -> NEWLINE statement .)
-    NEWLINE         shift and go to state 32
+    NEWLINE         shift and go to state 33
 
   ! NEWLINE         [ reduce using rule 16 (statement -> NEWLINE statement .) ]
 
 
-state 43
+state 44
 
     (53) exassign -> WORD . EQU expression
     (61) arraysh -> WORD . LARRY NUM RARRY
     (62) arraysh -> WORD . LARRY WORD RARRY
 
-    EQU             shift and go to state 57
-    LARRY           shift and go to state 58
-
-
-state 44
-
-    (54) exassign -> arraysh . EQU expression
-
-    EQU             shift and go to state 59
+    EQU             shift and go to state 58
+    LARRY           shift and go to state 59
 
 
 state 45
+
+    (54) exassign -> arraysh . EQU expression
+
+    EQU             shift and go to state 60
+
+
+state 46
 
     (20) exelif -> exif exelse .
 
@@ -1559,6 +1624,7 @@ state 45
     REPEAT          reduce using rule 20 (exelif -> exif exelse .)
     NUM             reduce using rule 20 (exelif -> exif exelse .)
     HEX             reduce using rule 20 (exelif -> exif exelse .)
+    APOS            reduce using rule 20 (exelif -> exif exelse .)
     TYPE_H          reduce using rule 20 (exelif -> exif exelse .)
     TYPE_N          reduce using rule 20 (exelif -> exif exelse .)
     TYPE_S          reduce using rule 20 (exelif -> exif exelse .)
@@ -1567,15 +1633,15 @@ state 45
     RSTATE          reduce using rule 20 (exelif -> exif exelse .)
 
 
-state 46
+state 47
 
     (21) exelse -> OTHERWISE . LSTATE statement LSTATE OTHERWISE
     (22) exelse -> OTHERWISE . LSTATE NEWLINE statement RSTATE
 
-    LSTATE          shift and go to state 76
+    LSTATE          shift and go to state 79
 
 
-state 47
+state 48
 
     (17) statement -> exloop NEWLINE .
 
@@ -1590,6 +1656,7 @@ state 47
     REPEAT          reduce using rule 17 (statement -> exloop NEWLINE .)
     NUM             reduce using rule 17 (statement -> exloop NEWLINE .)
     HEX             reduce using rule 17 (statement -> exloop NEWLINE .)
+    APOS            reduce using rule 17 (statement -> exloop NEWLINE .)
     TYPE_H          reduce using rule 17 (statement -> exloop NEWLINE .)
     TYPE_N          reduce using rule 17 (statement -> exloop NEWLINE .)
     TYPE_S          reduce using rule 17 (statement -> exloop NEWLINE .)
@@ -1598,7 +1665,7 @@ state 47
     RSTATE          reduce using rule 17 (statement -> exloop NEWLINE .)
 
 
-state 48
+state 49
 
     (28) expression -> term PLUS . term
     (29) expression -> term PLUS . expression
@@ -1606,6 +1673,8 @@ state 48
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (27) expression -> . expression PLUS expression
     (28) expression -> . term PLUS term
     (29) expression -> . term PLUS expression
@@ -1631,17 +1700,18 @@ state 48
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
 
-    term                           shift and go to state 77
-    expression                     shift and go to state 78
-    arraysh                        shift and go to state 55
+    term                           shift and go to state 80
+    expression                     shift and go to state 81
+    arraysh                        shift and go to state 56
 
-state 49
+state 50
 
     (31) expression -> term MINUS . term
     (32) expression -> term MINUS . expression
@@ -1649,6 +1719,8 @@ state 49
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (27) expression -> . expression PLUS expression
     (28) expression -> . term PLUS term
     (29) expression -> . term PLUS expression
@@ -1674,17 +1746,18 @@ state 49
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
 
-    term                           shift and go to state 79
-    expression                     shift and go to state 80
-    arraysh                        shift and go to state 55
+    term                           shift and go to state 82
+    expression                     shift and go to state 83
+    arraysh                        shift and go to state 56
 
-state 50
+state 51
 
     (34) expression -> term MUL . term
     (35) expression -> term MUL . expression
@@ -1692,6 +1765,8 @@ state 50
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (27) expression -> . expression PLUS expression
     (28) expression -> . term PLUS term
     (29) expression -> . term PLUS expression
@@ -1717,17 +1792,18 @@ state 50
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
 
-    term                           shift and go to state 81
-    expression                     shift and go to state 82
-    arraysh                        shift and go to state 55
+    term                           shift and go to state 84
+    expression                     shift and go to state 85
+    arraysh                        shift and go to state 56
 
-state 51
+state 52
 
     (37) expression -> term DIV . term
     (38) expression -> term DIV . expression
@@ -1735,6 +1811,8 @@ state 51
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (27) expression -> . expression PLUS expression
     (28) expression -> . term PLUS term
     (29) expression -> . term PLUS expression
@@ -1760,17 +1838,18 @@ state 51
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
 
-    term                           shift and go to state 83
-    expression                     shift and go to state 84
-    arraysh                        shift and go to state 55
+    term                           shift and go to state 86
+    expression                     shift and go to state 87
+    arraysh                        shift and go to state 56
 
-state 52
+state 53
 
     (40) expression -> term MOD . term
     (41) expression -> term MOD . expression
@@ -1778,6 +1857,8 @@ state 52
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (27) expression -> . expression PLUS expression
     (28) expression -> . term PLUS term
     (29) expression -> . term PLUS expression
@@ -1803,17 +1884,18 @@ state 52
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
 
-    term                           shift and go to state 85
-    expression                     shift and go to state 86
-    arraysh                        shift and go to state 55
+    term                           shift and go to state 88
+    expression                     shift and go to state 89
+    arraysh                        shift and go to state 56
 
-state 53
+state 54
 
     (51) expression -> MINUS expression .
     (27) expression -> expression . PLUS expression
@@ -1840,6 +1922,7 @@ state 53
     REPEAT          reduce using rule 51 (expression -> MINUS expression .)
     NUM             reduce using rule 51 (expression -> MINUS expression .)
     HEX             reduce using rule 51 (expression -> MINUS expression .)
+    APOS            reduce using rule 51 (expression -> MINUS expression .)
     TYPE_H          reduce using rule 51 (expression -> MINUS expression .)
     TYPE_N          reduce using rule 51 (expression -> MINUS expression .)
     TYPE_S          reduce using rule 51 (expression -> MINUS expression .)
@@ -1849,24 +1932,24 @@ state 53
     RSTATE          reduce using rule 51 (expression -> MINUS expression .)
     COMMA           reduce using rule 51 (expression -> MINUS expression .)
     QUOT            reduce using rule 51 (expression -> MINUS expression .)
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! MUL             [ reduce using rule 51 (expression -> MINUS expression .) ]
   ! DIV             [ reduce using rule 51 (expression -> MINUS expression .) ]
   ! MOD             [ reduce using rule 51 (expression -> MINUS expression .) ]
   ! LESS            [ reduce using rule 51 (expression -> MINUS expression .) ]
   ! MORE            [ reduce using rule 51 (expression -> MINUS expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 54
+state 55
 
     (42) term -> WORD .
     (61) arraysh -> WORD . LARRY NUM RARRY
@@ -1891,6 +1974,7 @@ state 54
     REPEAT          reduce using rule 42 (term -> WORD .)
     NUM             reduce using rule 42 (term -> WORD .)
     HEX             reduce using rule 42 (term -> WORD .)
+    APOS            reduce using rule 42 (term -> WORD .)
     TYPE_H          reduce using rule 42 (term -> WORD .)
     TYPE_N          reduce using rule 42 (term -> WORD .)
     TYPE_S          reduce using rule 42 (term -> WORD .)
@@ -1900,10 +1984,10 @@ state 54
     RSTATE          reduce using rule 42 (term -> WORD .)
     COMMA           reduce using rule 42 (term -> WORD .)
     QUOT            reduce using rule 42 (term -> WORD .)
-    LARRY           shift and go to state 58
+    LARRY           shift and go to state 59
 
 
-state 55
+state 56
 
     (43) term -> arraysh .
 
@@ -1926,6 +2010,7 @@ state 55
     REPEAT          reduce using rule 43 (term -> arraysh .)
     NUM             reduce using rule 43 (term -> arraysh .)
     HEX             reduce using rule 43 (term -> arraysh .)
+    APOS            reduce using rule 43 (term -> arraysh .)
     TYPE_H          reduce using rule 43 (term -> arraysh .)
     TYPE_N          reduce using rule 43 (term -> arraysh .)
     TYPE_S          reduce using rule 43 (term -> arraysh .)
@@ -1937,7 +2022,7 @@ state 55
     QUOT            reduce using rule 43 (term -> arraysh .)
 
 
-state 56
+state 57
 
     (52) expression -> LPAREN expression . RPAREN
     (27) expression -> expression . PLUS expression
@@ -1950,19 +2035,19 @@ state 56
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
 
-    RPAREN          shift and go to state 87
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    RPAREN          shift and go to state 90
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
 
-state 57
+state 58
 
     (53) exassign -> WORD EQU . expression
     (27) expression -> . expression PLUS expression
@@ -1991,29 +2076,32 @@ state 57
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 88
+    expression                     shift and go to state 91
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 58
+state 59
 
     (61) arraysh -> WORD LARRY . NUM RARRY
     (62) arraysh -> WORD LARRY . WORD RARRY
 
-    NUM             shift and go to state 90
-    WORD            shift and go to state 89
+    NUM             shift and go to state 93
+    WORD            shift and go to state 92
 
 
-state 59
+state 60
 
     (54) exassign -> arraysh EQU . expression
     (27) expression -> . expression PLUS expression
@@ -2042,20 +2130,23 @@ state 59
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    arraysh                        shift and go to state 55
-    expression                     shift and go to state 91
+    arraysh                        shift and go to state 56
+    expression                     shift and go to state 94
     term                           shift and go to state 14
 
-state 60
+state 61
 
     (59) declare -> typeconst WORD .
     (60) declare -> typeconst WORD . EQU term
@@ -2071,26 +2162,27 @@ state 60
     REPEAT          reduce using rule 59 (declare -> typeconst WORD .)
     NUM             reduce using rule 59 (declare -> typeconst WORD .)
     HEX             reduce using rule 59 (declare -> typeconst WORD .)
+    APOS            reduce using rule 59 (declare -> typeconst WORD .)
     TYPE_H          reduce using rule 59 (declare -> typeconst WORD .)
     TYPE_N          reduce using rule 59 (declare -> typeconst WORD .)
     TYPE_S          reduce using rule 59 (declare -> typeconst WORD .)
     $end            reduce using rule 59 (declare -> typeconst WORD .)
     LSTATE          reduce using rule 59 (declare -> typeconst WORD .)
     RSTATE          reduce using rule 59 (declare -> typeconst WORD .)
-    EQU             shift and go to state 92
+    EQU             shift and go to state 95
 
 
-state 61
+state 62
 
     (63) declare -> TYPE_A WORD . EQU LSTATE arrayX RSTATE
     (64) declare -> TYPE_A WORD . LARRY NUM RARRY
     (65) declare -> TYPE_A WORD . LARRY NUM RARRY EQU LSTATE arrayX RSTATE
 
-    EQU             shift and go to state 93
-    LARRY           shift and go to state 94
+    EQU             shift and go to state 96
+    LARRY           shift and go to state 97
 
 
-state 62
+state 63
 
     (69) exprint -> TEXT LPAREN . expression printMore RPAREN
     (70) exprint -> TEXT LPAREN . QUOT expression QUOT printMore RPAREN
@@ -2120,21 +2212,24 @@ state 62
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
-    QUOT            shift and go to state 96
+    QUOT            shift and go to state 99
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 95
+    expression                     shift and go to state 98
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 63
+state 64
 
     (18) exif -> SO LPAREN . expression RPAREN LSTATE statement RSTATE
     (19) exif -> SO LPAREN . expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -2164,20 +2259,23 @@ state 63
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 97
+    expression                     shift and go to state 100
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 64
+state 65
 
     (23) exloop -> LOOP LPAREN . expression RPAREN LSTATE statement RSTATE
     (24) exloop -> LOOP LPAREN . expression RPAREN LSTATE NEWLINE statement RSTATE
@@ -2207,20 +2305,23 @@ state 64
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 98
+    expression                     shift and go to state 101
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 65
+state 66
 
     (25) exrepeat -> REPEAT LPAREN . expression RPAREN LSTATE statement RSTATE
     (26) exrepeat -> REPEAT LPAREN . expression RPAREN NEWLINE LSTATE statement RSTATE
@@ -2250,20 +2351,37 @@ state 65
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 99
+    expression                     shift and go to state 102
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 66
+state 67
+
+    (71) term -> APOS WORD . APOS
+
+    APOS            shift and go to state 103
+
+
+state 68
+
+    (72) term -> APOS NUM . APOS
+
+    APOS            shift and go to state 104
+
+
+state 69
 
     (6) statement -> statement NEWLINE statement .
     (7) statement -> statement NEWLINE statement . NEWLINE
@@ -2282,18 +2400,19 @@ state 66
     REPEAT          reduce using rule 6 (statement -> statement NEWLINE statement .)
     NUM             reduce using rule 6 (statement -> statement NEWLINE statement .)
     HEX             reduce using rule 6 (statement -> statement NEWLINE statement .)
+    APOS            reduce using rule 6 (statement -> statement NEWLINE statement .)
     TYPE_H          reduce using rule 6 (statement -> statement NEWLINE statement .)
     TYPE_N          reduce using rule 6 (statement -> statement NEWLINE statement .)
     TYPE_S          reduce using rule 6 (statement -> statement NEWLINE statement .)
     $end            reduce using rule 6 (statement -> statement NEWLINE statement .)
     LSTATE          reduce using rule 6 (statement -> statement NEWLINE statement .)
     RSTATE          reduce using rule 6 (statement -> statement NEWLINE statement .)
-    NEWLINE         shift and go to state 100
+    NEWLINE         shift and go to state 105
 
   ! NEWLINE         [ reduce using rule 6 (statement -> statement NEWLINE statement .) ]
 
 
-state 67
+state 70
 
     (27) expression -> expression PLUS expression .
     (27) expression -> expression . PLUS expression
@@ -2320,6 +2439,7 @@ state 67
     REPEAT          reduce using rule 27 (expression -> expression PLUS expression .)
     NUM             reduce using rule 27 (expression -> expression PLUS expression .)
     HEX             reduce using rule 27 (expression -> expression PLUS expression .)
+    APOS            reduce using rule 27 (expression -> expression PLUS expression .)
     TYPE_H          reduce using rule 27 (expression -> expression PLUS expression .)
     TYPE_N          reduce using rule 27 (expression -> expression PLUS expression .)
     TYPE_S          reduce using rule 27 (expression -> expression PLUS expression .)
@@ -2329,24 +2449,24 @@ state 67
     RSTATE          reduce using rule 27 (expression -> expression PLUS expression .)
     COMMA           reduce using rule 27 (expression -> expression PLUS expression .)
     QUOT            reduce using rule 27 (expression -> expression PLUS expression .)
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! MUL             [ reduce using rule 27 (expression -> expression PLUS expression .) ]
   ! DIV             [ reduce using rule 27 (expression -> expression PLUS expression .) ]
   ! MOD             [ reduce using rule 27 (expression -> expression PLUS expression .) ]
   ! LESS            [ reduce using rule 27 (expression -> expression PLUS expression .) ]
   ! MORE            [ reduce using rule 27 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 68
+state 71
 
     (30) expression -> expression MINUS expression .
     (27) expression -> expression . PLUS expression
@@ -2373,6 +2493,7 @@ state 68
     REPEAT          reduce using rule 30 (expression -> expression MINUS expression .)
     NUM             reduce using rule 30 (expression -> expression MINUS expression .)
     HEX             reduce using rule 30 (expression -> expression MINUS expression .)
+    APOS            reduce using rule 30 (expression -> expression MINUS expression .)
     TYPE_H          reduce using rule 30 (expression -> expression MINUS expression .)
     TYPE_N          reduce using rule 30 (expression -> expression MINUS expression .)
     TYPE_S          reduce using rule 30 (expression -> expression MINUS expression .)
@@ -2382,24 +2503,24 @@ state 68
     RSTATE          reduce using rule 30 (expression -> expression MINUS expression .)
     COMMA           reduce using rule 30 (expression -> expression MINUS expression .)
     QUOT            reduce using rule 30 (expression -> expression MINUS expression .)
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! MUL             [ reduce using rule 30 (expression -> expression MINUS expression .) ]
   ! DIV             [ reduce using rule 30 (expression -> expression MINUS expression .) ]
   ! MOD             [ reduce using rule 30 (expression -> expression MINUS expression .) ]
   ! LESS            [ reduce using rule 30 (expression -> expression MINUS expression .) ]
   ! MORE            [ reduce using rule 30 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 69
+state 72
 
     (33) expression -> expression MUL expression .
     (27) expression -> expression . PLUS expression
@@ -2429,6 +2550,7 @@ state 69
     REPEAT          reduce using rule 33 (expression -> expression MUL expression .)
     NUM             reduce using rule 33 (expression -> expression MUL expression .)
     HEX             reduce using rule 33 (expression -> expression MUL expression .)
+    APOS            reduce using rule 33 (expression -> expression MUL expression .)
     TYPE_H          reduce using rule 33 (expression -> expression MUL expression .)
     TYPE_N          reduce using rule 33 (expression -> expression MUL expression .)
     TYPE_S          reduce using rule 33 (expression -> expression MUL expression .)
@@ -2438,21 +2560,21 @@ state 69
     RSTATE          reduce using rule 33 (expression -> expression MUL expression .)
     COMMA           reduce using rule 33 (expression -> expression MUL expression .)
     QUOT            reduce using rule 33 (expression -> expression MUL expression .)
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! LESS            [ reduce using rule 33 (expression -> expression MUL expression .) ]
   ! MORE            [ reduce using rule 33 (expression -> expression MUL expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
-  ! MOD             [ shift and go to state 37 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! MUL             [ shift and go to state 36 ]
+  ! DIV             [ shift and go to state 37 ]
+  ! MOD             [ shift and go to state 38 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 70
+state 73
 
     (36) expression -> expression DIV expression .
     (27) expression -> expression . PLUS expression
@@ -2482,6 +2604,7 @@ state 70
     REPEAT          reduce using rule 36 (expression -> expression DIV expression .)
     NUM             reduce using rule 36 (expression -> expression DIV expression .)
     HEX             reduce using rule 36 (expression -> expression DIV expression .)
+    APOS            reduce using rule 36 (expression -> expression DIV expression .)
     TYPE_H          reduce using rule 36 (expression -> expression DIV expression .)
     TYPE_N          reduce using rule 36 (expression -> expression DIV expression .)
     TYPE_S          reduce using rule 36 (expression -> expression DIV expression .)
@@ -2491,21 +2614,21 @@ state 70
     RSTATE          reduce using rule 36 (expression -> expression DIV expression .)
     COMMA           reduce using rule 36 (expression -> expression DIV expression .)
     QUOT            reduce using rule 36 (expression -> expression DIV expression .)
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! LESS            [ reduce using rule 36 (expression -> expression DIV expression .) ]
   ! MORE            [ reduce using rule 36 (expression -> expression DIV expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
-  ! MOD             [ shift and go to state 37 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! MUL             [ shift and go to state 36 ]
+  ! DIV             [ shift and go to state 37 ]
+  ! MOD             [ shift and go to state 38 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 71
+state 74
 
     (39) expression -> expression MOD expression .
     (27) expression -> expression . PLUS expression
@@ -2535,6 +2658,7 @@ state 71
     REPEAT          reduce using rule 39 (expression -> expression MOD expression .)
     NUM             reduce using rule 39 (expression -> expression MOD expression .)
     HEX             reduce using rule 39 (expression -> expression MOD expression .)
+    APOS            reduce using rule 39 (expression -> expression MOD expression .)
     TYPE_H          reduce using rule 39 (expression -> expression MOD expression .)
     TYPE_N          reduce using rule 39 (expression -> expression MOD expression .)
     TYPE_S          reduce using rule 39 (expression -> expression MOD expression .)
@@ -2544,21 +2668,21 @@ state 71
     RSTATE          reduce using rule 39 (expression -> expression MOD expression .)
     COMMA           reduce using rule 39 (expression -> expression MOD expression .)
     QUOT            reduce using rule 39 (expression -> expression MOD expression .)
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! LESS            [ reduce using rule 39 (expression -> expression MOD expression .) ]
   ! MORE            [ reduce using rule 39 (expression -> expression MOD expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
-  ! MOD             [ shift and go to state 37 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! MUL             [ shift and go to state 36 ]
+  ! DIV             [ shift and go to state 37 ]
+  ! MOD             [ shift and go to state 38 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 72
+state 75
 
     (55) expression -> expression EQUTO expression .
     (27) expression -> expression . PLUS expression
@@ -2590,6 +2714,7 @@ state 72
     REPEAT          reduce using rule 55 (expression -> expression EQUTO expression .)
     NUM             reduce using rule 55 (expression -> expression EQUTO expression .)
     HEX             reduce using rule 55 (expression -> expression EQUTO expression .)
+    APOS            reduce using rule 55 (expression -> expression EQUTO expression .)
     TYPE_H          reduce using rule 55 (expression -> expression EQUTO expression .)
     TYPE_N          reduce using rule 55 (expression -> expression EQUTO expression .)
     TYPE_S          reduce using rule 55 (expression -> expression EQUTO expression .)
@@ -2599,15 +2724,15 @@ state 72
     RSTATE          reduce using rule 55 (expression -> expression EQUTO expression .)
     COMMA           reduce using rule 55 (expression -> expression EQUTO expression .)
     QUOT            reduce using rule 55 (expression -> expression EQUTO expression .)
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! PLUS            [ reduce using rule 55 (expression -> expression EQUTO expression .) ]
   ! MINUS           [ reduce using rule 55 (expression -> expression EQUTO expression .) ]
@@ -2620,7 +2745,7 @@ state 72
   ! MORE            [ reduce using rule 55 (expression -> expression EQUTO expression .) ]
 
 
-state 73
+state 76
 
     (56) expression -> expression NOEQU expression .
     (27) expression -> expression . PLUS expression
@@ -2652,6 +2777,7 @@ state 73
     REPEAT          reduce using rule 56 (expression -> expression NOEQU expression .)
     NUM             reduce using rule 56 (expression -> expression NOEQU expression .)
     HEX             reduce using rule 56 (expression -> expression NOEQU expression .)
+    APOS            reduce using rule 56 (expression -> expression NOEQU expression .)
     TYPE_H          reduce using rule 56 (expression -> expression NOEQU expression .)
     TYPE_N          reduce using rule 56 (expression -> expression NOEQU expression .)
     TYPE_S          reduce using rule 56 (expression -> expression NOEQU expression .)
@@ -2661,15 +2787,15 @@ state 73
     RSTATE          reduce using rule 56 (expression -> expression NOEQU expression .)
     COMMA           reduce using rule 56 (expression -> expression NOEQU expression .)
     QUOT            reduce using rule 56 (expression -> expression NOEQU expression .)
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! PLUS            [ reduce using rule 56 (expression -> expression NOEQU expression .) ]
   ! MINUS           [ reduce using rule 56 (expression -> expression NOEQU expression .) ]
@@ -2682,7 +2808,7 @@ state 73
   ! MORE            [ reduce using rule 56 (expression -> expression NOEQU expression .) ]
 
 
-state 74
+state 77
 
     (57) expression -> expression LESS expression .
     (27) expression -> expression . PLUS expression
@@ -2714,6 +2840,7 @@ state 74
     REPEAT          reduce using rule 57 (expression -> expression LESS expression .)
     NUM             reduce using rule 57 (expression -> expression LESS expression .)
     HEX             reduce using rule 57 (expression -> expression LESS expression .)
+    APOS            reduce using rule 57 (expression -> expression LESS expression .)
     TYPE_H          reduce using rule 57 (expression -> expression LESS expression .)
     TYPE_N          reduce using rule 57 (expression -> expression LESS expression .)
     TYPE_S          reduce using rule 57 (expression -> expression LESS expression .)
@@ -2724,18 +2851,18 @@ state 74
     COMMA           reduce using rule 57 (expression -> expression LESS expression .)
     QUOT            reduce using rule 57 (expression -> expression LESS expression .)
 
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
-  ! MOD             [ shift and go to state 37 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
-  ! LESS            [ shift and go to state 40 ]
-  ! MORE            [ shift and go to state 41 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! MUL             [ shift and go to state 36 ]
+  ! DIV             [ shift and go to state 37 ]
+  ! MOD             [ shift and go to state 38 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
+  ! LESS            [ shift and go to state 41 ]
+  ! MORE            [ shift and go to state 42 ]
 
 
-state 75
+state 78
 
     (58) expression -> expression MORE expression .
     (27) expression -> expression . PLUS expression
@@ -2767,6 +2894,7 @@ state 75
     REPEAT          reduce using rule 58 (expression -> expression MORE expression .)
     NUM             reduce using rule 58 (expression -> expression MORE expression .)
     HEX             reduce using rule 58 (expression -> expression MORE expression .)
+    APOS            reduce using rule 58 (expression -> expression MORE expression .)
     TYPE_H          reduce using rule 58 (expression -> expression MORE expression .)
     TYPE_N          reduce using rule 58 (expression -> expression MORE expression .)
     TYPE_S          reduce using rule 58 (expression -> expression MORE expression .)
@@ -2777,18 +2905,18 @@ state 75
     COMMA           reduce using rule 58 (expression -> expression MORE expression .)
     QUOT            reduce using rule 58 (expression -> expression MORE expression .)
 
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
-  ! MOD             [ shift and go to state 37 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
-  ! LESS            [ shift and go to state 40 ]
-  ! MORE            [ shift and go to state 41 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! MUL             [ shift and go to state 36 ]
+  ! DIV             [ shift and go to state 37 ]
+  ! MOD             [ shift and go to state 38 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
+  ! LESS            [ shift and go to state 41 ]
+  ! MORE            [ shift and go to state 42 ]
 
 
-state 76
+state 79
 
     (21) exelse -> OTHERWISE LSTATE . statement LSTATE OTHERWISE
     (22) exelse -> OTHERWISE LSTATE . NEWLINE statement RSTATE
@@ -2827,18 +2955,18 @@ state 76
     (48) typeconst -> . TYPE_A
     (49) typeconst -> . TYPE_S
 
-    NEWLINE         shift and go to state 102
-    WORD            shift and go to state 43
+    NEWLINE         shift and go to state 107
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 101
+    statement                      shift and go to state 106
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -2846,10 +2974,10 @@ state 76
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 77
+state 80
 
     (28) expression -> term PLUS term .
     (28) expression -> term . PLUS term
@@ -2883,6 +3011,7 @@ state 77
   ! reduce/reduce conflict for REPEAT resolved using rule 28 (expression -> term PLUS term .)
   ! reduce/reduce conflict for NUM resolved using rule 28 (expression -> term PLUS term .)
   ! reduce/reduce conflict for HEX resolved using rule 28 (expression -> term PLUS term .)
+  ! reduce/reduce conflict for APOS resolved using rule 28 (expression -> term PLUS term .)
   ! reduce/reduce conflict for TYPE_H resolved using rule 28 (expression -> term PLUS term .)
   ! reduce/reduce conflict for TYPE_N resolved using rule 28 (expression -> term PLUS term .)
   ! reduce/reduce conflict for TYPE_S resolved using rule 28 (expression -> term PLUS term .)
@@ -2908,6 +3037,7 @@ state 77
     REPEAT          reduce using rule 28 (expression -> term PLUS term .)
     NUM             reduce using rule 28 (expression -> term PLUS term .)
     HEX             reduce using rule 28 (expression -> term PLUS term .)
+    APOS            reduce using rule 28 (expression -> term PLUS term .)
     TYPE_H          reduce using rule 28 (expression -> term PLUS term .)
     TYPE_N          reduce using rule 28 (expression -> term PLUS term .)
     TYPE_S          reduce using rule 28 (expression -> term PLUS term .)
@@ -2917,15 +3047,15 @@ state 77
     RSTATE          reduce using rule 28 (expression -> term PLUS term .)
     COMMA           reduce using rule 28 (expression -> term PLUS term .)
     QUOT            reduce using rule 28 (expression -> term PLUS term .)
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
-    MOD             shift and go to state 52
+    MUL             shift and go to state 51
+    DIV             shift and go to state 52
+    MOD             shift and go to state 53
 
   ! MUL             [ reduce using rule 28 (expression -> term PLUS term .) ]
   ! DIV             [ reduce using rule 28 (expression -> term PLUS term .) ]
   ! MOD             [ reduce using rule 28 (expression -> term PLUS term .) ]
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
+  ! PLUS            [ shift and go to state 49 ]
+  ! MINUS           [ shift and go to state 50 ]
   ! PLUS            [ reduce using rule 50 (expression -> term .) ]
   ! MINUS           [ reduce using rule 50 (expression -> term .) ]
   ! MUL             [ reduce using rule 50 (expression -> term .) ]
@@ -2945,6 +3075,7 @@ state 77
   ! REPEAT          [ reduce using rule 50 (expression -> term .) ]
   ! NUM             [ reduce using rule 50 (expression -> term .) ]
   ! HEX             [ reduce using rule 50 (expression -> term .) ]
+  ! APOS            [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_H          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_N          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_S          [ reduce using rule 50 (expression -> term .) ]
@@ -2956,7 +3087,7 @@ state 77
   ! QUOT            [ reduce using rule 50 (expression -> term .) ]
 
 
-state 78
+state 81
 
     (29) expression -> term PLUS expression .
     (27) expression -> expression . PLUS expression
@@ -2983,6 +3114,7 @@ state 78
     REPEAT          reduce using rule 29 (expression -> term PLUS expression .)
     NUM             reduce using rule 29 (expression -> term PLUS expression .)
     HEX             reduce using rule 29 (expression -> term PLUS expression .)
+    APOS            reduce using rule 29 (expression -> term PLUS expression .)
     TYPE_H          reduce using rule 29 (expression -> term PLUS expression .)
     TYPE_N          reduce using rule 29 (expression -> term PLUS expression .)
     TYPE_S          reduce using rule 29 (expression -> term PLUS expression .)
@@ -2992,24 +3124,24 @@ state 78
     RSTATE          reduce using rule 29 (expression -> term PLUS expression .)
     COMMA           reduce using rule 29 (expression -> term PLUS expression .)
     QUOT            reduce using rule 29 (expression -> term PLUS expression .)
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! MUL             [ reduce using rule 29 (expression -> term PLUS expression .) ]
   ! DIV             [ reduce using rule 29 (expression -> term PLUS expression .) ]
   ! MOD             [ reduce using rule 29 (expression -> term PLUS expression .) ]
   ! LESS            [ reduce using rule 29 (expression -> term PLUS expression .) ]
   ! MORE            [ reduce using rule 29 (expression -> term PLUS expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 79
+state 82
 
     (31) expression -> term MINUS term .
     (28) expression -> term . PLUS term
@@ -3043,6 +3175,7 @@ state 79
   ! reduce/reduce conflict for REPEAT resolved using rule 31 (expression -> term MINUS term .)
   ! reduce/reduce conflict for NUM resolved using rule 31 (expression -> term MINUS term .)
   ! reduce/reduce conflict for HEX resolved using rule 31 (expression -> term MINUS term .)
+  ! reduce/reduce conflict for APOS resolved using rule 31 (expression -> term MINUS term .)
   ! reduce/reduce conflict for TYPE_H resolved using rule 31 (expression -> term MINUS term .)
   ! reduce/reduce conflict for TYPE_N resolved using rule 31 (expression -> term MINUS term .)
   ! reduce/reduce conflict for TYPE_S resolved using rule 31 (expression -> term MINUS term .)
@@ -3068,6 +3201,7 @@ state 79
     REPEAT          reduce using rule 31 (expression -> term MINUS term .)
     NUM             reduce using rule 31 (expression -> term MINUS term .)
     HEX             reduce using rule 31 (expression -> term MINUS term .)
+    APOS            reduce using rule 31 (expression -> term MINUS term .)
     TYPE_H          reduce using rule 31 (expression -> term MINUS term .)
     TYPE_N          reduce using rule 31 (expression -> term MINUS term .)
     TYPE_S          reduce using rule 31 (expression -> term MINUS term .)
@@ -3077,15 +3211,15 @@ state 79
     RSTATE          reduce using rule 31 (expression -> term MINUS term .)
     COMMA           reduce using rule 31 (expression -> term MINUS term .)
     QUOT            reduce using rule 31 (expression -> term MINUS term .)
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
-    MOD             shift and go to state 52
+    MUL             shift and go to state 51
+    DIV             shift and go to state 52
+    MOD             shift and go to state 53
 
   ! MUL             [ reduce using rule 31 (expression -> term MINUS term .) ]
   ! DIV             [ reduce using rule 31 (expression -> term MINUS term .) ]
   ! MOD             [ reduce using rule 31 (expression -> term MINUS term .) ]
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
+  ! PLUS            [ shift and go to state 49 ]
+  ! MINUS           [ shift and go to state 50 ]
   ! PLUS            [ reduce using rule 50 (expression -> term .) ]
   ! MINUS           [ reduce using rule 50 (expression -> term .) ]
   ! MUL             [ reduce using rule 50 (expression -> term .) ]
@@ -3105,6 +3239,7 @@ state 79
   ! REPEAT          [ reduce using rule 50 (expression -> term .) ]
   ! NUM             [ reduce using rule 50 (expression -> term .) ]
   ! HEX             [ reduce using rule 50 (expression -> term .) ]
+  ! APOS            [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_H          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_N          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_S          [ reduce using rule 50 (expression -> term .) ]
@@ -3116,7 +3251,7 @@ state 79
   ! QUOT            [ reduce using rule 50 (expression -> term .) ]
 
 
-state 80
+state 83
 
     (32) expression -> term MINUS expression .
     (27) expression -> expression . PLUS expression
@@ -3143,6 +3278,7 @@ state 80
     REPEAT          reduce using rule 32 (expression -> term MINUS expression .)
     NUM             reduce using rule 32 (expression -> term MINUS expression .)
     HEX             reduce using rule 32 (expression -> term MINUS expression .)
+    APOS            reduce using rule 32 (expression -> term MINUS expression .)
     TYPE_H          reduce using rule 32 (expression -> term MINUS expression .)
     TYPE_N          reduce using rule 32 (expression -> term MINUS expression .)
     TYPE_S          reduce using rule 32 (expression -> term MINUS expression .)
@@ -3152,24 +3288,24 @@ state 80
     RSTATE          reduce using rule 32 (expression -> term MINUS expression .)
     COMMA           reduce using rule 32 (expression -> term MINUS expression .)
     QUOT            reduce using rule 32 (expression -> term MINUS expression .)
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! MUL             [ reduce using rule 32 (expression -> term MINUS expression .) ]
   ! DIV             [ reduce using rule 32 (expression -> term MINUS expression .) ]
   ! MOD             [ reduce using rule 32 (expression -> term MINUS expression .) ]
   ! LESS            [ reduce using rule 32 (expression -> term MINUS expression .) ]
   ! MORE            [ reduce using rule 32 (expression -> term MINUS expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 81
+state 84
 
     (34) expression -> term MUL term .
     (28) expression -> term . PLUS term
@@ -3203,6 +3339,7 @@ state 81
   ! reduce/reduce conflict for REPEAT resolved using rule 34 (expression -> term MUL term .)
   ! reduce/reduce conflict for NUM resolved using rule 34 (expression -> term MUL term .)
   ! reduce/reduce conflict for HEX resolved using rule 34 (expression -> term MUL term .)
+  ! reduce/reduce conflict for APOS resolved using rule 34 (expression -> term MUL term .)
   ! reduce/reduce conflict for TYPE_H resolved using rule 34 (expression -> term MUL term .)
   ! reduce/reduce conflict for TYPE_N resolved using rule 34 (expression -> term MUL term .)
   ! reduce/reduce conflict for TYPE_S resolved using rule 34 (expression -> term MUL term .)
@@ -3231,6 +3368,7 @@ state 81
     REPEAT          reduce using rule 34 (expression -> term MUL term .)
     NUM             reduce using rule 34 (expression -> term MUL term .)
     HEX             reduce using rule 34 (expression -> term MUL term .)
+    APOS            reduce using rule 34 (expression -> term MUL term .)
     TYPE_H          reduce using rule 34 (expression -> term MUL term .)
     TYPE_N          reduce using rule 34 (expression -> term MUL term .)
     TYPE_S          reduce using rule 34 (expression -> term MUL term .)
@@ -3241,11 +3379,11 @@ state 81
     COMMA           reduce using rule 34 (expression -> term MUL term .)
     QUOT            reduce using rule 34 (expression -> term MUL term .)
 
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! MUL             [ shift and go to state 50 ]
-  ! DIV             [ shift and go to state 51 ]
-  ! MOD             [ shift and go to state 52 ]
+  ! PLUS            [ shift and go to state 49 ]
+  ! MINUS           [ shift and go to state 50 ]
+  ! MUL             [ shift and go to state 51 ]
+  ! DIV             [ shift and go to state 52 ]
+  ! MOD             [ shift and go to state 53 ]
   ! PLUS            [ reduce using rule 50 (expression -> term .) ]
   ! MINUS           [ reduce using rule 50 (expression -> term .) ]
   ! MUL             [ reduce using rule 50 (expression -> term .) ]
@@ -3265,6 +3403,7 @@ state 81
   ! REPEAT          [ reduce using rule 50 (expression -> term .) ]
   ! NUM             [ reduce using rule 50 (expression -> term .) ]
   ! HEX             [ reduce using rule 50 (expression -> term .) ]
+  ! APOS            [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_H          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_N          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_S          [ reduce using rule 50 (expression -> term .) ]
@@ -3276,7 +3415,7 @@ state 81
   ! QUOT            [ reduce using rule 50 (expression -> term .) ]
 
 
-state 82
+state 85
 
     (35) expression -> term MUL expression .
     (27) expression -> expression . PLUS expression
@@ -3306,6 +3445,7 @@ state 82
     REPEAT          reduce using rule 35 (expression -> term MUL expression .)
     NUM             reduce using rule 35 (expression -> term MUL expression .)
     HEX             reduce using rule 35 (expression -> term MUL expression .)
+    APOS            reduce using rule 35 (expression -> term MUL expression .)
     TYPE_H          reduce using rule 35 (expression -> term MUL expression .)
     TYPE_N          reduce using rule 35 (expression -> term MUL expression .)
     TYPE_S          reduce using rule 35 (expression -> term MUL expression .)
@@ -3315,21 +3455,21 @@ state 82
     RSTATE          reduce using rule 35 (expression -> term MUL expression .)
     COMMA           reduce using rule 35 (expression -> term MUL expression .)
     QUOT            reduce using rule 35 (expression -> term MUL expression .)
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! LESS            [ reduce using rule 35 (expression -> term MUL expression .) ]
   ! MORE            [ reduce using rule 35 (expression -> term MUL expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
-  ! MOD             [ shift and go to state 37 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! MUL             [ shift and go to state 36 ]
+  ! DIV             [ shift and go to state 37 ]
+  ! MOD             [ shift and go to state 38 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 83
+state 86
 
     (37) expression -> term DIV term .
     (28) expression -> term . PLUS term
@@ -3363,6 +3503,7 @@ state 83
   ! reduce/reduce conflict for REPEAT resolved using rule 37 (expression -> term DIV term .)
   ! reduce/reduce conflict for NUM resolved using rule 37 (expression -> term DIV term .)
   ! reduce/reduce conflict for HEX resolved using rule 37 (expression -> term DIV term .)
+  ! reduce/reduce conflict for APOS resolved using rule 37 (expression -> term DIV term .)
   ! reduce/reduce conflict for TYPE_H resolved using rule 37 (expression -> term DIV term .)
   ! reduce/reduce conflict for TYPE_N resolved using rule 37 (expression -> term DIV term .)
   ! reduce/reduce conflict for TYPE_S resolved using rule 37 (expression -> term DIV term .)
@@ -3391,6 +3532,7 @@ state 83
     REPEAT          reduce using rule 37 (expression -> term DIV term .)
     NUM             reduce using rule 37 (expression -> term DIV term .)
     HEX             reduce using rule 37 (expression -> term DIV term .)
+    APOS            reduce using rule 37 (expression -> term DIV term .)
     TYPE_H          reduce using rule 37 (expression -> term DIV term .)
     TYPE_N          reduce using rule 37 (expression -> term DIV term .)
     TYPE_S          reduce using rule 37 (expression -> term DIV term .)
@@ -3401,11 +3543,11 @@ state 83
     COMMA           reduce using rule 37 (expression -> term DIV term .)
     QUOT            reduce using rule 37 (expression -> term DIV term .)
 
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! MUL             [ shift and go to state 50 ]
-  ! DIV             [ shift and go to state 51 ]
-  ! MOD             [ shift and go to state 52 ]
+  ! PLUS            [ shift and go to state 49 ]
+  ! MINUS           [ shift and go to state 50 ]
+  ! MUL             [ shift and go to state 51 ]
+  ! DIV             [ shift and go to state 52 ]
+  ! MOD             [ shift and go to state 53 ]
   ! PLUS            [ reduce using rule 50 (expression -> term .) ]
   ! MINUS           [ reduce using rule 50 (expression -> term .) ]
   ! MUL             [ reduce using rule 50 (expression -> term .) ]
@@ -3425,6 +3567,7 @@ state 83
   ! REPEAT          [ reduce using rule 50 (expression -> term .) ]
   ! NUM             [ reduce using rule 50 (expression -> term .) ]
   ! HEX             [ reduce using rule 50 (expression -> term .) ]
+  ! APOS            [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_H          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_N          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_S          [ reduce using rule 50 (expression -> term .) ]
@@ -3436,7 +3579,7 @@ state 83
   ! QUOT            [ reduce using rule 50 (expression -> term .) ]
 
 
-state 84
+state 87
 
     (38) expression -> term DIV expression .
     (27) expression -> expression . PLUS expression
@@ -3466,6 +3609,7 @@ state 84
     REPEAT          reduce using rule 38 (expression -> term DIV expression .)
     NUM             reduce using rule 38 (expression -> term DIV expression .)
     HEX             reduce using rule 38 (expression -> term DIV expression .)
+    APOS            reduce using rule 38 (expression -> term DIV expression .)
     TYPE_H          reduce using rule 38 (expression -> term DIV expression .)
     TYPE_N          reduce using rule 38 (expression -> term DIV expression .)
     TYPE_S          reduce using rule 38 (expression -> term DIV expression .)
@@ -3475,21 +3619,21 @@ state 84
     RSTATE          reduce using rule 38 (expression -> term DIV expression .)
     COMMA           reduce using rule 38 (expression -> term DIV expression .)
     QUOT            reduce using rule 38 (expression -> term DIV expression .)
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! LESS            [ reduce using rule 38 (expression -> term DIV expression .) ]
   ! MORE            [ reduce using rule 38 (expression -> term DIV expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
-  ! MOD             [ shift and go to state 37 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! MUL             [ shift and go to state 36 ]
+  ! DIV             [ shift and go to state 37 ]
+  ! MOD             [ shift and go to state 38 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 85
+state 88
 
     (40) expression -> term MOD term .
     (28) expression -> term . PLUS term
@@ -3523,6 +3667,7 @@ state 85
   ! reduce/reduce conflict for REPEAT resolved using rule 40 (expression -> term MOD term .)
   ! reduce/reduce conflict for NUM resolved using rule 40 (expression -> term MOD term .)
   ! reduce/reduce conflict for HEX resolved using rule 40 (expression -> term MOD term .)
+  ! reduce/reduce conflict for APOS resolved using rule 40 (expression -> term MOD term .)
   ! reduce/reduce conflict for TYPE_H resolved using rule 40 (expression -> term MOD term .)
   ! reduce/reduce conflict for TYPE_N resolved using rule 40 (expression -> term MOD term .)
   ! reduce/reduce conflict for TYPE_S resolved using rule 40 (expression -> term MOD term .)
@@ -3551,6 +3696,7 @@ state 85
     REPEAT          reduce using rule 40 (expression -> term MOD term .)
     NUM             reduce using rule 40 (expression -> term MOD term .)
     HEX             reduce using rule 40 (expression -> term MOD term .)
+    APOS            reduce using rule 40 (expression -> term MOD term .)
     TYPE_H          reduce using rule 40 (expression -> term MOD term .)
     TYPE_N          reduce using rule 40 (expression -> term MOD term .)
     TYPE_S          reduce using rule 40 (expression -> term MOD term .)
@@ -3561,11 +3707,11 @@ state 85
     COMMA           reduce using rule 40 (expression -> term MOD term .)
     QUOT            reduce using rule 40 (expression -> term MOD term .)
 
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! MUL             [ shift and go to state 50 ]
-  ! DIV             [ shift and go to state 51 ]
-  ! MOD             [ shift and go to state 52 ]
+  ! PLUS            [ shift and go to state 49 ]
+  ! MINUS           [ shift and go to state 50 ]
+  ! MUL             [ shift and go to state 51 ]
+  ! DIV             [ shift and go to state 52 ]
+  ! MOD             [ shift and go to state 53 ]
   ! PLUS            [ reduce using rule 50 (expression -> term .) ]
   ! MINUS           [ reduce using rule 50 (expression -> term .) ]
   ! MUL             [ reduce using rule 50 (expression -> term .) ]
@@ -3585,6 +3731,7 @@ state 85
   ! REPEAT          [ reduce using rule 50 (expression -> term .) ]
   ! NUM             [ reduce using rule 50 (expression -> term .) ]
   ! HEX             [ reduce using rule 50 (expression -> term .) ]
+  ! APOS            [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_H          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_N          [ reduce using rule 50 (expression -> term .) ]
   ! TYPE_S          [ reduce using rule 50 (expression -> term .) ]
@@ -3596,7 +3743,7 @@ state 85
   ! QUOT            [ reduce using rule 50 (expression -> term .) ]
 
 
-state 86
+state 89
 
     (41) expression -> term MOD expression .
     (27) expression -> expression . PLUS expression
@@ -3626,6 +3773,7 @@ state 86
     REPEAT          reduce using rule 41 (expression -> term MOD expression .)
     NUM             reduce using rule 41 (expression -> term MOD expression .)
     HEX             reduce using rule 41 (expression -> term MOD expression .)
+    APOS            reduce using rule 41 (expression -> term MOD expression .)
     TYPE_H          reduce using rule 41 (expression -> term MOD expression .)
     TYPE_N          reduce using rule 41 (expression -> term MOD expression .)
     TYPE_S          reduce using rule 41 (expression -> term MOD expression .)
@@ -3635,21 +3783,21 @@ state 86
     RSTATE          reduce using rule 41 (expression -> term MOD expression .)
     COMMA           reduce using rule 41 (expression -> term MOD expression .)
     QUOT            reduce using rule 41 (expression -> term MOD expression .)
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! LESS            [ reduce using rule 41 (expression -> term MOD expression .) ]
   ! MORE            [ reduce using rule 41 (expression -> term MOD expression .) ]
-  ! PLUS            [ shift and go to state 33 ]
-  ! MINUS           [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
-  ! MOD             [ shift and go to state 37 ]
-  ! EQUTO           [ shift and go to state 38 ]
-  ! NOEQU           [ shift and go to state 39 ]
+  ! PLUS            [ shift and go to state 34 ]
+  ! MINUS           [ shift and go to state 35 ]
+  ! MUL             [ shift and go to state 36 ]
+  ! DIV             [ shift and go to state 37 ]
+  ! MOD             [ shift and go to state 38 ]
+  ! EQUTO           [ shift and go to state 39 ]
+  ! NOEQU           [ shift and go to state 40 ]
 
 
-state 87
+state 90
 
     (52) expression -> LPAREN expression RPAREN .
 
@@ -3672,6 +3820,7 @@ state 87
     REPEAT          reduce using rule 52 (expression -> LPAREN expression RPAREN .)
     NUM             reduce using rule 52 (expression -> LPAREN expression RPAREN .)
     HEX             reduce using rule 52 (expression -> LPAREN expression RPAREN .)
+    APOS            reduce using rule 52 (expression -> LPAREN expression RPAREN .)
     TYPE_H          reduce using rule 52 (expression -> LPAREN expression RPAREN .)
     TYPE_N          reduce using rule 52 (expression -> LPAREN expression RPAREN .)
     TYPE_S          reduce using rule 52 (expression -> LPAREN expression RPAREN .)
@@ -3683,7 +3832,7 @@ state 87
     QUOT            reduce using rule 52 (expression -> LPAREN expression RPAREN .)
 
 
-state 88
+state 91
 
     (53) exassign -> WORD EQU expression .
     (27) expression -> expression . PLUS expression
@@ -3707,40 +3856,41 @@ state 88
     REPEAT          reduce using rule 53 (exassign -> WORD EQU expression .)
     NUM             reduce using rule 53 (exassign -> WORD EQU expression .)
     HEX             reduce using rule 53 (exassign -> WORD EQU expression .)
+    APOS            reduce using rule 53 (exassign -> WORD EQU expression .)
     TYPE_H          reduce using rule 53 (exassign -> WORD EQU expression .)
     TYPE_N          reduce using rule 53 (exassign -> WORD EQU expression .)
     TYPE_S          reduce using rule 53 (exassign -> WORD EQU expression .)
     $end            reduce using rule 53 (exassign -> WORD EQU expression .)
     LSTATE          reduce using rule 53 (exassign -> WORD EQU expression .)
     RSTATE          reduce using rule 53 (exassign -> WORD EQU expression .)
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! MINUS           [ reduce using rule 53 (exassign -> WORD EQU expression .) ]
 
 
-state 89
+state 92
 
     (62) arraysh -> WORD LARRY WORD . RARRY
 
-    RARRY           shift and go to state 103
+    RARRY           shift and go to state 108
 
 
-state 90
+state 93
 
     (61) arraysh -> WORD LARRY NUM . RARRY
 
-    RARRY           shift and go to state 104
+    RARRY           shift and go to state 109
 
 
-state 91
+state 94
 
     (54) exassign -> arraysh EQU expression .
     (27) expression -> expression . PLUS expression
@@ -3764,58 +3914,62 @@ state 91
     REPEAT          reduce using rule 54 (exassign -> arraysh EQU expression .)
     NUM             reduce using rule 54 (exassign -> arraysh EQU expression .)
     HEX             reduce using rule 54 (exassign -> arraysh EQU expression .)
+    APOS            reduce using rule 54 (exassign -> arraysh EQU expression .)
     TYPE_H          reduce using rule 54 (exassign -> arraysh EQU expression .)
     TYPE_N          reduce using rule 54 (exassign -> arraysh EQU expression .)
     TYPE_S          reduce using rule 54 (exassign -> arraysh EQU expression .)
     $end            reduce using rule 54 (exassign -> arraysh EQU expression .)
     LSTATE          reduce using rule 54 (exassign -> arraysh EQU expression .)
     RSTATE          reduce using rule 54 (exassign -> arraysh EQU expression .)
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
   ! MINUS           [ reduce using rule 54 (exassign -> arraysh EQU expression .) ]
 
 
-state 92
+state 95
 
     (60) declare -> typeconst WORD EQU . term
     (42) term -> . WORD
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    term                           shift and go to state 105
-    arraysh                        shift and go to state 55
+    term                           shift and go to state 110
+    arraysh                        shift and go to state 56
 
-state 93
+state 96
 
     (63) declare -> TYPE_A WORD EQU . LSTATE arrayX RSTATE
 
-    LSTATE          shift and go to state 106
+    LSTATE          shift and go to state 111
 
 
-state 94
+state 97
 
     (64) declare -> TYPE_A WORD LARRY . NUM RARRY
     (65) declare -> TYPE_A WORD LARRY . NUM RARRY EQU LSTATE arrayX RSTATE
 
-    NUM             shift and go to state 107
+    NUM             shift and go to state 112
 
 
-state 95
+state 98
 
     (69) exprint -> TEXT LPAREN expression . printMore RPAREN
     (27) expression -> expression . PLUS expression
@@ -3827,27 +3981,27 @@ state 95
     (56) expression -> expression . NOEQU expression
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
-    (71) printMore -> . COMMA expression printMore
-    (72) printMore -> . empty empty empty
-    (73) printMore -> . COMMA QUOT expression QUOT printMore
-    (74) empty -> .
+    (73) printMore -> . COMMA expression printMore
+    (74) printMore -> . empty empty empty
+    (75) printMore -> . COMMA QUOT expression QUOT printMore
+    (76) empty -> .
 
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
-    COMMA           shift and go to state 109
-    RPAREN          reduce using rule 74 (empty -> .)
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
+    COMMA           shift and go to state 114
+    RPAREN          reduce using rule 76 (empty -> .)
 
-    printMore                      shift and go to state 108
-    empty                          shift and go to state 110
+    printMore                      shift and go to state 113
+    empty                          shift and go to state 115
 
-state 96
+state 99
 
     (70) exprint -> TEXT LPAREN QUOT . expression QUOT printMore RPAREN
     (27) expression -> . expression PLUS expression
@@ -3876,20 +4030,23 @@ state 96
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 111
+    expression                     shift and go to state 116
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 97
+state 100
 
     (18) exif -> SO LPAREN expression . RPAREN LSTATE statement RSTATE
     (19) exif -> SO LPAREN expression . RPAREN NEWLINE LSTATE statement RSTATE
@@ -3903,19 +4060,19 @@ state 97
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
 
-    RPAREN          shift and go to state 112
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    RPAREN          shift and go to state 117
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
 
-state 98
+state 101
 
     (23) exloop -> LOOP LPAREN expression . RPAREN LSTATE statement RSTATE
     (24) exloop -> LOOP LPAREN expression . RPAREN LSTATE NEWLINE statement RSTATE
@@ -3929,19 +4086,19 @@ state 98
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
 
-    RPAREN          shift and go to state 113
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    RPAREN          shift and go to state 118
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
 
-state 99
+state 102
 
     (25) exrepeat -> REPEAT LPAREN expression . RPAREN LSTATE statement RSTATE
     (26) exrepeat -> REPEAT LPAREN expression . RPAREN NEWLINE LSTATE statement RSTATE
@@ -3955,19 +4112,89 @@ state 99
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
 
-    RPAREN          shift and go to state 114
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    RPAREN          shift and go to state 119
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
 
-state 100
+state 103
+
+    (71) term -> APOS WORD APOS .
+
+    PLUS            reduce using rule 71 (term -> APOS WORD APOS .)
+    MINUS           reduce using rule 71 (term -> APOS WORD APOS .)
+    MUL             reduce using rule 71 (term -> APOS WORD APOS .)
+    DIV             reduce using rule 71 (term -> APOS WORD APOS .)
+    MOD             reduce using rule 71 (term -> APOS WORD APOS .)
+    EQUTO           reduce using rule 71 (term -> APOS WORD APOS .)
+    NOEQU           reduce using rule 71 (term -> APOS WORD APOS .)
+    LESS            reduce using rule 71 (term -> APOS WORD APOS .)
+    MORE            reduce using rule 71 (term -> APOS WORD APOS .)
+    NEWLINE         reduce using rule 71 (term -> APOS WORD APOS .)
+    LPAREN          reduce using rule 71 (term -> APOS WORD APOS .)
+    WORD            reduce using rule 71 (term -> APOS WORD APOS .)
+    TYPE_A          reduce using rule 71 (term -> APOS WORD APOS .)
+    TEXT            reduce using rule 71 (term -> APOS WORD APOS .)
+    SO              reduce using rule 71 (term -> APOS WORD APOS .)
+    LOOP            reduce using rule 71 (term -> APOS WORD APOS .)
+    REPEAT          reduce using rule 71 (term -> APOS WORD APOS .)
+    NUM             reduce using rule 71 (term -> APOS WORD APOS .)
+    HEX             reduce using rule 71 (term -> APOS WORD APOS .)
+    APOS            reduce using rule 71 (term -> APOS WORD APOS .)
+    TYPE_H          reduce using rule 71 (term -> APOS WORD APOS .)
+    TYPE_N          reduce using rule 71 (term -> APOS WORD APOS .)
+    TYPE_S          reduce using rule 71 (term -> APOS WORD APOS .)
+    $end            reduce using rule 71 (term -> APOS WORD APOS .)
+    RPAREN          reduce using rule 71 (term -> APOS WORD APOS .)
+    LSTATE          reduce using rule 71 (term -> APOS WORD APOS .)
+    RSTATE          reduce using rule 71 (term -> APOS WORD APOS .)
+    COMMA           reduce using rule 71 (term -> APOS WORD APOS .)
+    QUOT            reduce using rule 71 (term -> APOS WORD APOS .)
+
+
+state 104
+
+    (72) term -> APOS NUM APOS .
+
+    PLUS            reduce using rule 72 (term -> APOS NUM APOS .)
+    MINUS           reduce using rule 72 (term -> APOS NUM APOS .)
+    MUL             reduce using rule 72 (term -> APOS NUM APOS .)
+    DIV             reduce using rule 72 (term -> APOS NUM APOS .)
+    MOD             reduce using rule 72 (term -> APOS NUM APOS .)
+    EQUTO           reduce using rule 72 (term -> APOS NUM APOS .)
+    NOEQU           reduce using rule 72 (term -> APOS NUM APOS .)
+    LESS            reduce using rule 72 (term -> APOS NUM APOS .)
+    MORE            reduce using rule 72 (term -> APOS NUM APOS .)
+    NEWLINE         reduce using rule 72 (term -> APOS NUM APOS .)
+    LPAREN          reduce using rule 72 (term -> APOS NUM APOS .)
+    WORD            reduce using rule 72 (term -> APOS NUM APOS .)
+    TYPE_A          reduce using rule 72 (term -> APOS NUM APOS .)
+    TEXT            reduce using rule 72 (term -> APOS NUM APOS .)
+    SO              reduce using rule 72 (term -> APOS NUM APOS .)
+    LOOP            reduce using rule 72 (term -> APOS NUM APOS .)
+    REPEAT          reduce using rule 72 (term -> APOS NUM APOS .)
+    NUM             reduce using rule 72 (term -> APOS NUM APOS .)
+    HEX             reduce using rule 72 (term -> APOS NUM APOS .)
+    APOS            reduce using rule 72 (term -> APOS NUM APOS .)
+    TYPE_H          reduce using rule 72 (term -> APOS NUM APOS .)
+    TYPE_N          reduce using rule 72 (term -> APOS NUM APOS .)
+    TYPE_S          reduce using rule 72 (term -> APOS NUM APOS .)
+    $end            reduce using rule 72 (term -> APOS NUM APOS .)
+    RPAREN          reduce using rule 72 (term -> APOS NUM APOS .)
+    LSTATE          reduce using rule 72 (term -> APOS NUM APOS .)
+    RSTATE          reduce using rule 72 (term -> APOS NUM APOS .)
+    COMMA           reduce using rule 72 (term -> APOS NUM APOS .)
+    QUOT            reduce using rule 72 (term -> APOS NUM APOS .)
+
+
+state 105
 
     (7) statement -> statement NEWLINE statement NEWLINE .
     (6) statement -> statement NEWLINE . statement
@@ -4019,6 +4246,7 @@ state 100
   ! reduce/reduce conflict for REPEAT resolved using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
   ! reduce/reduce conflict for NUM resolved using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
   ! reduce/reduce conflict for HEX resolved using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
+  ! reduce/reduce conflict for APOS resolved using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
   ! reduce/reduce conflict for TYPE_H resolved using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
   ! reduce/reduce conflict for TYPE_N resolved using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
   ! reduce/reduce conflict for TYPE_S resolved using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
@@ -4039,19 +4267,20 @@ state 100
     LPAREN          reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
     NUM             reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
     HEX             reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
+    APOS            reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
     $end            reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
     LSTATE          reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
     RSTATE          reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .)
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
   ! NEWLINE         [ reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .) ]
   ! WORD            [ reduce using rule 7 (statement -> statement NEWLINE statement NEWLINE .) ]
@@ -4074,6 +4303,7 @@ state 100
   ! REPEAT          [ reduce using rule 15 (statement -> statement NEWLINE .) ]
   ! NUM             [ reduce using rule 15 (statement -> statement NEWLINE .) ]
   ! HEX             [ reduce using rule 15 (statement -> statement NEWLINE .) ]
+  ! APOS            [ reduce using rule 15 (statement -> statement NEWLINE .) ]
   ! TYPE_H          [ reduce using rule 15 (statement -> statement NEWLINE .) ]
   ! TYPE_N          [ reduce using rule 15 (statement -> statement NEWLINE .) ]
   ! TYPE_S          [ reduce using rule 15 (statement -> statement NEWLINE .) ]
@@ -4081,7 +4311,7 @@ state 100
   ! LSTATE          [ reduce using rule 15 (statement -> statement NEWLINE .) ]
   ! RSTATE          [ reduce using rule 15 (statement -> statement NEWLINE .) ]
 
-    statement                      shift and go to state 66
+    statement                      shift and go to state 69
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -4089,21 +4319,21 @@ state 100
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 101
+state 106
 
     (21) exelse -> OTHERWISE LSTATE statement . LSTATE OTHERWISE
     (6) statement -> statement . NEWLINE statement
     (7) statement -> statement . NEWLINE statement NEWLINE
     (15) statement -> statement . NEWLINE
 
-    LSTATE          shift and go to state 115
-    NEWLINE         shift and go to state 32
+    LSTATE          shift and go to state 120
+    NEWLINE         shift and go to state 33
 
 
-state 102
+state 107
 
     (22) exelse -> OTHERWISE LSTATE NEWLINE . statement RSTATE
     (16) statement -> NEWLINE . statement
@@ -4143,17 +4373,17 @@ state 102
     (49) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 116
+    statement                      shift and go to state 121
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -4161,10 +4391,10 @@ state 102
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 103
+state 108
 
     (62) arraysh -> WORD LARRY WORD RARRY .
 
@@ -4188,6 +4418,7 @@ state 103
     REPEAT          reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
     NUM             reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
     HEX             reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
+    APOS            reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
     TYPE_H          reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
     TYPE_N          reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
     TYPE_S          reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
@@ -4199,7 +4430,7 @@ state 103
     QUOT            reduce using rule 62 (arraysh -> WORD LARRY WORD RARRY .)
 
 
-state 104
+state 109
 
     (61) arraysh -> WORD LARRY NUM RARRY .
 
@@ -4223,6 +4454,7 @@ state 104
     REPEAT          reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
     NUM             reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
     HEX             reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
+    APOS            reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
     TYPE_H          reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
     TYPE_N          reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
     TYPE_S          reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
@@ -4234,7 +4466,7 @@ state 104
     QUOT            reduce using rule 61 (arraysh -> WORD LARRY NUM RARRY .)
 
 
-state 105
+state 110
 
     (60) declare -> typeconst WORD EQU term .
 
@@ -4249,6 +4481,7 @@ state 105
     REPEAT          reduce using rule 60 (declare -> typeconst WORD EQU term .)
     NUM             reduce using rule 60 (declare -> typeconst WORD EQU term .)
     HEX             reduce using rule 60 (declare -> typeconst WORD EQU term .)
+    APOS            reduce using rule 60 (declare -> typeconst WORD EQU term .)
     TYPE_H          reduce using rule 60 (declare -> typeconst WORD EQU term .)
     TYPE_N          reduce using rule 60 (declare -> typeconst WORD EQU term .)
     TYPE_S          reduce using rule 60 (declare -> typeconst WORD EQU term .)
@@ -4257,34 +4490,34 @@ state 105
     RSTATE          reduce using rule 60 (declare -> typeconst WORD EQU term .)
 
 
-state 106
+state 111
 
     (63) declare -> TYPE_A WORD EQU LSTATE . arrayX RSTATE
     (66) arrayX -> . NUM arrayY
 
-    NUM             shift and go to state 118
+    NUM             shift and go to state 123
 
-    arrayX                         shift and go to state 117
+    arrayX                         shift and go to state 122
 
-state 107
+state 112
 
     (64) declare -> TYPE_A WORD LARRY NUM . RARRY
     (65) declare -> TYPE_A WORD LARRY NUM . RARRY EQU LSTATE arrayX RSTATE
 
-    RARRY           shift and go to state 119
+    RARRY           shift and go to state 124
 
 
-state 108
+state 113
 
     (69) exprint -> TEXT LPAREN expression printMore . RPAREN
 
-    RPAREN          shift and go to state 120
+    RPAREN          shift and go to state 125
 
 
-state 109
+state 114
 
-    (71) printMore -> COMMA . expression printMore
-    (73) printMore -> COMMA . QUOT expression QUOT printMore
+    (73) printMore -> COMMA . expression printMore
+    (75) printMore -> COMMA . QUOT expression QUOT printMore
     (27) expression -> . expression PLUS expression
     (28) expression -> . term PLUS term
     (29) expression -> . term PLUS expression
@@ -4311,30 +4544,33 @@ state 109
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
-    QUOT            shift and go to state 122
+    QUOT            shift and go to state 127
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 121
+    expression                     shift and go to state 126
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 110
+state 115
 
-    (72) printMore -> empty . empty empty
-    (74) empty -> .
+    (74) printMore -> empty . empty empty
+    (76) empty -> .
 
-    RPAREN          reduce using rule 74 (empty -> .)
+    RPAREN          reduce using rule 76 (empty -> .)
 
-    empty                          shift and go to state 123
+    empty                          shift and go to state 128
 
-state 111
+state 116
 
     (70) exprint -> TEXT LPAREN QUOT expression . QUOT printMore RPAREN
     (27) expression -> expression . PLUS expression
@@ -4347,52 +4583,52 @@ state 111
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
 
-    QUOT            shift and go to state 124
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    QUOT            shift and go to state 129
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
 
-state 112
+state 117
 
     (18) exif -> SO LPAREN expression RPAREN . LSTATE statement RSTATE
     (19) exif -> SO LPAREN expression RPAREN . NEWLINE LSTATE statement RSTATE
 
-    LSTATE          shift and go to state 125
-    NEWLINE         shift and go to state 126
+    LSTATE          shift and go to state 130
+    NEWLINE         shift and go to state 131
 
 
-state 113
+state 118
 
     (23) exloop -> LOOP LPAREN expression RPAREN . LSTATE statement RSTATE
     (24) exloop -> LOOP LPAREN expression RPAREN . LSTATE NEWLINE statement RSTATE
 
-    LSTATE          shift and go to state 127
+    LSTATE          shift and go to state 132
 
 
-state 114
+state 119
 
     (25) exrepeat -> REPEAT LPAREN expression RPAREN . LSTATE statement RSTATE
     (26) exrepeat -> REPEAT LPAREN expression RPAREN . NEWLINE LSTATE statement RSTATE
 
-    LSTATE          shift and go to state 128
-    NEWLINE         shift and go to state 129
+    LSTATE          shift and go to state 133
+    NEWLINE         shift and go to state 134
 
 
-state 115
+state 120
 
     (21) exelse -> OTHERWISE LSTATE statement LSTATE . OTHERWISE
 
-    OTHERWISE       shift and go to state 130
+    OTHERWISE       shift and go to state 135
 
 
-state 116
+state 121
 
     (22) exelse -> OTHERWISE LSTATE NEWLINE statement . RSTATE
     (16) statement -> NEWLINE statement .
@@ -4401,34 +4637,34 @@ state 116
     (15) statement -> statement . NEWLINE
 
   ! shift/reduce conflict for NEWLINE resolved as shift
-    RSTATE          shift and go to state 131
+    RSTATE          shift and go to state 136
     LSTATE          reduce using rule 16 (statement -> NEWLINE statement .)
-    NEWLINE         shift and go to state 32
+    NEWLINE         shift and go to state 33
 
   ! NEWLINE         [ reduce using rule 16 (statement -> NEWLINE statement .) ]
 
 
-state 117
+state 122
 
     (63) declare -> TYPE_A WORD EQU LSTATE arrayX . RSTATE
 
-    RSTATE          shift and go to state 132
+    RSTATE          shift and go to state 137
 
 
-state 118
+state 123
 
     (66) arrayX -> NUM . arrayY
     (67) arrayY -> . COMMA NUM arrayY
     (68) arrayY -> . empty empty empty
-    (74) empty -> .
+    (76) empty -> .
 
-    COMMA           shift and go to state 134
-    RSTATE          reduce using rule 74 (empty -> .)
+    COMMA           shift and go to state 139
+    RSTATE          reduce using rule 76 (empty -> .)
 
-    arrayY                         shift and go to state 133
-    empty                          shift and go to state 135
+    arrayY                         shift and go to state 138
+    empty                          shift and go to state 140
 
-state 119
+state 124
 
     (64) declare -> TYPE_A WORD LARRY NUM RARRY .
     (65) declare -> TYPE_A WORD LARRY NUM RARRY . EQU LSTATE arrayX RSTATE
@@ -4444,16 +4680,17 @@ state 119
     REPEAT          reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
     NUM             reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
     HEX             reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
+    APOS            reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
     TYPE_H          reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
     TYPE_N          reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
     TYPE_S          reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
     $end            reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
     LSTATE          reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
     RSTATE          reduce using rule 64 (declare -> TYPE_A WORD LARRY NUM RARRY .)
-    EQU             shift and go to state 136
+    EQU             shift and go to state 141
 
 
-state 120
+state 125
 
     (69) exprint -> TEXT LPAREN expression printMore RPAREN .
 
@@ -4468,6 +4705,7 @@ state 120
     REPEAT          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
     NUM             reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
     HEX             reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
+    APOS            reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
     TYPE_H          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
     TYPE_N          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
     TYPE_S          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
@@ -4476,9 +4714,9 @@ state 120
     RSTATE          reduce using rule 69 (exprint -> TEXT LPAREN expression printMore RPAREN .)
 
 
-state 121
+state 126
 
-    (71) printMore -> COMMA expression . printMore
+    (73) printMore -> COMMA expression . printMore
     (27) expression -> expression . PLUS expression
     (30) expression -> expression . MINUS expression
     (33) expression -> expression . MUL expression
@@ -4488,29 +4726,29 @@ state 121
     (56) expression -> expression . NOEQU expression
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
-    (71) printMore -> . COMMA expression printMore
-    (72) printMore -> . empty empty empty
-    (73) printMore -> . COMMA QUOT expression QUOT printMore
-    (74) empty -> .
+    (73) printMore -> . COMMA expression printMore
+    (74) printMore -> . empty empty empty
+    (75) printMore -> . COMMA QUOT expression QUOT printMore
+    (76) empty -> .
 
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
-    COMMA           shift and go to state 109
-    RPAREN          reduce using rule 74 (empty -> .)
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
+    COMMA           shift and go to state 114
+    RPAREN          reduce using rule 76 (empty -> .)
 
-    printMore                      shift and go to state 137
-    empty                          shift and go to state 110
+    printMore                      shift and go to state 142
+    empty                          shift and go to state 115
 
-state 122
+state 127
 
-    (73) printMore -> COMMA QUOT . expression QUOT printMore
+    (75) printMore -> COMMA QUOT . expression QUOT printMore
     (27) expression -> . expression PLUS expression
     (28) expression -> . term PLUS term
     (29) expression -> . term PLUS expression
@@ -4537,43 +4775,46 @@ state 122
     (43) term -> . arraysh
     (44) term -> . NUM
     (45) term -> . HEX
+    (71) term -> . APOS WORD APOS
+    (72) term -> . APOS NUM APOS
     (61) arraysh -> . WORD LARRY NUM RARRY
     (62) arraysh -> . WORD LARRY WORD RARRY
 
     MINUS           shift and go to state 15
     LPAREN          shift and go to state 16
-    WORD            shift and go to state 54
+    WORD            shift and go to state 55
     NUM             shift and go to state 21
     HEX             shift and go to state 26
+    APOS            shift and go to state 27
 
-    expression                     shift and go to state 138
+    expression                     shift and go to state 143
     term                           shift and go to state 14
-    arraysh                        shift and go to state 55
+    arraysh                        shift and go to state 56
 
-state 123
+state 128
 
-    (72) printMore -> empty empty . empty
-    (74) empty -> .
+    (74) printMore -> empty empty . empty
+    (76) empty -> .
 
-    RPAREN          reduce using rule 74 (empty -> .)
+    RPAREN          reduce using rule 76 (empty -> .)
 
-    empty                          shift and go to state 139
+    empty                          shift and go to state 144
 
-state 124
+state 129
 
     (70) exprint -> TEXT LPAREN QUOT expression QUOT . printMore RPAREN
-    (71) printMore -> . COMMA expression printMore
-    (72) printMore -> . empty empty empty
-    (73) printMore -> . COMMA QUOT expression QUOT printMore
-    (74) empty -> .
+    (73) printMore -> . COMMA expression printMore
+    (74) printMore -> . empty empty empty
+    (75) printMore -> . COMMA QUOT expression QUOT printMore
+    (76) empty -> .
 
-    COMMA           shift and go to state 109
-    RPAREN          reduce using rule 74 (empty -> .)
+    COMMA           shift and go to state 114
+    RPAREN          reduce using rule 76 (empty -> .)
 
-    printMore                      shift and go to state 140
-    empty                          shift and go to state 110
+    printMore                      shift and go to state 145
+    empty                          shift and go to state 115
 
-state 125
+state 130
 
     (18) exif -> SO LPAREN expression RPAREN LSTATE . statement RSTATE
     (6) statement -> . statement NEWLINE statement
@@ -4612,17 +4853,17 @@ state 125
     (49) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 141
+    statement                      shift and go to state 146
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -4630,17 +4871,17 @@ state 125
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 126
+state 131
 
     (19) exif -> SO LPAREN expression RPAREN NEWLINE . LSTATE statement RSTATE
 
-    LSTATE          shift and go to state 142
+    LSTATE          shift and go to state 147
 
 
-state 127
+state 132
 
     (23) exloop -> LOOP LPAREN expression RPAREN LSTATE . statement RSTATE
     (24) exloop -> LOOP LPAREN expression RPAREN LSTATE . NEWLINE statement RSTATE
@@ -4679,18 +4920,18 @@ state 127
     (48) typeconst -> . TYPE_A
     (49) typeconst -> . TYPE_S
 
-    NEWLINE         shift and go to state 144
-    WORD            shift and go to state 43
+    NEWLINE         shift and go to state 149
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 143
+    statement                      shift and go to state 148
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -4698,10 +4939,10 @@ state 127
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 128
+state 133
 
     (25) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE . statement RSTATE
     (6) statement -> . statement NEWLINE statement
@@ -4740,17 +4981,17 @@ state 128
     (49) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 145
+    statement                      shift and go to state 150
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -4758,17 +4999,17 @@ state 128
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 129
+state 134
 
     (26) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE . LSTATE statement RSTATE
 
-    LSTATE          shift and go to state 146
+    LSTATE          shift and go to state 151
 
 
-state 130
+state 135
 
     (21) exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .
 
@@ -4783,6 +5024,7 @@ state 130
     REPEAT          reduce using rule 21 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
     NUM             reduce using rule 21 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
     HEX             reduce using rule 21 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
+    APOS            reduce using rule 21 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
     TYPE_H          reduce using rule 21 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
     TYPE_N          reduce using rule 21 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
     TYPE_S          reduce using rule 21 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
@@ -4791,7 +5033,7 @@ state 130
     RSTATE          reduce using rule 21 (exelse -> OTHERWISE LSTATE statement LSTATE OTHERWISE .)
 
 
-state 131
+state 136
 
     (22) exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .
 
@@ -4806,6 +5048,7 @@ state 131
     REPEAT          reduce using rule 22 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
     NUM             reduce using rule 22 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
     HEX             reduce using rule 22 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
+    APOS            reduce using rule 22 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
     TYPE_H          reduce using rule 22 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
     TYPE_N          reduce using rule 22 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
     TYPE_S          reduce using rule 22 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
@@ -4814,7 +5057,7 @@ state 131
     RSTATE          reduce using rule 22 (exelse -> OTHERWISE LSTATE NEWLINE statement RSTATE .)
 
 
-state 132
+state 137
 
     (63) declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .
 
@@ -4829,6 +5072,7 @@ state 132
     REPEAT          reduce using rule 63 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
     NUM             reduce using rule 63 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
     HEX             reduce using rule 63 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
+    APOS            reduce using rule 63 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
     TYPE_H          reduce using rule 63 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
     TYPE_N          reduce using rule 63 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
     TYPE_S          reduce using rule 63 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
@@ -4837,46 +5081,46 @@ state 132
     RSTATE          reduce using rule 63 (declare -> TYPE_A WORD EQU LSTATE arrayX RSTATE .)
 
 
-state 133
+state 138
 
     (66) arrayX -> NUM arrayY .
 
     RSTATE          reduce using rule 66 (arrayX -> NUM arrayY .)
 
 
-state 134
+state 139
 
     (67) arrayY -> COMMA . NUM arrayY
 
-    NUM             shift and go to state 147
+    NUM             shift and go to state 152
 
 
-state 135
+state 140
 
     (68) arrayY -> empty . empty empty
-    (74) empty -> .
+    (76) empty -> .
 
-    RSTATE          reduce using rule 74 (empty -> .)
+    RSTATE          reduce using rule 76 (empty -> .)
 
-    empty                          shift and go to state 148
+    empty                          shift and go to state 153
 
-state 136
+state 141
 
     (65) declare -> TYPE_A WORD LARRY NUM RARRY EQU . LSTATE arrayX RSTATE
 
-    LSTATE          shift and go to state 149
+    LSTATE          shift and go to state 154
 
 
-state 137
+state 142
 
-    (71) printMore -> COMMA expression printMore .
+    (73) printMore -> COMMA expression printMore .
 
-    RPAREN          reduce using rule 71 (printMore -> COMMA expression printMore .)
+    RPAREN          reduce using rule 73 (printMore -> COMMA expression printMore .)
 
 
-state 138
+state 143
 
-    (73) printMore -> COMMA QUOT expression . QUOT printMore
+    (75) printMore -> COMMA QUOT expression . QUOT printMore
     (27) expression -> expression . PLUS expression
     (30) expression -> expression . MINUS expression
     (33) expression -> expression . MUL expression
@@ -4887,44 +5131,44 @@ state 138
     (57) expression -> expression . LESS expression
     (58) expression -> expression . MORE expression
 
-    QUOT            shift and go to state 150
-    PLUS            shift and go to state 33
-    MINUS           shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    MOD             shift and go to state 37
-    EQUTO           shift and go to state 38
-    NOEQU           shift and go to state 39
-    LESS            shift and go to state 40
-    MORE            shift and go to state 41
+    QUOT            shift and go to state 155
+    PLUS            shift and go to state 34
+    MINUS           shift and go to state 35
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+    MOD             shift and go to state 38
+    EQUTO           shift and go to state 39
+    NOEQU           shift and go to state 40
+    LESS            shift and go to state 41
+    MORE            shift and go to state 42
 
 
-state 139
+state 144
 
-    (72) printMore -> empty empty empty .
+    (74) printMore -> empty empty empty .
 
-    RPAREN          reduce using rule 72 (printMore -> empty empty empty .)
+    RPAREN          reduce using rule 74 (printMore -> empty empty empty .)
 
 
-state 140
+state 145
 
     (70) exprint -> TEXT LPAREN QUOT expression QUOT printMore . RPAREN
 
-    RPAREN          shift and go to state 151
+    RPAREN          shift and go to state 156
 
 
-state 141
+state 146
 
     (18) exif -> SO LPAREN expression RPAREN LSTATE statement . RSTATE
     (6) statement -> statement . NEWLINE statement
     (7) statement -> statement . NEWLINE statement NEWLINE
     (15) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 152
-    NEWLINE         shift and go to state 32
+    RSTATE          shift and go to state 157
+    NEWLINE         shift and go to state 33
 
 
-state 142
+state 147
 
     (19) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE . statement RSTATE
     (6) statement -> . statement NEWLINE statement
@@ -4963,17 +5207,17 @@ state 142
     (49) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 153
+    statement                      shift and go to state 158
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -4981,21 +5225,21 @@ state 142
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 143
+state 148
 
     (23) exloop -> LOOP LPAREN expression RPAREN LSTATE statement . RSTATE
     (6) statement -> statement . NEWLINE statement
     (7) statement -> statement . NEWLINE statement NEWLINE
     (15) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 154
-    NEWLINE         shift and go to state 32
+    RSTATE          shift and go to state 159
+    NEWLINE         shift and go to state 33
 
 
-state 144
+state 149
 
     (24) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE . statement RSTATE
     (16) statement -> NEWLINE . statement
@@ -5035,17 +5279,17 @@ state 144
     (49) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 155
+    statement                      shift and go to state 160
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -5053,21 +5297,21 @@ state 144
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 145
+state 150
 
     (25) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement . RSTATE
     (6) statement -> statement . NEWLINE statement
     (7) statement -> statement . NEWLINE statement NEWLINE
     (15) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 156
-    NEWLINE         shift and go to state 32
+    RSTATE          shift and go to state 161
+    NEWLINE         shift and go to state 33
 
 
-state 146
+state 151
 
     (26) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE . statement RSTATE
     (6) statement -> . statement NEWLINE statement
@@ -5106,17 +5350,17 @@ state 146
     (49) typeconst -> . TYPE_S
 
     NEWLINE         shift and go to state 6
-    WORD            shift and go to state 43
+    WORD            shift and go to state 44
     TYPE_A          shift and go to state 20
     TEXT            shift and go to state 22
     SO              shift and go to state 23
     LOOP            shift and go to state 24
     REPEAT          shift and go to state 25
-    TYPE_H          shift and go to state 27
-    TYPE_N          shift and go to state 28
-    TYPE_S          shift and go to state 29
+    TYPE_H          shift and go to state 28
+    TYPE_N          shift and go to state 29
+    TYPE_S          shift and go to state 30
 
-    statement                      shift and go to state 157
+    statement                      shift and go to state 162
     exassign                       shift and go to state 7
     declare                        shift and go to state 8
     exprint                        shift and go to state 9
@@ -5124,55 +5368,55 @@ state 146
     exelif                         shift and go to state 11
     exloop                         shift and go to state 12
     exrepeat                       shift and go to state 13
-    arraysh                        shift and go to state 44
+    arraysh                        shift and go to state 45
     typeconst                      shift and go to state 19
 
-state 147
+state 152
 
     (67) arrayY -> COMMA NUM . arrayY
     (67) arrayY -> . COMMA NUM arrayY
     (68) arrayY -> . empty empty empty
-    (74) empty -> .
+    (76) empty -> .
 
-    COMMA           shift and go to state 134
-    RSTATE          reduce using rule 74 (empty -> .)
+    COMMA           shift and go to state 139
+    RSTATE          reduce using rule 76 (empty -> .)
 
-    arrayY                         shift and go to state 158
-    empty                          shift and go to state 135
+    arrayY                         shift and go to state 163
+    empty                          shift and go to state 140
 
-state 148
+state 153
 
     (68) arrayY -> empty empty . empty
-    (74) empty -> .
+    (76) empty -> .
 
-    RSTATE          reduce using rule 74 (empty -> .)
+    RSTATE          reduce using rule 76 (empty -> .)
 
-    empty                          shift and go to state 159
+    empty                          shift and go to state 164
 
-state 149
+state 154
 
     (65) declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE . arrayX RSTATE
     (66) arrayX -> . NUM arrayY
 
-    NUM             shift and go to state 118
+    NUM             shift and go to state 123
 
-    arrayX                         shift and go to state 160
+    arrayX                         shift and go to state 165
 
-state 150
+state 155
 
-    (73) printMore -> COMMA QUOT expression QUOT . printMore
-    (71) printMore -> . COMMA expression printMore
-    (72) printMore -> . empty empty empty
-    (73) printMore -> . COMMA QUOT expression QUOT printMore
-    (74) empty -> .
+    (75) printMore -> COMMA QUOT expression QUOT . printMore
+    (73) printMore -> . COMMA expression printMore
+    (74) printMore -> . empty empty empty
+    (75) printMore -> . COMMA QUOT expression QUOT printMore
+    (76) empty -> .
 
-    COMMA           shift and go to state 109
-    RPAREN          reduce using rule 74 (empty -> .)
+    COMMA           shift and go to state 114
+    RPAREN          reduce using rule 76 (empty -> .)
 
-    printMore                      shift and go to state 161
-    empty                          shift and go to state 110
+    printMore                      shift and go to state 166
+    empty                          shift and go to state 115
 
-state 151
+state 156
 
     (70) exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .
 
@@ -5187,6 +5431,7 @@ state 151
     REPEAT          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
     NUM             reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
     HEX             reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
+    APOS            reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
     TYPE_H          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
     TYPE_N          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
     TYPE_S          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
@@ -5195,7 +5440,7 @@ state 151
     RSTATE          reduce using rule 70 (exprint -> TEXT LPAREN QUOT expression QUOT printMore RPAREN .)
 
 
-state 152
+state 157
 
     (18) exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .
 
@@ -5211,6 +5456,7 @@ state 152
     REPEAT          reduce using rule 18 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
     NUM             reduce using rule 18 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
     HEX             reduce using rule 18 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
+    APOS            reduce using rule 18 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_H          reduce using rule 18 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_N          reduce using rule 18 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_S          reduce using rule 18 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
@@ -5219,18 +5465,18 @@ state 152
     RSTATE          reduce using rule 18 (exif -> SO LPAREN expression RPAREN LSTATE statement RSTATE .)
 
 
-state 153
+state 158
 
     (19) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement . RSTATE
     (6) statement -> statement . NEWLINE statement
     (7) statement -> statement . NEWLINE statement NEWLINE
     (15) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 162
-    NEWLINE         shift and go to state 32
+    RSTATE          shift and go to state 167
+    NEWLINE         shift and go to state 33
 
 
-state 154
+state 159
 
     (23) exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .
 
@@ -5245,6 +5491,7 @@ state 154
     REPEAT          reduce using rule 23 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
     NUM             reduce using rule 23 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
     HEX             reduce using rule 23 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
+    APOS            reduce using rule 23 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_H          reduce using rule 23 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_N          reduce using rule 23 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_S          reduce using rule 23 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
@@ -5253,7 +5500,7 @@ state 154
     RSTATE          reduce using rule 23 (exloop -> LOOP LPAREN expression RPAREN LSTATE statement RSTATE .)
 
 
-state 155
+state 160
 
     (24) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement . RSTATE
     (16) statement -> NEWLINE statement .
@@ -5263,14 +5510,14 @@ state 155
 
   ! shift/reduce conflict for RSTATE resolved as shift
   ! shift/reduce conflict for NEWLINE resolved as shift
-    RSTATE          shift and go to state 163
-    NEWLINE         shift and go to state 32
+    RSTATE          shift and go to state 168
+    NEWLINE         shift and go to state 33
 
   ! RSTATE          [ reduce using rule 16 (statement -> NEWLINE statement .) ]
   ! NEWLINE         [ reduce using rule 16 (statement -> NEWLINE statement .) ]
 
 
-state 156
+state 161
 
     (25) exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .
 
@@ -5285,6 +5532,7 @@ state 156
     REPEAT          reduce using rule 25 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
     NUM             reduce using rule 25 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
     HEX             reduce using rule 25 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
+    APOS            reduce using rule 25 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_H          reduce using rule 25 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_N          reduce using rule 25 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
     TYPE_S          reduce using rule 25 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
@@ -5293,46 +5541,46 @@ state 156
     RSTATE          reduce using rule 25 (exrepeat -> REPEAT LPAREN expression RPAREN LSTATE statement RSTATE .)
 
 
-state 157
+state 162
 
     (26) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement . RSTATE
     (6) statement -> statement . NEWLINE statement
     (7) statement -> statement . NEWLINE statement NEWLINE
     (15) statement -> statement . NEWLINE
 
-    RSTATE          shift and go to state 164
-    NEWLINE         shift and go to state 32
+    RSTATE          shift and go to state 169
+    NEWLINE         shift and go to state 33
 
 
-state 158
+state 163
 
     (67) arrayY -> COMMA NUM arrayY .
 
     RSTATE          reduce using rule 67 (arrayY -> COMMA NUM arrayY .)
 
 
-state 159
+state 164
 
     (68) arrayY -> empty empty empty .
 
     RSTATE          reduce using rule 68 (arrayY -> empty empty empty .)
 
 
-state 160
+state 165
 
     (65) declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX . RSTATE
 
-    RSTATE          shift and go to state 165
+    RSTATE          shift and go to state 170
 
 
-state 161
+state 166
 
-    (73) printMore -> COMMA QUOT expression QUOT printMore .
+    (75) printMore -> COMMA QUOT expression QUOT printMore .
 
-    RPAREN          reduce using rule 73 (printMore -> COMMA QUOT expression QUOT printMore .)
+    RPAREN          reduce using rule 75 (printMore -> COMMA QUOT expression QUOT printMore .)
 
 
-state 162
+state 167
 
     (19) exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .
 
@@ -5348,6 +5596,7 @@ state 162
     REPEAT          reduce using rule 19 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     NUM             reduce using rule 19 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     HEX             reduce using rule 19 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    APOS            reduce using rule 19 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     TYPE_H          reduce using rule 19 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     TYPE_N          reduce using rule 19 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     TYPE_S          reduce using rule 19 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
@@ -5356,7 +5605,7 @@ state 162
     RSTATE          reduce using rule 19 (exif -> SO LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
 
 
-state 163
+state 168
 
     (24) exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .
 
@@ -5371,6 +5620,7 @@ state 163
     REPEAT          reduce using rule 24 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
     NUM             reduce using rule 24 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
     HEX             reduce using rule 24 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
+    APOS            reduce using rule 24 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
     TYPE_H          reduce using rule 24 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
     TYPE_N          reduce using rule 24 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
     TYPE_S          reduce using rule 24 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
@@ -5379,7 +5629,7 @@ state 163
     RSTATE          reduce using rule 24 (exloop -> LOOP LPAREN expression RPAREN LSTATE NEWLINE statement RSTATE .)
 
 
-state 164
+state 169
 
     (26) exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .
 
@@ -5394,6 +5644,7 @@ state 164
     REPEAT          reduce using rule 26 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     NUM             reduce using rule 26 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     HEX             reduce using rule 26 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
+    APOS            reduce using rule 26 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     TYPE_H          reduce using rule 26 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     TYPE_N          reduce using rule 26 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
     TYPE_S          reduce using rule 26 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
@@ -5402,7 +5653,7 @@ state 164
     RSTATE          reduce using rule 26 (exrepeat -> REPEAT LPAREN expression RPAREN NEWLINE LSTATE statement RSTATE .)
 
 
-state 165
+state 170
 
     (65) declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .
 
@@ -5417,6 +5668,7 @@ state 165
     REPEAT          reduce using rule 65 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
     NUM             reduce using rule 65 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
     HEX             reduce using rule 65 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
+    APOS            reduce using rule 65 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
     TYPE_H          reduce using rule 65 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
     TYPE_N          reduce using rule 65 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
     TYPE_S          reduce using rule 65 (declare -> TYPE_A WORD LARRY NUM RARRY EQU LSTATE arrayX RSTATE .)
@@ -5436,66 +5688,66 @@ WARNING: shift/reduce conflict for MUL in state 14 resolved as shift
 WARNING: shift/reduce conflict for DIV in state 14 resolved as shift
 WARNING: shift/reduce conflict for MOD in state 14 resolved as shift
 WARNING: shift/reduce conflict for WORD in state 20 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 32 resolved as shift
-WARNING: shift/reduce conflict for WORD in state 32 resolved as shift
-WARNING: shift/reduce conflict for TYPE_A in state 32 resolved as shift
-WARNING: shift/reduce conflict for TEXT in state 32 resolved as shift
-WARNING: shift/reduce conflict for SO in state 32 resolved as shift
-WARNING: shift/reduce conflict for LOOP in state 32 resolved as shift
-WARNING: shift/reduce conflict for REPEAT in state 32 resolved as shift
-WARNING: shift/reduce conflict for TYPE_H in state 32 resolved as shift
-WARNING: shift/reduce conflict for TYPE_N in state 32 resolved as shift
-WARNING: shift/reduce conflict for TYPE_S in state 32 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 42 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 66 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 72 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 72 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 72 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 72 resolved as shift
-WARNING: shift/reduce conflict for MOD in state 72 resolved as shift
-WARNING: shift/reduce conflict for EQUTO in state 72 resolved as shift
-WARNING: shift/reduce conflict for NOEQU in state 72 resolved as shift
-WARNING: shift/reduce conflict for LESS in state 72 resolved as shift
-WARNING: shift/reduce conflict for MORE in state 72 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 73 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 73 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 73 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 73 resolved as shift
-WARNING: shift/reduce conflict for MOD in state 73 resolved as shift
-WARNING: shift/reduce conflict for EQUTO in state 73 resolved as shift
-WARNING: shift/reduce conflict for NOEQU in state 73 resolved as shift
-WARNING: shift/reduce conflict for LESS in state 73 resolved as shift
-WARNING: shift/reduce conflict for MORE in state 73 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 77 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 77 resolved as shift
-WARNING: shift/reduce conflict for MOD in state 77 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 79 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 79 resolved as shift
-WARNING: shift/reduce conflict for MOD in state 79 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 88 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 33 resolved as shift
+WARNING: shift/reduce conflict for WORD in state 33 resolved as shift
+WARNING: shift/reduce conflict for TYPE_A in state 33 resolved as shift
+WARNING: shift/reduce conflict for TEXT in state 33 resolved as shift
+WARNING: shift/reduce conflict for SO in state 33 resolved as shift
+WARNING: shift/reduce conflict for LOOP in state 33 resolved as shift
+WARNING: shift/reduce conflict for REPEAT in state 33 resolved as shift
+WARNING: shift/reduce conflict for TYPE_H in state 33 resolved as shift
+WARNING: shift/reduce conflict for TYPE_N in state 33 resolved as shift
+WARNING: shift/reduce conflict for TYPE_S in state 33 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 43 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 69 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 75 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 75 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 75 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 75 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 75 resolved as shift
+WARNING: shift/reduce conflict for EQUTO in state 75 resolved as shift
+WARNING: shift/reduce conflict for NOEQU in state 75 resolved as shift
+WARNING: shift/reduce conflict for LESS in state 75 resolved as shift
+WARNING: shift/reduce conflict for MORE in state 75 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 76 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 76 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 76 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 76 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 76 resolved as shift
+WARNING: shift/reduce conflict for EQUTO in state 76 resolved as shift
+WARNING: shift/reduce conflict for NOEQU in state 76 resolved as shift
+WARNING: shift/reduce conflict for LESS in state 76 resolved as shift
+WARNING: shift/reduce conflict for MORE in state 76 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 80 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 80 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 80 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 82 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 82 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 82 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 91 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 100 resolved as shift
-WARNING: shift/reduce conflict for WORD in state 100 resolved as shift
-WARNING: shift/reduce conflict for TYPE_A in state 100 resolved as shift
-WARNING: shift/reduce conflict for TEXT in state 100 resolved as shift
-WARNING: shift/reduce conflict for SO in state 100 resolved as shift
-WARNING: shift/reduce conflict for LOOP in state 100 resolved as shift
-WARNING: shift/reduce conflict for REPEAT in state 100 resolved as shift
-WARNING: shift/reduce conflict for TYPE_H in state 100 resolved as shift
-WARNING: shift/reduce conflict for TYPE_N in state 100 resolved as shift
-WARNING: shift/reduce conflict for TYPE_S in state 100 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 116 resolved as shift
-WARNING: shift/reduce conflict for RSTATE in state 155 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 155 resolved as shift
-WARNING: reduce/reduce conflict in state 77 resolved using rule (expression -> term PLUS term)
-WARNING: rejected rule (expression -> term) in state 77
-WARNING: reduce/reduce conflict in state 79 resolved using rule (expression -> term MINUS term)
-WARNING: rejected rule (expression -> term) in state 79
-WARNING: reduce/reduce conflict in state 81 resolved using rule (expression -> term MUL term)
-WARNING: rejected rule (expression -> term) in state 81
-WARNING: reduce/reduce conflict in state 83 resolved using rule (expression -> term DIV term)
-WARNING: rejected rule (expression -> term) in state 83
-WARNING: reduce/reduce conflict in state 85 resolved using rule (expression -> term MOD term)
-WARNING: rejected rule (expression -> term) in state 85
-WARNING: reduce/reduce conflict in state 100 resolved using rule (statement -> statement NEWLINE statement NEWLINE)
-WARNING: rejected rule (statement -> statement NEWLINE) in state 100
+WARNING: shift/reduce conflict for MINUS in state 94 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 105 resolved as shift
+WARNING: shift/reduce conflict for WORD in state 105 resolved as shift
+WARNING: shift/reduce conflict for TYPE_A in state 105 resolved as shift
+WARNING: shift/reduce conflict for TEXT in state 105 resolved as shift
+WARNING: shift/reduce conflict for SO in state 105 resolved as shift
+WARNING: shift/reduce conflict for LOOP in state 105 resolved as shift
+WARNING: shift/reduce conflict for REPEAT in state 105 resolved as shift
+WARNING: shift/reduce conflict for TYPE_H in state 105 resolved as shift
+WARNING: shift/reduce conflict for TYPE_N in state 105 resolved as shift
+WARNING: shift/reduce conflict for TYPE_S in state 105 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 121 resolved as shift
+WARNING: shift/reduce conflict for RSTATE in state 160 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 160 resolved as shift
+WARNING: reduce/reduce conflict in state 80 resolved using rule (expression -> term PLUS term)
+WARNING: rejected rule (expression -> term) in state 80
+WARNING: reduce/reduce conflict in state 82 resolved using rule (expression -> term MINUS term)
+WARNING: rejected rule (expression -> term) in state 82
+WARNING: reduce/reduce conflict in state 84 resolved using rule (expression -> term MUL term)
+WARNING: rejected rule (expression -> term) in state 84
+WARNING: reduce/reduce conflict in state 86 resolved using rule (expression -> term DIV term)
+WARNING: rejected rule (expression -> term) in state 86
+WARNING: reduce/reduce conflict in state 88 resolved using rule (expression -> term MOD term)
+WARNING: rejected rule (expression -> term) in state 88
+WARNING: reduce/reduce conflict in state 105 resolved using rule (statement -> statement NEWLINE statement NEWLINE)
+WARNING: rejected rule (statement -> statement NEWLINE) in state 105
