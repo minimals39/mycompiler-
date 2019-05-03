@@ -59,7 +59,7 @@ def getLeave():
 #------------------------------------ Add Assembly code section
 def addData(name, value):
     global asmdata
-    asmdata += "%s db %s\n" % (name, value)
+    asmdata += "%s dd %s\n" % (name, value)
 
 def addText(asmcode = ""):
     global asmtext

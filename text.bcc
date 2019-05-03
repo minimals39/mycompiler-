@@ -1,2 +1,2 @@
-type_n a = 1
-text("\n")
+type_s a = 'hello'
+text(a)

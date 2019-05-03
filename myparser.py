@@ -271,14 +271,14 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
-while True:
+'''while True:
     try:
         s = input('calc > ')
     except EOFError:
         break
     if not s: continue
     result = parser.parse(s)
-    print(result)
+    print(result)'''
 
 def parse(s, debug=False):
     return parser.parse(s, tracking=True, debug=debug)
