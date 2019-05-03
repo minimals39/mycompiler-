@@ -25,6 +25,18 @@ reg_order = ["rcx", "rdx", "r8", "r9"]
 
 #------------------------------------ Get Set Add Function
 
+def get_var(symbol):
+    if symbol in global_var:
+        return symbol
+    print_error("Use of undeclare variable %s" % symbol)
+
+def print_error(error_str, show_line=True):
+    if show_line:
+        print("ERROR : %s At line %d" % (error_str, lexer.lineno))
+    else:
+        print("ERROR : %s" % error_str)
+    sys.exit(1)
+
 def getHeader():
     global asmheader
     return asmheader
@@ -86,9 +98,9 @@ def statement_main(tuple):
     elif state == "multiple_stm":
         print("")
         multiple_stm_routine(stateTuple)
-    elif state == "PRINT":
+    elif state == "print":
         print("")
-#       print_routine(stateTuple)
+        print_routine(stateTuple)
     elif state == "PRINTLN":
         print("")
 #       println_routine(stateTuple)
@@ -121,9 +133,9 @@ def statement_main_from_multi(tuple):
     elif state == "multiple_stm":
         print("")
         multiple_stm_routine(stateTuple)
-    elif state == "PRINT":
+    elif state == "print":
         print("")
-#       print_routine(stateTuple)
+        print_routine(stateTuple)
     elif state == "PRINTLN":
         print("")
 #       println_routine(stateTuple)
@@ -153,7 +165,7 @@ def declare_var(var_name, value, assign=None):
         print("Error!, Duplicate var is declared")
     else:
         global_var.append(var_name)
-
+        print(global_var)
         if assign is None:
             addData(var_name, value)
         elif assign == "array":
@@ -163,7 +175,10 @@ def declaration_routine(stm):
     #print("visited declacration_routine")
     #print(type(stm[2]))
     if stm[1] == "type_s":
-        valuename = "'"+stm[3]+"',0"
+        if type(stm[3]) == int:
+            valuename = "' ',0"
+        else:
+            valuename = "'" + stm[3] + "',0"
         declare_var(stm[2],valuename)
     elif stm[1] == "type_n":
         declare_var(stm[2],stm[3])
@@ -190,4 +205,22 @@ def Array_routine(stm):
             except:
                 break
 
-
+def print_routine(stm):
+    print("-> print_routine")
+    if stm[1] == 'string':
+        text = stm[2]
+        addText("mov rcx, %s" % text)
+        addText("call printf")
+        addText("xor %s, %s" % (reg_order[0], reg_order[0]))
+        addText("call " + fflush_label)
+        addText()
+    '''else :
+        if type(stm[1]) == tuple:
+            pass
+        elif type(stm[2]) == tuple :
+            texts = stm[1]
+            addText("mov rcx, %s" % texts)
+            addText("call printf")
+            addText("xor %s, %s" % (reg_order[0], reg_order[0]))
+            addText("call " + fflush_label)
+            addText()'''
