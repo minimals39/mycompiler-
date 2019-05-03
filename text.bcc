@@ -1,2 +1,2 @@
 type_s a = 'hello'
-text(a)
+text("a")

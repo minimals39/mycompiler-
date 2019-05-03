@@ -16,13 +16,10 @@ fflush_label = "fflush"
 
 empty_str = '""'
 str_prefix = "_STR"
-global_var2 = {}
 global_str_counter = 0
 global_str = {}
 global_var = []
 global_if_counter = 0
-
-str_prefix = "_STR"
 
 reg_order = ["rcx", "rdx", "r8", "r9"]
 
@@ -59,7 +56,7 @@ def getLeave():
 #------------------------------------ Add Assembly code section
 def addData(name, value):
     global asmdata
-    asmdata += "%s dd %s\n" % (name, value)
+    asmdata += "%s db %s\n" % (name, value)
 
 def addText(asmcode = ""):
     global asmtext
@@ -169,16 +166,10 @@ def declare_var(var_name, value, assign=None):
     else:
         global_var.append(var_name)
         print(global_var)
-        if assign != 'array':
-            if assign == 'int':
-                global_var2[var_name] = 'int'
-            elif assign == 'string':
-                global_var2[var_name] = 'string'
+        if assign is None:
             addData(var_name, value)
         elif assign == "array":
             asmdata += var_name + " times " + str(value) + " dq 0" + "\n"
-        elif assign == None:
-            print("something is wrong law na")
 
 def declaration_routine(stm):
     #print("visited declacration_routine")
@@ -189,9 +180,9 @@ def declaration_routine(stm):
             valuename = "'" + stmnum + "',0"
         else:
             valuename = "'" + stm[3] + "',0"
-        declare_var(stm[2],valuename,'string')
+        declare_var(stm[2],valuename)
     elif stm[1] == "type_n":
-        declare_var(stm[2],stm[3],'int')
+        declare_var(stm[2],stm[3])
 
 def Array_routine(stm):
     if type(stm[3]) != tuple:
@@ -217,60 +208,20 @@ def Array_routine(stm):
 
 def print_routine(stm):
     print("-> print_routine")
-    while True:
-        if stm[1] == 'string':
-            text = stm[2]
-            texts = get_str(text)
+    if stm[1] == 'string':
+        text = stm[2]
+        addText("mov rcx, %s" % text)
+        addText("call printf")
+        addText("xor %s, %s" % (reg_order[0], reg_order[0]))
+        addText("call " + fflush_label)
+        addText()
+    '''else :
+        if type(stm[1]) == tuple:
+            pass
+        elif type(stm[2]) == tuple :
+            texts = stm[1]
             addText("mov rcx, %s" % texts)
             addText("call printf")
             addText("xor %s, %s" % (reg_order[0], reg_order[0]))
             addText("call " + fflush_label)
-            addText()
-            newstm = stm[3]
-        else :
-            if type(stm[1]) == tuple:
-                newstm = stm[2]
-            elif type(stm[2]) == tuple :
-                if global_var2[stm[1]] == 'int':
-                    texts = stm[1]
-                    addText("mov rcx, %s" % texts)
-                    addText("call printf")
-                    addText("xor %s, %s" % (reg_order[0], reg_order[0]))
-                    addText("call " + fflush_label)
-                    addText()
-                    newstm = stm[2]
-                elif global_var2[stm[1]] == 'string':
-                    texts = stm[1]
-                    addText("mov rcx, %s" % texts)
-                    addText("call printf")
-                    addText("xor %s, %s" % (reg_order[0], reg_order[0]))
-                    addText("call " + fflush_label)
-                    addText()
-                    newstm = stm[2]
-        if stm[1] == None:
-            break
-        if newstm[0] != 'argument':
-            break
-        stm = newstm
-
-def get_str(text):
-    if text not in global_str:
-        newstring(text)
-    return global_str[text]
-
-def newstring(text):
-    global global_str_counter
-    if text not in global_str:
-        asm_symbol = str_prefix + str(global_str_counter)
-        global_str[text] = asm_symbol
-        _text = ''
-        if '\\n' in text:
-            texts = text.replace('"', '').split('\\n')
-            for t in texts:
-                if t:
-                    _text += '"' + t + '", 10,'
-            _text += ' 0'
-        else:
-            _text = "'"+text+"'" + ', 0'
-        addData(asm_symbol, _text)
-        global_str_counter += 1
+            addText()'''
