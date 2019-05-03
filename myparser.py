@@ -127,9 +127,9 @@ def p_value(p):
     p[0] = p[1]
 
 def p_value2(p):
-    '''term : APOS WORD APOS
+    '''term : STRING_LITERAL
            '''
-    p[0] = ('string',p[2])
+    p[0] = p[1]
 
 
 def p_value_hexdecstr(p):
@@ -233,9 +233,9 @@ def p_exprint(p):
     p[0] = ('print', p[3], p[4])
 
 
-def p_exprint2(p):
+'''def p_exprint2(p):
     'exprint : TEXT LPAREN STRING_LITERAL printMore RPAREN'
-    p[0] = ('print','string', p[3], p[4])
+    p[0] = ('print','string', p[3], p[4])'''
 
 
 def p_print_content(p):
@@ -271,14 +271,14 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
-while True:
+'''while True:
     try:
         s = input('calc > ')
     except EOFError:
         break
     if not s: continue
     result = parser.parse(s)
-    print(result)
+    print(result)'''
 
 def parse(s, debug=False):
     return parser.parse(s, tracking=True, debug=debug)

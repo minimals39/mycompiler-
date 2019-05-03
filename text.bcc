@@ -1,2 +1,3 @@
-type_s a = 'hello'
-text(a)
+type_n a = 1
+type_s b = "ab"
+text(b,a)

@@ -20,7 +20,9 @@ genasm.lexer = flex.lexer
 result = myparser.parse(lines)
 var = {}
 var['a'] = 'b'
-print(var['a'])
+ab = "abcdefg"
+abb = "'"+ab+"'"
+print(ab[:-3])
 print(result)
 genasm.statement_main(result)
 

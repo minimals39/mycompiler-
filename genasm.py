@@ -57,9 +57,13 @@ def getLeave():
     return asmexit
 
 #------------------------------------ Add Assembly code section
-def addData(name, value):
+def addDataInt(name, value):
     global asmdata
-    asmdata += "%s dd %s\n" % (name, value)
+    asmdata += "%s dq %s\n" % (name, value)
+
+def addDataString(name, value):
+    global asmdata
+    asmdata += "%s db %s\n" % (name, value)
 
 def addText(asmcode = ""):
     global asmtext
@@ -104,9 +108,6 @@ def statement_main(tuple):
     elif state == "print":
         print("")
         print_routine(stateTuple)
-    elif state == "PRINTLN":
-        print("")
-#       println_routine(stateTuple)
     elif state == "FORLOOP":
         print("")
     elif state == "WHILELOOP":
@@ -139,9 +140,6 @@ def statement_main_from_multi(tuple):
     elif state == "print":
         print("")
         print_routine(stateTuple)
-    elif state == "PRINTLN":
-        print("")
-#       println_routine(stateTuple)
     elif state == "FORLOOP":
         print("")
     elif state == "WHILELOOP":
@@ -172,9 +170,10 @@ def declare_var(var_name, value, assign=None):
         if assign != 'array':
             if assign == 'int':
                 global_var2[var_name] = 'int'
+                addDataInt(var_name, value)
             elif assign == 'string':
                 global_var2[var_name] = 'string'
-            addData(var_name, value)
+                addDataString(var_name, value)
         elif assign == "array":
             asmdata += var_name + " times " + str(value) + " dq 0" + "\n"
         elif assign == None:
@@ -188,10 +187,12 @@ def declaration_routine(stm):
             stmnum = str(stm[3])
             valuename = "'" + stmnum + "',0"
         else:
-            valuename = "'" + stm[3] + "',0"
+            stmsplit = stm[3][1:-1]
+            valuename = "'" + stmsplit + "',0"
         declare_var(stm[2],valuename,'string')
     elif stm[1] == "type_n":
-        declare_var(stm[2],stm[3],'int')
+        stmint = ' "%d ", '+str(stm[3])
+        declare_var(stm[2],stmint,'int')
 
 def Array_routine(stm):
     if type(stm[3]) != tuple:
@@ -199,7 +200,7 @@ def Array_routine(stm):
     else:
         declare_var(stm[1], stm[2], "array")
         now = stm[3]
-        arraynum = 0
+        arraynum = 1
         while True:
             try:
                 if now[0] == "argument":
@@ -218,40 +219,53 @@ def Array_routine(stm):
 def print_routine(stm):
     print("-> print_routine")
     while True:
-        if stm[1] == 'string':
-            text = stm[2]
+        if type(stm[1]) == str:
+            if stm[1][0] == '"':
+                text = stm[1][1:-1]
+                texts = get_str(text)
+                addText("mov rcx, %s" % texts)
+                addText("call printf")
+                addText("xor %s, %s" % (reg_order[0], reg_order[0]))
+                addText("call " + fflush_label)
+                addText()
+                newstm = stm[2]
+            else:
+                if type(stm[1]) == tuple:
+                    newstm = stm[2]
+                elif type(stm[2]) == tuple:
+                    print(global_var2[stm[1]])
+                    if global_var2[stm[1]] == 'int':
+                        texts = stm[1]
+                        addText("mov rcx, %s" % texts)
+                        addText("mov rdx, [%s +8]" % texts)
+                        addText("call printf")
+                        addText("xor %s, %s" % (reg_order[0], reg_order[0]))
+                        addText("call " + fflush_label)
+                        addText()
+                        newstm = stm[2]
+                    elif global_var2[stm[1]] == 'string':
+                        texts = stm[1]
+                        addText("mov rcx, %s" % texts)
+                        addText("call printf")
+                        addText("xor %s, %s" % (reg_order[0], reg_order[0]))
+                        addText("call " + fflush_label)
+                        addText()
+                        newstm = stm[2]
+        elif type(stm[1]) == int:
+            text = str(stm[1])
             texts = get_str(text)
             addText("mov rcx, %s" % texts)
             addText("call printf")
             addText("xor %s, %s" % (reg_order[0], reg_order[0]))
             addText("call " + fflush_label)
             addText()
-            newstm = stm[3]
-        else :
-            if type(stm[1]) == tuple:
-                newstm = stm[2]
-            elif type(stm[2]) == tuple :
-                if global_var2[stm[1]] == 'int':
-                    texts = stm[1]
-                    addText("mov rcx, %s" % texts)
-                    addText("call printf")
-                    addText("xor %s, %s" % (reg_order[0], reg_order[0]))
-                    addText("call " + fflush_label)
-                    addText()
-                    newstm = stm[2]
-                elif global_var2[stm[1]] == 'string':
-                    texts = stm[1]
-                    addText("mov rcx, %s" % texts)
-                    addText("call printf")
-                    addText("xor %s, %s" % (reg_order[0], reg_order[0]))
-                    addText("call " + fflush_label)
-                    addText()
-                    newstm = stm[2]
+            newstm = stm[2]
+
         if stm[1] == None:
             break
-        if newstm[0] != 'argument':
+        stm = stm[2]
+        if stm[1] == None:
             break
-        stm = newstm
 
 def get_str(text):
     if text not in global_str:
@@ -268,9 +282,9 @@ def newstring(text):
             texts = text.replace('"', '').split('\\n')
             for t in texts:
                 if t:
-                    _text += '"' + t + '", 10,'
+                    _text += "'" + t + "', 10,"
             _text += ' 0'
         else:
             _text = "'"+text+"'" + ', 0'
-        addData(asm_symbol, _text)
+        addDataString(asm_symbol, _text)
         global_str_counter += 1
