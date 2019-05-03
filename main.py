@@ -18,6 +18,9 @@ system_platform = platform.system()
 lines = open("text.bcc", 'r').read()
 genasm.lexer = flex.lexer
 result = myparser.parse(lines)
+var = {}
+var['a'] = 'b'
+print(var['a'])
 print(result)
 genasm.statement_main(result)
 
@@ -30,7 +33,7 @@ print(genasm.getText())
 
 
 if result:
-     file = open("test.o", 'w')
+     file = open("test.asm", 'w')
      file.writelines(genasm.asmheader)
      file.writelines(genasm.asmdata)
      file.writelines(genasm.asmtext)
