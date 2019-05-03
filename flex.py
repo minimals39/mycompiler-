@@ -4,7 +4,7 @@ import ply.lex as lex
 tokens = (
 	'INT64','WORD','NUM','HEX','TEXT','LOOP','REPEAT',"TYPE_H",'QUOT',
 	'SO','NOTSO','OTHERWISE','EQU','PLUS','MINUS','MUL','DIV',
-	'SEMI','COMMA','MOD','DECADE','LPAREN','RPAREN','LARRY','RARRY','APOS',
+	'SEMI','COMMA','MOD','DECADE','LPAREN','RPAREN','LARRY','RARRY','APOS','STRING_LITERAL',
 	'LSTATE','RSTATE','BACK','NEWLINE','LESS','MORE','EQUTO','NOEQU','DECL', 'TYPE_S', 'TYPE_N','TYPE_A')
 #Reseved word
 RESERVED = {
@@ -54,6 +54,7 @@ t_EQUTO = r'=='
 t_NOEQU = r'<=>'
 t_QUOT = '\"'
 t_APOS = '\''
+t_STRING_LITERAL = r'\"(\\.|[^"\\])*\"'
 
 def t_newline(t):
     r'\n+'
