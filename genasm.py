@@ -205,13 +205,13 @@ def expression_select(state):
     if state[0] == 'PLUS':
         plus_routine(state)
     elif state[0] == 'MINUS':
-        plus_routine(state)
+        sub_routine(state)
     elif state[0] == 'MUL':
-        plus_routine(state)
+        mul_routine(state)
     elif state[0] == 'DIV':
-        plus_routine(state)
+        div_routine(state)
     elif state[0] == 'MOD':
-        plus_routine(state)
+        mod_routine(state)
 #--------------------------------------------Maths-------------------
 def plus_routine(stm):
     if type(stm[1]) == int and type(stm[2]) == int :
