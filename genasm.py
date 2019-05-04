@@ -212,7 +212,7 @@ def expression_select(state):
         plus_routine(state)
     elif state[0] == 'MOD':
         plus_routine(state)
-
+#--------------------------------------------Maths-------------------
 def plus_routine(stm):
     if type(stm[1]) == int and type(stm[2]) == int :
         addText("mov rax, %s" % stm[1])
@@ -280,6 +280,279 @@ def plus_routine(stm):
             addText("add rbx,rax")
             addText("push rbx")
     addText("xor rax,rax")
+
+def sub_routine(stm):
+    if type(stm[1]) == int and type(stm[2]) == int :
+        addText("mov rax, %s" % stm[1])
+        addText("mov rbx, %s" % stm[2])
+        addText("sub rbx, rax")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2]) == tuple:
+        sub_routine(stm[1])
+        sub_routine(stm[2])
+        addText("pop rbx")
+        addText("mov rcx,rbx")
+        addText("pop rbx")
+        addText("sub rbx,rcx")
+        addText("xor rcx,rcx")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2]) == int:
+        sub_routine(stm[1])
+        addText("pop rbx")
+        addText("mov rax, %s"%stm[2])
+        addText("sub rbx,rax")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2] )== str:
+        if stm[2] not in global_var2:
+            print("111111111")
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[2]] != 'int':
+            print_error("wrong input type")
+        else:
+            sub_routine(stm[1])
+            addText("pop rbx")
+            addText("mov rax, [%s+8]"%stm[2])
+            addText("sub rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == int and type(stm[2]) == str:
+        print(type(stm[2]))
+        if stm[2] not in global_var2:
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[2]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, %s" % stm[1])
+            addText("mov rax, [%s+8]" % stm[2])
+            addText("sub rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == str and type(stm[2]) == int:
+        print("33333333333")
+        if stm[1] not in global_var2:
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[1]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, [%s+8]" % stm[1])
+            addText("mov rax, %s" % stm[2])
+            addText("sub rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == str and type(stm[2]) == str:
+        print("4444444444")
+        if stm[2] not in global_var2 and stm[1] not in global_var2:
+            print_error("you doesnt declare variable ")
+        elif global_var2[stm[2]] != 'int' and global_var2[stm[1]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, [%s+8]" % stm[1])
+            addText("mov rax, [%s+8]" % stm[2])
+            addText("sub rbx,rax")
+            addText("push rbx")
+    addText("xor rax,rax")
+
+def mul_routine(stm):
+    if type(stm[1]) == int and type(stm[2]) == int :
+        addText("mov rax, %s" % stm[1])
+        addText("mov rbx, %s" % stm[2])
+        addText("imul rbx, rax")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2]) == tuple:
+        plus_routine(stm[1])
+        plus_routine(stm[2])
+        addText("pop rbx")
+        addText("mov rcx,rbx")
+        addText("pop rbx")
+        addText("imul rbx,rcx")
+        addText("xor rcx,rcx")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2]) == int:
+        plus_routine(stm[1])
+        addText("pop rbx")
+        addText("mov rax, %s"%stm[2])
+        addText("imul rbx,rax")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2] )== str:
+        if stm[2] not in global_var2:
+            print("111111111")
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[2]] != 'int':
+            print_error("wrong input type")
+        else:
+            plus_routine(stm[1])
+            addText("pop rbx")
+            addText("mov rax, [%s+8]"%stm[2])
+            addText("imul rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == int and type(stm[2]) == str:
+        print(type(stm[2]))
+        if stm[2] not in global_var2:
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[2]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, %s" % stm[1])
+            addText("mov rax, [%s+8]" % stm[2])
+            addText("imul rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == str and type(stm[2]) == int:
+        print("33333333333")
+        if stm[1] not in global_var2:
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[1]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, [%s+8]" % stm[1])
+            addText("mov rax, %s" % stm[2])
+            addText("imul rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == str and type(stm[2]) == str:
+        print("4444444444")
+        if stm[2] not in global_var2 and stm[1] not in global_var2:
+            print_error("you doesnt declare variable ")
+        elif global_var2[stm[2]] != 'int' and global_var2[stm[1]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, [%s+8]" % stm[1])
+            addText("mov rax, [%s+8]" % stm[2])
+            addText("imul rbx,rax")
+            addText("push rbx")
+    addText("xor rax,rax")
+
+def div_routine(stm):
+    if type(stm[1]) == int and type(stm[2]) == int :
+        addText("mov rax, %s" % stm[1])
+        addText("mov rbx, %s" % stm[2])
+        addText("idiv rbx, rax")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2]) == tuple:
+        plus_routine(stm[1])
+        plus_routine(stm[2])
+        addText("pop rbx")
+        addText("mov rcx,rbx")
+        addText("pop rbx")
+        addText("idiv rbx,rcx")
+        addText("xor rcx,rcx")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2]) == int:
+        plus_routine(stm[1])
+        addText("pop rbx")
+        addText("mov rax, %s"%stm[2])
+        addText("idiv rbx,rax")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2] )== str:
+        if stm[2] not in global_var2:
+            print("111111111")
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[2]] != 'int':
+            print_error("wrong input type")
+        else:
+            plus_routine(stm[1])
+            addText("pop rbx")
+            addText("mov rax, [%s+8]"%stm[2])
+            addText("idiv rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == int and type(stm[2]) == str:
+        print(type(stm[2]))
+        if stm[2] not in global_var2:
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[2]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, %s" % stm[1])
+            addText("mov rax, [%s+8]" % stm[2])
+            addText("idiv rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == str and type(stm[2]) == int:
+        print("33333333333")
+        if stm[1] not in global_var2:
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[1]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, [%s+8]" % stm[1])
+            addText("mov rax, %s" % stm[2])
+            addText("idiv rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == str and type(stm[2]) == str:
+        print("4444444444")
+        if stm[2] not in global_var2 and stm[1] not in global_var2:
+            print_error("you doesnt declare variable ")
+        elif global_var2[stm[2]] != 'int' and global_var2[stm[1]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, [%s+8]" % stm[1])
+            addText("mov rax, [%s+8]" % stm[2])
+            addText("idiv rbx,rax")
+            addText("push rbx")
+    addText("xor rax,rax")
+#---------------------------------------mod how2---------------------------
+def mod_routine(stm):
+    if type(stm[1]) == int and type(stm[2]) == int :
+        addText("mov rax, %s" % stm[1])
+        addText("mov rbx, %s" % stm[2])
+        addText("idiv rbx, rax")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2]) == tuple:
+        plus_routine(stm[1])
+        plus_routine(stm[2])
+        addText("pop rbx")
+        addText("mov rcx,rbx")
+        addText("pop rbx")
+        addText("idiv rbx,rcx")
+        addText("xor rcx,rcx")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2]) == int:
+        plus_routine(stm[1])
+        addText("pop rbx")
+        addText("mov rax, %s"%stm[2])
+        addText("idiv rbx,rax")
+        addText("push rbx")
+    if type(stm[1]) == tuple and type(stm[2] )== str:
+        if stm[2] not in global_var2:
+            print("111111111")
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[2]] != 'int':
+            print_error("wrong input type")
+        else:
+            plus_routine(stm[1])
+            addText("pop rbx")
+            addText("mov rax, [%s+8]"%stm[2])
+            addText("idiv rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == int and type(stm[2]) == str:
+        print(type(stm[2]))
+        if stm[2] not in global_var2:
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[2]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, %s" % stm[1])
+            addText("mov rax, [%s+8]" % stm[2])
+            addText("idiv rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == str and type(stm[2]) == int:
+        print("33333333333")
+        if stm[1] not in global_var2:
+            print_error("you doesnt declare variable %s " % stm[1])
+        elif global_var2[stm[1]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, [%s+8]" % stm[1])
+            addText("mov rax, %s" % stm[2])
+            addText("idiv rbx,rax")
+            addText("push rbx")
+    if type(stm[1]) == str and type(stm[2]) == str:
+        print("4444444444")
+        if stm[2] not in global_var2 and stm[1] not in global_var2:
+            print_error("you doesnt declare variable ")
+        elif global_var2[stm[2]] != 'int' and global_var2[stm[1]] != 'int':
+            print_error("wrong input type")
+        else:
+            addText("mov rbx, [%s+8]" % stm[1])
+            addText("mov rax, [%s+8]" % stm[2])
+            addText("idiv rbx,rax")
+            addText("push rbx")
+    addText("xor rax,rax")
+
 def multiple_stm_routine(stm):
     statement_main_from_multi(stm[1])
     statement_main_from_multi(stm[2])
