@@ -23,7 +23,9 @@ global_str_counter = 0
 global_int = {}
 global_str = {}
 global_var = []
+global global_if_counter
 global_if_counter = 0
+global_if_stack = []
 
 str_prefix = "_STR"
 
@@ -117,6 +119,9 @@ def statement_main(tuple):
     elif state == "assign":
         print("")
         assign_routine(stateTuple)
+    elif state == "if":
+        print("")
+        if_routine(stateTuple)
     elif state == "WHILELOOP":
         print("")
 
@@ -149,6 +154,9 @@ def statement_main_from_multi(tuple):
     elif state == "assign":
         print("")
         assign_routine(stateTuple)
+    elif state == "if":
+        print("")
+        if_routine(stateTuple)
     elif state == "WHILELOOP":
         print("")
 
@@ -160,6 +168,59 @@ def statement_main_from_multi(tuple):
 
 
 #------------------------------------ All Function Section
+def if_routine(stm):
+    global global_if_counter
+    global_if_stack.append(global_if_counter)
+    ifcounter = global_if_counter
+    if_symbol = 'if'+str(ifcounter)
+    global_if_counter += 1
+    addText("%s:" %if_symbol)
+    cmpexp = stm[1]
+    doing = stm[2]
+    endif = 'end' + str(global_if_stack.pop())
+    if (cmpexp[0]=='==' or cmpexp[0]=='<<'or cmpexp[0]=='>>'or cmpexp[0]=='<=>' ):
+        cmp_routine(cmpexp,endif)
+    else:
+        print_error("no syntax")
+    statement_main_from_multi(doing)
+    addText("%s:" % endif)
+
+def cmp_routine(stm,endif):
+    if(stm[0] == '=='):
+        equal(stm,endif)
+    elif(stm[0] == '>>'):
+        pass
+    elif (stm[0] == '<<'):
+        pass
+    elif (stm[0] == '<=>'):
+        pass
+
+def equal(stm,endif):
+    if type(stm[1]) == str:
+        if stm[1] in global_var2:
+            if global_var2[stm[1]] == 'int':
+                addText("mov rax, [%s+8]" % stm[1])
+            else:
+                print_error("wrong Type")
+        else:
+            print_error("you didnt declare this variable")
+    elif type(stm[1]) == int:
+        addText("mov rax,%s" % stm[1])
+
+
+    if type(stm[2]) == str:
+        if stm[2] in global_var2:
+            if global_var2[stm[2]] == 'int':
+                addText("mov rbx, [%s+8]" % stm[2])
+            else:
+                print_error("wrong Type")
+        else:
+            print_error("you didnt declare this variable")
+    elif type(stm[2]) == int:
+        addText("mov rbx,%s" % stm[2])
+
+    addText("cmp rax,rbx")
+    addText("jne %s" % endif)
 def assign_routine(stm):
     if type(stm[2]) == str:
         if stm[2][0] == '"':

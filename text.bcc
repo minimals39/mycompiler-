@@ -1,2 +1,9 @@
-type_a a[10] = {10,20}
-text("1")
+type_n a = 0
+type_n b = 0
+    so(a==0){
+
+        so(b==0){
+            text(a)
+        }
+        text(a)
+    }

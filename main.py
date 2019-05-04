@@ -14,7 +14,6 @@ system_platform = platform.system()
 # parser.add_argument("output_asm", help="Output assembly file name.")
 # parser.add_argument("output_exec", help="Output executeable file name.")
 # args = parser.parse_args()
-
 lines = open("text.bcc", 'r').read()
 genasm.lexer = flex.lexer
 result = myparser.parse(lines)
