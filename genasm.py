@@ -24,8 +24,11 @@ global_int = {}
 global_str = {}
 global_var = []
 global global_if_counter
+global global_while_counter
 global_if_counter = 0
 global_if_stack = []
+global_while_counter = 0
+global_while_stack = []
 
 str_prefix = "_STR"
 
@@ -122,9 +125,9 @@ def statement_main(tuple):
     elif state == "if":
         print("")
         if_routine(stateTuple)
-    elif state == "WHILELOOP":
+    elif state == "repeat":
         print("")
-
+        repeat_routine(stateTuple)
         #Next STM
     try :ThisTuple = ThisTuple[2]
     except :
@@ -157,8 +160,9 @@ def statement_main_from_multi(tuple):
     elif state == "if":
         print("")
         if_routine(stateTuple)
-    elif state == "WHILELOOP":
+    elif state == "repeat":
         print("")
+        repeat_routine(stateTuple)
 
         #Next STM
     try :ThisTuple = ThisTuple[2]
@@ -185,17 +189,35 @@ def if_routine(stm):
     statement_main_from_multi(doing)
     addText("%s:" % endif)
 
+def repeat_routine(stm):
+    global global_while_counter
+    global_while_stack.append(global_while_counter)
+    whilecounter = global_while_counter
+    while_symbol = 'loop'+str(whilecounter)
+    global_while_counter += 1
+    addText("%s:" %while_symbol)
+    cmpexp = stm[1]
+    doing = stm[2]
+    endloop = 'endloop' + str(global_while_stack.pop())
+    if (cmpexp[0]=='==' or cmpexp[0]=='<<'or cmpexp[0]=='>>'or cmpexp[0]=='<=>' ):
+        cmp_routine(cmpexp,endloop)
+    else:
+        print_error("no syntax")
+    statement_main_from_multi(doing)
+    addText("jmp %s" % while_symbol)
+    addText("%s:" % endloop)
+
 def cmp_routine(stm,endif):
     if(stm[0] == '=='):
         equal(stm,endif)
     elif(stm[0] == '>>'):
-        pass
+        greater(stm,endif)
     elif (stm[0] == '<<'):
-        pass
+        less(stm,endif)
     elif (stm[0] == '<=>'):
-        pass
+        noequal(stm,endif)
 
-def equal(stm,endif):
+def greater(stm,endif):
     if type(stm[1]) == str:
         if stm[1] in global_var2:
             if global_var2[stm[1]] == 'int':
@@ -218,6 +240,99 @@ def equal(stm,endif):
             print_error("you didnt declare this variable")
     elif type(stm[2]) == int:
         addText("mov rbx,%s" % stm[2])
+
+    addText("cmp rax,rbx")
+    addText("jle %s" % endif)
+
+def less(stm,endif):
+    if type(stm[1]) == str:
+        if stm[1] in global_var2:
+            if global_var2[stm[1]] == 'int':
+                addText("mov rax, [%s+8]" % stm[1])
+            else:
+                print_error("wrong Type")
+        else:
+            print_error("you didnt declare this variable")
+    elif type(stm[1]) == int:
+        addText("mov rax,%s" % stm[1])
+
+
+    if type(stm[2]) == str:
+        if stm[2] in global_var2:
+            if global_var2[stm[2]] == 'int':
+                addText("mov rbx, [%s+8]" % stm[2])
+            else:
+                print_error("wrong Type")
+        else:
+            print_error("you didnt declare this variable")
+    elif type(stm[2]) == int:
+        addText("mov rbx,%s" % stm[2])
+
+    addText("cmp rax,rbx")
+    addText("jge %s" % endif)
+
+def noequal(stm,endif):
+    if type(stm[1]) == str:
+        if stm[1] in global_var2:
+            if global_var2[stm[1]] == 'int':
+                addText("mov rax, [%s+8]" % stm[1])
+            else:
+                print_error("wrong Type")
+        else:
+            print_error("you didnt declare this variable")
+    elif type(stm[1]) == int:
+        addText("mov rax,%s" % stm[1])
+
+
+    if type(stm[2]) == str:
+        if stm[2] in global_var2:
+            if global_var2[stm[2]] == 'int':
+                addText("mov rbx, [%s+8]" % stm[2])
+            else:
+                print_error("wrong Type")
+        else:
+            print_error("you didnt declare this variable")
+    elif type(stm[2]) == int:
+        addText("mov rbx,%s" % stm[2])
+
+    addText("cmp rax,rbx")
+    addText("je %s" % endif)
+
+def equal(stm,endif):
+    if type(stm[1]) == str:
+        if stm[1] in global_var2:
+            if global_var2[stm[1]] == 'int':
+                addText("mov rax, [%s+8]" % stm[1])
+            else:
+                print_error("wrong Type")
+        else:
+            print_error("you didnt declare this variable")
+    elif type(stm[1]) == int:
+        addText("mov rax,%s" % stm[1])
+
+    elif type(stm[1]) == tuple:
+        if stm[1][0] == 'MUL' or stm[1][0] == 'MINUS'  or stm[1][0] == 'PLUS':
+            expression_select(stm[1])
+            addText("pop rbx")
+            addText("mov rax,rbx" )
+        if stm[1][0] == 'MOD':
+            expression_select(stm[1])
+            addText("pop ax")
+            addText("mov cl, ah")
+            addText("movsx rax, cl")
+
+    if type(stm[2]) == str:
+        if stm[2] in global_var2:
+            if global_var2[stm[2]] == 'int':
+                addText("mov rbx, [%s+8]" % stm[2])
+            else:
+                print_error("wrong Type")
+        else:
+            print_error("you didnt declare this variable")
+    elif type(stm[2]) == int:
+        addText("mov rbx,%s" % stm[2])
+
+
 
     addText("cmp rax,rbx")
     addText("jne %s" % endif)
@@ -257,11 +372,15 @@ def assign_routine(stm):
         print_error("wrong input type")
     else:
         if type(stm[2]) == tuple:
-            if stm[2][0] == 'MOD' or stm[2][0] == 'MUL' or stm[2][0] == 'MINUS' or stm[2][0] == 'DIV' or stm[2][0] == 'PLUS' :
+            if stm[2][0] == 'MUL' or stm[2][0] == 'MINUS' or stm[2][0] == 'DIV' or stm[2][0] == 'PLUS' :
                 expression_select(stm[2])
                 addText("pop rbx")
                 addText("mov [%s+8],rbx" % stm[1])
                 addText("xor rbx,rbx")
+            if   stm[2][0] == 'MOD' :
+                expression_select(stm[2])
+                addText("pop ax")
+                addText("mov [%s+8],ah" % stm[1])
 def expression_select(state):
     if state[0] == 'PLUS':
         plus_routine(state)
@@ -548,37 +667,55 @@ def div_routine(stm):
 #---------------------------------------mod how2---------------------------
 def mod_routine(stm):
     if type(stm[1]) == int and type(stm[2]) == int :
-        addText("mov rax, %s" % stm[1])
-        addText("mov rbx, %s" % stm[2])
-        addText("idiv rbx, rax")
-        addText("push rbx")
+        addText("mov ax, %s" % stm[1])
+        addText("xor rdx, rdx")
+        addText("mov bl, %s" % stm[2])
+        addText("div bl")
+        addText("push ax")
     if type(stm[1]) == tuple and type(stm[2]) == tuple:
-        plus_routine(stm[1])
-        plus_routine(stm[2])
-        addText("pop rbx")
-        addText("mov rcx,rbx")
-        addText("pop rbx")
-        addText("idiv rbx,rcx")
-        addText("xor rcx,rcx")
-        addText("push rbx")
+        expression_select(stm[1])
+        expression_select(stm[2])
+        if stm[1][0] == 'MUL' or stm[1][0] == 'MINUS' or stm[1][0] == 'DIV' or stm[1][0] == 'PLUS':
+            addText("pop rbx")
+            addText("mov ax,rbx")
+        elif stm[1][0] == 'MOD':
+            addText("pop ax")
+            addText("mov ax,ah")
+        if stm[2][0] == 'MUL' or stm[2][0] == 'MINUS' or stm[2][0] == 'DIV' or stm[2][0] == 'PLUS':
+            addText("pop rbx")
+            addText("mov bl,rbx")
+        elif stm[2][0] == 'MOD':
+            addText("pop ax")
+            addText("mov bl,ah")
+        addText("div bl")
+        addText("push ax")
     if type(stm[1]) == tuple and type(stm[2]) == int:
-        plus_routine(stm[1])
-        addText("pop rbx")
-        addText("mov rax, %s"%stm[2])
-        addText("idiv rbx,rax")
-        addText("push rbx")
+        expression_select(stm[1])
+        if stm[1][0] == 'MUL' or stm[1][0] == 'MINUS' or stm[1][0] == 'DIV' or stm[1][0] == 'PLUS':
+            addText("pop rbx")
+            addText("mov ax,rbx")
+        elif stm[1][0] == 'MOD':
+            addText("pop ax")
+            addText("mov ax,ah")
+        addText("mov bl, %s"%stm[2])
+        addText("div bl")
+        addText("push ax")
     if type(stm[1]) == tuple and type(stm[2] )== str:
         if stm[2] not in global_var2:
-            print("111111111")
             print_error("you doesnt declare variable %s " % stm[1])
         elif global_var2[stm[2]] != 'int':
             print_error("wrong input type")
         else:
-            plus_routine(stm[1])
-            addText("pop rbx")
-            addText("mov rax, [%s+8]"%stm[2])
-            addText("idiv rbx,rax")
-            addText("push rbx")
+            expression_select(stm[1])
+            if stm[1][0] == 'MUL' or stm[1][0] == 'MINUS' or stm[1][0] == 'DIV' or stm[1][0] == 'PLUS':
+                addText("pop rbx")
+                addText("mov ax,rbx")
+            elif stm[1][0] == 'MOD':
+                addText("pop ax")
+                addText("mov ax,ah")
+            addText("mov bl, [%s+8]"%stm[2])
+            addText("div bl")
+            addText("push ax")
     if type(stm[1]) == int and type(stm[2]) == str:
         print(type(stm[2]))
         if stm[2] not in global_var2:
@@ -586,10 +723,10 @@ def mod_routine(stm):
         elif global_var2[stm[2]] != 'int':
             print_error("wrong input type")
         else:
-            addText("mov rbx, %s" % stm[1])
-            addText("mov rax, [%s+8]" % stm[2])
-            addText("idiv rbx,rax")
-            addText("push rbx")
+            addText("mov ax, %s" % stm[1])
+            addText("mov bl, [%s+8]" % stm[2])
+            addText("div bl")
+            addText("push ax")
     if type(stm[1]) == str and type(stm[2]) == int:
         print("33333333333")
         if stm[1] not in global_var2:
@@ -597,10 +734,10 @@ def mod_routine(stm):
         elif global_var2[stm[1]] != 'int':
             print_error("wrong input type")
         else:
-            addText("mov rbx, [%s+8]" % stm[1])
-            addText("mov rax, %s" % stm[2])
-            addText("idiv rbx,rax")
-            addText("push rbx")
+            addText("mov ax, [%s+8]" % stm[1])
+            addText("mov bl, %s" % stm[2])
+            addText("div bl")
+            addText("push ax")
     if type(stm[1]) == str and type(stm[2]) == str:
         print("4444444444")
         if stm[2] not in global_var2 and stm[1] not in global_var2:
@@ -608,11 +745,11 @@ def mod_routine(stm):
         elif global_var2[stm[2]] != 'int' and global_var2[stm[1]] != 'int':
             print_error("wrong input type")
         else:
-            addText("mov rbx, [%s+8]" % stm[1])
-            addText("mov rax, [%s+8]" % stm[2])
-            addText("idiv rbx,rax")
-            addText("push rbx")
-    addText("xor rax,rax")
+            addText("mov ax, [%s+8]" % stm[1])
+            addText("mov bl, [%s+8]" % stm[2])
+            addText("div bl")
+            addText("push ax")
+    addText("xor ah,ah")
 
 def multiple_stm_routine(stm):
     statement_main_from_multi(stm[1])
