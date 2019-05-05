@@ -3,21 +3,17 @@ extern printf
 extern fflush
 global main
 section .data
-i dq  "%d ", 4
-j dq  "%d ", 2
-count dq  "%d ", 0
+a dq "%d " ,0,0,0,0,0,0,0,0,0
+i dq  "%d ", 1
 section .text
 main:
+mov rax, 10
+mov [a + 1 * 8], rax
+mov rax,20
 mov rbx, [i+8]
-mov rax, [j+8]
-imul rbx,rax
-push rbx
-xor rax,rax
-pop rbx
-mov [count+8],rbx
-xor rbx,rbx
-mov rcx, count
-mov rdx, [count +8]
+mov [a+rbx*8],rax
+mov rcx, a
+mov rdx, [a +8]
 call printf
 xor rcx, rcx
 call fflush

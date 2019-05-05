@@ -1,5 +1,4 @@
+type_a a[10] = {10}
 type_n i = 1
-type_n j = 2
-type_n count
-count = i*j
-text(count)
+a[i] = 20
+text(a[0])

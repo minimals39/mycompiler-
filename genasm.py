@@ -360,16 +360,34 @@ def assign_routine(stm):
                     addText("mov rax, [%s]" % stm[2])
                     addText("mov [%s], rax" % stm[1])
     elif type(stm[2]) == int:
-        if stm[1] not in global_var2:
-            print_error("you doesnt declare variable %s " % stm[1])
+        if type(stm[1]) == tuple:
+            if stm[1][0] == 'array':
+                if stm[1][1] not in global_var2:
+                    print_error("you didnt declare this variable")
+                else:
+                    if type(stm[1][2]) == int:
+                        element = (stm[1][2]+1) * 8
+                        addText("mov rax, %s" % stm[2])
+                        addText("mov [%s+%s],rax" % (stm[1][1],element))
+                    elif type(stm[1][2]) == str:
+                        if stm[1][2][0] == '"':
+                            print_error("cant")
+                        else:
+                            if stm[1][2] not in global_var2:
+                                print_error("you didnt declare")
+                            else:
+                                if global_var2[stm[1][2]] == 'int':
+                                    addText("mov rax,%s"% stm[2])
+                                    addText("mov rbx, [%s+8]"% stm[1][2])
+                                    addText("mov [%s+rbx*8],rax" % stm[1][1])
+        elif stm[1] not in global_var2:
+            print_error("you doesnt declare variable  ")
         elif global_var2[stm[1]] != 'int':
             print_error("Wrong type ")
         else:
             textint = get_int(str(stm[2]))
             addText("mov rax, [%s+8]" % textint)
             addText("mov [%s+8], rax" % stm[1])
-    if type(stm[1]) != str or global_var2[stm[1]] != 'int':
-        print_error("wrong input type")
     else:
         if type(stm[2]) == tuple:
             if stm[2][0] == 'MUL' or stm[2][0] == 'MINUS' or stm[2][0] == 'PLUS' :
@@ -404,8 +422,8 @@ def plus_routine(stm):
         addText("add rbx, rax")
         addText("push rbx")
     if type(stm[1]) == tuple and type(stm[2]) == tuple:
-        plus_routine(stm[1])
-        plus_routine(stm[2])
+        expression_select(stm[1])
+        expression_select(stm[2])
         addText("pop rbx")
         addText("mov rcx,rbx")
         addText("pop rbx")
@@ -413,7 +431,7 @@ def plus_routine(stm):
         addText("xor rcx,rcx")
         addText("push rbx")
     if type(stm[1]) == tuple and type(stm[2]) == int:
-        plus_routine(stm[1])
+        expression_select(stm[1])
         addText("pop rbx")
         addText("mov rax, %s"%stm[2])
         addText("add rbx,rax")
@@ -425,7 +443,7 @@ def plus_routine(stm):
         elif global_var2[stm[2]] != 'int':
             print_error("wrong input type")
         else:
-            plus_routine(stm[1])
+            expression_select(stm[1])
             addText("pop rbx")
             addText("mov rax, [%s+8]"%stm[2])
             addText("add rbx,rax")
@@ -540,8 +558,8 @@ def mul_routine(stm):
         addText("imul rbx, rax")
         addText("push rbx")
     if type(stm[1]) == tuple and type(stm[2]) == tuple:
-        plus_routine(stm[1])
-        plus_routine(stm[2])
+        expression_select(stm[1])
+        expression_select(stm[2])
         addText("pop rbx")
         addText("mov rcx,rbx")
         addText("pop rbx")
@@ -549,7 +567,7 @@ def mul_routine(stm):
         addText("xor rcx,rcx")
         addText("push rbx")
     if type(stm[1]) == tuple and type(stm[2]) == int:
-        plus_routine(stm[1])
+        expression_select(stm[1])
         addText("pop rbx")
         addText("mov rax, %s"%stm[2])
         addText("imul rbx,rax")
@@ -561,7 +579,7 @@ def mul_routine(stm):
         elif global_var2[stm[2]] != 'int':
             print_error("wrong input type")
         else:
-            plus_routine(stm[1])
+            expression_select(stm[1])
             addText("pop rbx")
             addText("mov rax, [%s+8]"%stm[2])
             addText("imul rbx,rax")
@@ -798,6 +816,7 @@ def declare_var(var_name, value, assign=None):
             for i in range(value-1):
                 asmdata += ',0'
             asmdata += "\n"
+            global_var2[var_name] = 'array'
         elif assign == None:
             print("something is wrong law na")
 
@@ -844,9 +863,7 @@ def print_routine(stm):
                 addText()
                 newstm = stm[2]
             else:
-                if type(stm[1]) == tuple:
-                    newstm = stm[2]
-                elif type(stm[2]) == tuple:
+                if type(stm[2]) == tuple:
                     if global_var2[stm[1]] == 'int':
                         texts = stm[1]
                         addText("mov rcx, %s" % texts)
@@ -874,9 +891,19 @@ def print_routine(stm):
             addText("call " + fflush_label)
             addText()
             newstm = stm[2]
-
-        if stm[1] == None:
-            break
+        elif type(stm[1]) == tuple:
+            if stm[1][0] == 'array':
+                if stm[1][1] not in global_var2:
+                    print_error("you didnt declare this variable")
+                else:
+                    element = (stm[1][2]+1)*8
+                    texts = stm[1][1]
+                    addText("mov rcx, %s" % texts)
+                    addText("mov rdx, [%s +%s]" % (texts,element))
+                    addText("call printf")
+                    addText("xor %s, %s" % (reg_order[0], reg_order[0]))
+                    addText("call " + fflush_label)
+                    addText()
         stm = stm[2]
         if stm[1] == None:
             break
