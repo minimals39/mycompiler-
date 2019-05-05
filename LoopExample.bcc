@@ -1,0 +1,13 @@
+type_n i = 1
+type_n j = 1
+type_n sum = 0
+repeat(i << 11){
+    j = 1
+    repeat(j << 11){
+        sum = sum + j
+        sum = sum + i
+        j = j+1
+    }
+    i = i+1
+}
+text(sum)

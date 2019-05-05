@@ -1,0 +1,12 @@
+type_n x = 80
+type_n y = 100
+type_n z = 100
+type_n max = 0
+max = x
+so(x << y){
+    max = y
+}
+so(max << z){
+    max = z
+}
+text(max)

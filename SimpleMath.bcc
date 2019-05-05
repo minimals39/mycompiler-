@@ -1,0 +1,9 @@
+type_n y = 50
+type_n x = 10
+x = x + y
+text(x)
+x = x + y
+text(x)
+x = x + y
+text(x)
+
