@@ -1,19 +1,5 @@
 type_n i = 1
-type_n j = 1
-type_n count = 0
-type_n max = 0
-repeat(i << 101){
-    j = 1
-    count = 0
-    max = i+1
-    repeat(j << max){
-        so(i%j ==0){
-            count = count + 1
-        }
-        j = j+1
-    }
-    so(count == 2){
-        text(i)
-    }
-    i = i+1
-}
+type_n j = 2
+type_n count
+count = i*j
+text(count)
